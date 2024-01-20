@@ -11,6 +11,8 @@ services:
     environment:
       - SERVER_PORT=8181
       - SPRING_DATASOURCE_URL=jdbc:postgresql://77.222.37.212:32770/terrestrial_tutor
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
 
   postgres:
     image: postgres:latest
