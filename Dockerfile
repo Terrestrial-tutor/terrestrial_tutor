@@ -1,5 +1,4 @@
 FROM eclipse-temurin:21-jdk-alpine as builder
-FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY . /app/.
 ENTRYPOINT ["java","-jar","/app.jar"]
