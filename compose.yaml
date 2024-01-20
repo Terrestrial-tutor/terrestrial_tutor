@@ -10,7 +10,7 @@ services:
       - postgres
     environment:
       - SERVER_PORT=8181
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://77.222.37.212:5432/terrestrial_tutor
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://77.222.37.212:32770/terrestrial_tutor
 
   postgres:
     image: postgres:latest
