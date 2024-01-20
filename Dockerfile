@@ -1,7 +1,8 @@
 FROM maven:4.0.0-openjdk-21 as builder
+FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY . /app/.
-RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip=true
+ENTRYPOINT ["java","-jar","/app.jar"]
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
