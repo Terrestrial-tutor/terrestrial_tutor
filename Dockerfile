@@ -1,8 +1,8 @@
-FROM maven:4.0.0-openjdk-21 as builder
+FROM eclipse-temurin:21-jdk-alpine as builder
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 COPY . /app/.
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","/app.jar"]Zz
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
