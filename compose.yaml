@@ -24,7 +24,7 @@ services:
       - '5432:5432'
     volumes:
       - /db-data:/var/lib/postgresql/data
-      - /shema.dump:/docker-entrypoint-initdb.d/shema.dump //Need to change
+      - /shema.sql:/docker-entrypoint-initdb.d/shema.sql //Need to change
 
 volumes:
   db-data:
