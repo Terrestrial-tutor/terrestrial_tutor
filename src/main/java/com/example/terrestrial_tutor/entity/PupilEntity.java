@@ -3,6 +3,7 @@ package com.example.terrestrial_tutor.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Type;
 import org.hibernate.mapping.List;
 
 
@@ -32,6 +33,7 @@ public class PupilEntity {
 
     Integer supervisor_id;
 
+    @Column(name = "hw_list", columnDefinition = "bytea")
     List hw_list;
 
     Double balance;
