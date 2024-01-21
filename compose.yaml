@@ -6,25 +6,23 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8181:8181"
-    depends_on:
-      - postgres
+#    depends_on:
+#      - postgres
     environment:
       - SERVER_PORT=8181
       - SPRING_DATASOURCE_URL=jdbc:postgresql://77.222.37.212:5432/terrestrial_tutor
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin
 
-  postgres:
-    image: postgres:latest
-    environment:
-        POSTGRES_DB: terrestrial_tutor
-        POSTGRES_PASSWORD: admin
-        POSTGRES_USER: admin
-    ports:
-      - '5432:5432'
-    volumes:
-      - /db-data:/var/lib/postgresql/data
-      - /shema.sql:/docker-entrypoint-initdb.d/shema.sql //Need to change
-
-volumes:
-  db-data:
+#Uncomment if it's server
+#  postgres:
+#    image: postgres:latest
+#    environment:
+#        POSTGRES_DB: terrestrial_tutor
+#        POSTGRES_PASSWORD: admin
+#        POSTGRES_USER: admin
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - /db-data:/var/lib/postgresql/data
+#      - /shema.sql:/docker-entrypoint-initdb.d/shema.sql //Need to change

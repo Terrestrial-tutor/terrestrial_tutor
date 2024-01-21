@@ -17,6 +17,7 @@ public class PupilEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pupils_id_seq")
+    @SequenceGenerator(name = "pupils_id_seq", sequenceName = "pupils_id_seq", allocationSize = 1)
     private Long id;
 
     @NonNull
