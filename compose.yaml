@@ -29,8 +29,8 @@ services:
     image: postgres:16.1
     environment:
         POSTGRES_DB: terrestrial_tutor
-        POSTGRES_PASSWORD: admin
-        POSTGRES_USER: tErRrEsTrIaLtUtOr
+        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+        POSTGRES_USER: admin
     ports:
       - '5432:5432'
     volumes:
