@@ -25,16 +25,15 @@ public class PupilEntity {
     @Column(name = "name")
     String name;
 
-    List subjects;
+    String subjects;
 
     Integer price;
 
-    List tutor_id;
+    int[] tutor_id;
 
     Integer supervisor_id;
 
-    @Column(name = "hw_list", columnDefinition = "bytea")
-    List hw_list;
+    int[] hw_list;
 
     Double balance;
 
