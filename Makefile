@@ -1,5 +1,5 @@
 restart:
-	docker compose down backend --remove-orphans
+	docker compose down
 	docker compose build backend
 	docker compose up -d backend
 
