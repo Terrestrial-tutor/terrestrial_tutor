@@ -17,7 +17,7 @@ services:
       - "8080:8080"
     depends_on:
        - builder-be
-       - postgres
+#       - postgres
     environment:
       - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://87.249.49.62:5432/terrestrial_tutor
@@ -25,13 +25,13 @@ services:
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
 
 #Uncomment if it's server
-  postgres:
-    image: postgres:16.1
-    environment:
-        POSTGRES_DB: terrestrial_tutor
-        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
-        POSTGRES_USER: admin
-    ports:
-      - '5432:5432'
-    volumes:
-      - /shema.sql:/data/shema.sql
+#  postgres:
+#    image: postgres:16.1
+#    environment:
+#        POSTGRES_DB: terrestrial_tutor
+#        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+#        POSTGRES_USER: admin
+#    ports:
+#      - '5432:5432'
+#    volumes:
+#      - /shema.sql:/data/shema.sql
