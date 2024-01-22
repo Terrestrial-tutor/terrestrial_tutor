@@ -1,5 +1,6 @@
 package com.example.terrestrial_tutor.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -25,6 +26,7 @@ public class PupilEntity {
     @Column(name = "name")
     String name;
 
+    @Nullable
     String subjects;
 
     Integer price;
