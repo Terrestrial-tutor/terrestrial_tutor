@@ -34,4 +34,4 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - /shema.sql:/
+      - /shema.sql:data
