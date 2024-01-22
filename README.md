@@ -1,3 +1,10 @@
+#How to restart backend server
+docker compose build backend
+docker compose down backend
+docker compose up -d backend
+
+_____________________________________________________________________
+
 #For up docker containers
 docker compose up -d
 
@@ -14,4 +21,5 @@ docker ps -a
 
 #Check container logs
 docker compose logs -f 
+
 
