@@ -2,7 +2,7 @@ FROM eclipse-temurin:21-jdk-alpine as builder
 RUN apk update && apk add maven
 WORKDIR /app
 COPY . /app/.
-RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip=true
+RUN mvn -f /app/pom.xml -T 3 package -am -Dmaven.test.skip=true
 
 FROM eclipse-temurin:21-jdk-alpine as app
 WORKDIR /app
