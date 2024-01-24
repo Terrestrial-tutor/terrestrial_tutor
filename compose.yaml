@@ -1,4 +1,22 @@
+networks:
+  default:
+    name: localnet
+    external: true
+
 services:
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/nginx.conf/:/etc/nginx/conf.d/nginx.confZz
+      - ./frontend/src:/usr/share/nginx/html/
+    ports:
+      - "80:80"
+    links:
+      - backend
+      - frontend
+    networks:
+      - default
 
   builder-be:
     image: backend-builder
@@ -6,6 +24,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
+    networks:
+      - default
 
   backend:
     image: backend
@@ -14,7 +34,7 @@ services:
       dockerfile: Dockerfile
       target: app
     ports:
-      - "8080:8080"
+      - "8181:8181"
     depends_on:
        - builder-be
 #       - postgres
@@ -23,6 +43,19 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://87.249.49.62:5432/terrestrial_tutor
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
+    networks:
+      - default
+
+  frontend:
+    image: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: frontend
+    volumes:
+      - './frontend:/app'
+    networks:
+      - default
 
 #Uncomment if it's server
 #  postgres:
