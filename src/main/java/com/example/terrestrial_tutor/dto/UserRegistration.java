@@ -1,6 +1,5 @@
 package com.example.terrestrial_tutor.dto;
 
-import com.example.terrestrial_tutor.enums.Role;
 import lombok.Getter;
 import lombok.Setter;
 @Getter

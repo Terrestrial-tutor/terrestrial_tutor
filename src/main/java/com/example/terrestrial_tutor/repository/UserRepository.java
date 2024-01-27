@@ -3,6 +3,10 @@ package com.example.terrestrial_tutor.repository;
 import com.example.terrestrial_tutor.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByUsername(String username);
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findUserByUsername(String username);
+
+    User findUserById(Long id);
 }

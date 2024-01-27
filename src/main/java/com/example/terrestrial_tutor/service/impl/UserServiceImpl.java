@@ -1,68 +1,44 @@
 package com.example.terrestrial_tutor.service.impl;
 
-import com.example.terrestrial_tutor.dto.UserRegistration;
 import com.example.terrestrial_tutor.entity.User;
+import com.example.terrestrial_tutor.exceptions.UserExistException;
+import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.repository.UserRepository;
-import lombok.AccessLevel;
+import com.example.terrestrial_tutor.security.JWTAuthenticationFilter;
+import com.example.terrestrial_tutor.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
+@Service
 @RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserService {
+    public static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public User createUser(RegistrationRequest userIn) {
+        User user = new User();
+        user.setEmail(userIn.getEmail());
+        user.setName(userIn.getName());
+        user.setSurname(userIn.getSurname());
+        user.setPatronymic(userIn.getPatronymic());
+        user.setUsername(userIn.getUsername());
+        user.setPassword(passwordEncoder.encode(userIn.getPassword()));
+        user.setRole(userIn.getRole());
 
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+        try {
+            LOG.info("Saving User {}", userIn.getUsername());
+            return userRepository.save(user);
+        } catch (Exception ex) {
+            LOG.error("Error during registration");
+            throw new UserExistException("The user " + user.getUsername() + "already exist");
         }
-
-        return (UserDetails) user;
     }
 
-    public User findUserById(Integer userId) {
-        Optional<User> userFromDb = userRepository.findById(userId);
-        return userFromDb.orElse(new User());
-    }
-
-    public List<User> allUsers() {
-        return userRepository.findAll();
-    }
-
-    public boolean addUser(UserRegistration user) {
-        User userFromDB = userRepository.findByUsername(user.getUsername());
-
-        if (userFromDB != null) {
-            return false;
-        }
-        User newUser = new User(user);
-        newUser.setSystemId(1);
-        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        userRepository.save(newUser);
-        return true;
-    }
-
-    public boolean deleteUser(Integer userId) {
-        if (userRepository.findById(userId).isPresent()) {
-            userRepository.deleteById(userId);
-            return true;
-        }
-        return false;
-    }
 }

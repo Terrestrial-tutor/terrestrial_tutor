@@ -1,11 +1,12 @@
 package com.example.terrestrial_tutor.entity;
 
-import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Type;
 import org.hibernate.mapping.List;
+import org.springframework.lang.Nullable;
+
+import javax.persistence.*;
 
 
 @Entity
@@ -14,7 +15,7 @@ import org.hibernate.mapping.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "pupils", schema = "public")
+@Table(name = "pupils")
 public class PupilEntity {
 
     @Id
@@ -22,7 +23,6 @@ public class PupilEntity {
     @SequenceGenerator(name = "pupils_id_seq", sequenceName = "pupils_id_seq", allocationSize = 1)
     private Long id;
 
-    @NonNull
     @Column(name = "name")
     String name;
 
@@ -31,11 +31,9 @@ public class PupilEntity {
 
     Integer price;
 
-    int[] tutor_id;
+    Integer tutor_id;
 
-    Integer supervisor_id;
-
-    int[] hw_list;
+    Integer[] hw_list;
 
     Double balance;
 
