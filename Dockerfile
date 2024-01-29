@@ -16,5 +16,8 @@ COPY ./frontend/package.json ./frontend/package-lock.json ./
 RUN npm install
 COPY ./frontend .
 EXPOSE 4200
-RUN npm run build
-ENTRYPOINT ["npm", "start"]
+
+
+FROM nginx AS nginx
+COPY config/nginx.conf /etc/nginx/nginx.conf
+COPY --from=frontend /usr/src/app/dist/frontend/browser /usr/share/nginx/html
