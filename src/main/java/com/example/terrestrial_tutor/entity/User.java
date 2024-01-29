@@ -50,8 +50,8 @@ public class User implements UserDetails {
     @Column(name = "role")
     ERole role;
 
-    @Column(name = "user_id")
-    Long userId;
+    @Column(name = "additional_info_id")
+    Long additionalInfoId;
 
     @Transient
     private GrantedAuthority authorities;

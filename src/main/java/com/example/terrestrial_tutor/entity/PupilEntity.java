@@ -34,12 +34,11 @@ public class PupilEntity {
     List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToOne()
-    @JoinColumn(name = "support_id")
-    SupportEntity supportId;
+    @JoinColumn(name = "support")
+    SupportEntity support;
 
-    @Column(name = "tutor_id")
-    @ManyToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
-    List<TutorEntity> tutorId = new ArrayList<>();
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
+    List<TutorEntity> tutors = new ArrayList<>();
 
     @NonNull
     @Column(name = "email")

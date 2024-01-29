@@ -25,7 +25,7 @@ public class SupportEntity {
     @Column(name = "name")
     String name;
 
-    @OneToMany(mappedBy = "support_id", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "support", fetch = FetchType.LAZY)
     List<PupilEntity> pupils;
 
     @NonNull

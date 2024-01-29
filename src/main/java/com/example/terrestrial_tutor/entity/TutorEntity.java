@@ -23,7 +23,7 @@ public class TutorEntity {
     private Long id;
 
     @Column(name = "subjects")
-    @ManyToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tutors", fetch = FetchType.LAZY)
     List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToMany()
