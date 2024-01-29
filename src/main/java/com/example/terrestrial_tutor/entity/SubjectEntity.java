@@ -27,5 +27,9 @@ public class SubjectEntity {
 
     @ManyToMany()
     @JoinColumn(name = "tutors")
-    List<TutorEntity> tutors = new ArrayList<>();
+    List<TutorEntity> tutors;
+
+    @ManyToMany()
+    @JoinColumn(name = "pupils")
+    List<PupilEntity> pupils;
 }

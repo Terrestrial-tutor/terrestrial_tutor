@@ -33,7 +33,6 @@ public class TutorEntity {
     @Column(name = "payment_data")
     String paymentData;
 
-    @Column(name = "hw_list")
     @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
     List<HomeworkEntity> homeworkList = new ArrayList<>();
 }

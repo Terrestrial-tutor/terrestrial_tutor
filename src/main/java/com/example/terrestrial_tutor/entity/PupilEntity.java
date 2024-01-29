@@ -25,14 +25,12 @@ public class PupilEntity {
     @Column(name = "balance")
     Double balance;
 
-    @Column(name = "hw_list")
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
     List<HomeworkEntity> homeworkList = new ArrayList<>();
     @Column(name = "price")
     int price;
 
-    @Column(name = "subjects")
-    @ManyToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
     List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToOne()
@@ -46,4 +44,7 @@ public class PupilEntity {
     @NonNull
     @Column(name = "email")
     String email;
+
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    List<PaymentEntity> payments= new ArrayList<>();
 }

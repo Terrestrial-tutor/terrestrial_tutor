@@ -22,8 +22,36 @@ public class TaskEntity {
     @NonNull
     @Column(name = "name")
     String name;
-
+    /*
     @NonNull
     @Column(name = "checking")
     int checking;
+
+    @NonNull
+    @Column(name = "answer_type")
+    String answerType;
+
+    @Column(name = "files")
+    String files;
+
+    @NonNull
+    @Column(name = "complexity")
+    String complexity;
+
+    @Column(name = "task_text")
+    String taskText;
+
+     */
+
+    //task_images
+
+    //task_tables_ids
+
+    @NonNull
+    @Column(name = "answer")
+    String answer;
+
+    //ban_commands
+
+    //task_analysis
 }

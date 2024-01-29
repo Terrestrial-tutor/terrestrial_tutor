@@ -20,13 +20,16 @@ public class PaymentEntity {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @Column(name = "pupil")
-    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
-    PupilEntity pupil = new PupilEntity();
+    @ManyToOne()
+    @JoinColumn(name = "pupil")
+    PupilEntity pupil;
 
-    @Column(name = "tutor")
-    @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
-    TutorEntity tutor = new TutorEntity();
+    /*
+    @ManyToOne()
+    @JoinColumn(name = "tutor")
+    PupilEntity tutor;
+
+     */
 
     @Column(name = "lesson_time")
     Time lessonTime;

@@ -33,9 +33,11 @@ public class HomeworkEntity {
     @Column(name = "solute_time")
     Time soluteTime;
 
+    @ManyToOne()
     @JoinColumn(name = "pupil")
     PupilEntity pupil;
 
+    @ManyToOne()
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 }
