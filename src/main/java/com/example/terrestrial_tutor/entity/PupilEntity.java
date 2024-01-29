@@ -2,11 +2,9 @@ package com.example.terrestrial_tutor.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Type;
-import org.hibernate.mapping.List;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -15,26 +13,37 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "pupils")
+@Table(name = "pupils_additional_info", schema = "public")
 public class PupilEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pupils_id_seq")
-    @SequenceGenerator(name = "pupils_id_seq", sequenceName = "pupils_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
+    @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @Column(name = "name")
-    String name;
-
-    @Nullable
-    String subjects;
-
-    Integer price;
-
-    Integer tutor_id;
-
-    Integer[] hw_list;
-
+    @NonNull
+    @Column(name = "balance")
     Double balance;
 
+    @Column(name = "hw_list")
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    @Column(name = "price")
+    int price;
+
+    @Column(name = "subjects")
+    @ManyToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    List<SubjectEntity> subjects = new ArrayList<>();
+
+    @ManyToOne()
+    @JoinColumn(name = "support_id")
+    private SupportEntity supportId;
+
+    @Column(name = "tutor_id")
+    @ManyToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    List<TutorEntity> tutorId = new ArrayList<>();
+
+    @NonNull
+    @Column(name = "email")
+    String email;
 }

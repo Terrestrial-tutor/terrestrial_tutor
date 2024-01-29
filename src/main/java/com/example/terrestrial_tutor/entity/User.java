@@ -23,24 +23,30 @@ public class User implements UserDetails {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
+    @NonNull
     @Column(name = "username")
     String username;
 
+    @NonNull
     @Column(name = "name")
     String name;
 
+    @NonNull
     @Column(name = "surname")
     String surname;
 
     @Column(name = "patronymic")
     String patronymic;
 
+    @NonNull
     @Column(name = "email")
     String email;
 
+    @NonNull
     @Column(name = "password")
     String password;
 
+    @NonNull
     @Column(name = "role")
     ERole role;
 
