@@ -9,7 +9,3 @@ WORKDIR /app
 COPY --from=builder /app/target/*.jar /app/*.jar
 EXPOSE 8181
 ENTRYPOINT ["java", "-jar", "/app/*.jar"]
-
-FROM nginx AS nginx
-COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY --from=frontend /usr/src/app/dist/frontend/browser /usr/share/nginx/html
