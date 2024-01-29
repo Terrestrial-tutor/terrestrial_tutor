@@ -35,7 +35,7 @@ public class PupilEntity {
 
     @ManyToOne()
     @JoinColumn(name = "support_id")
-    private SupportEntity supportId;
+    SupportEntity supportId;
 
     @Column(name = "tutor_id")
     @ManyToMany(mappedBy = "pupil", fetch = FetchType.LAZY)

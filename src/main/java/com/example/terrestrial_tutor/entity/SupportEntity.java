@@ -25,9 +25,8 @@ public class SupportEntity {
     @Column(name = "name")
     String name;
 
-    @Column(name = "pupils")
-    @OneToMany(mappedBy = "support", fetch = FetchType.LAZY)
-    List<PupilEntity> pupils = new ArrayList<>();
+    @OneToMany(mappedBy = "support_id", fetch = FetchType.LAZY)
+    List<PupilEntity> pupils;
 
     @NonNull
     @Column(name = "telegram_tag")
