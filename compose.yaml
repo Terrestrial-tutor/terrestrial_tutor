@@ -46,11 +46,9 @@ services:
       - default
 
   frontend:
-    image: frontend
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend
+    image: node:18.15.0-alpine
+    working_dir: /usr/src/app
+    command: sh -c "apk add npm && npm install && npm run build && npm run watch"
     volumes:
       - ./frontend:/usr/src/app
     networks:

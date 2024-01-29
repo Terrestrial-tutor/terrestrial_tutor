@@ -10,14 +10,6 @@ COPY --from=builder /app/target/*.jar /app/*.jar
 EXPOSE 8181
 ENTRYPOINT ["java", "-jar", "/app/*.jar"]
 
-FROM node:18.15.0-alpine AS frontend
-WORKDIR /usr/src/app
-COPY ./frontend/package.json ./frontend/package-lock.json ./
-RUN npm install
-COPY ./frontend .
-EXPOSE 4200
-
-
 FROM nginx AS nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY --from=frontend /usr/src/app/dist/frontend/browser /usr/share/nginx/html
