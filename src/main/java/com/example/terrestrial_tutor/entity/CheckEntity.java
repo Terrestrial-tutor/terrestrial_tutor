@@ -24,6 +24,6 @@ public class CheckEntity {
     Date date;
 
     @OneToOne()
-    @JoinColumn(name = "user")
-    User newUser;
+    @JoinColumn(name = "candidate")
+    User candidate;
 }

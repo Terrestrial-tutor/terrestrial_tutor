@@ -40,10 +40,6 @@ public class PupilEntity {
     @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
     List<TutorEntity> tutors = new ArrayList<>();
 
-    @NonNull
-    @Column(name = "email")
-    String email;
-
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
     List<PaymentEntity> payments= new ArrayList<>();
 }
