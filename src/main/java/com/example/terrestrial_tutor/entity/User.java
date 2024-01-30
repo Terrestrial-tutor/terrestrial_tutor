@@ -53,12 +53,12 @@ public class User implements UserDetails {
 
     @NonNull
     @Column(name = "verification")
-    Boolean verification;
+    Boolean verification = false;
 
     @Column(name = "additional_info_id")
     Long additionalInfoId;
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "candidate", fetch = FetchType.LAZY)
     CheckEntity check;
 
     @Transient

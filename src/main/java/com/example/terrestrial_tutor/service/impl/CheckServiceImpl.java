@@ -28,7 +28,7 @@ public class CheckServiceImpl implements CheckService {
     public CheckEntity addCheck(User newUser){
         CheckEntity newCheck = new CheckEntity();
         newCheck.setDate(new Date());
-        newCheck.setNewUser(newUser);
+        newCheck.setCandidate(newUser);
         try {
             return checkRepository.save(newCheck);
         } catch (Exception ex) {

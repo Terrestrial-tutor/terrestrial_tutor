@@ -1,5 +1,6 @@
 package com.example.terrestrial_tutor.web.controller;
 
+import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.User;
 import com.example.terrestrial_tutor.entity.enums.ERole;
@@ -9,6 +10,7 @@ import com.example.terrestrial_tutor.payload.response.JWTTokenSuccessResponse;
 import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
+import com.example.terrestrial_tutor.service.CheckService;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.UserService;
 import com.example.terrestrial_tutor.validators.ResponseErrorValidation;
@@ -27,8 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @CrossOrigin
-@RestController
-@RequestMapping("/api/auth")
+@Api
 @PreAuthorize("permitAll()")
 public class AuthController {
 
@@ -42,8 +43,10 @@ public class AuthController {
     private UserService userService;
     @Autowired
     PupilService pupilService;
+    @Autowired
+    CheckService checkService;
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) return errors;
@@ -59,7 +62,7 @@ public class AuthController {
         return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/auth/registration")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest, BindingResult bindResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindResult);
         if (!ObjectUtils.isEmpty(errors)) {
@@ -67,15 +70,16 @@ public class AuthController {
             return errors;
         }
 
+        User newUser = userService.createUser(registrationRequest);
         switch (registrationRequest.getRole()) {
             case PUPIL:
                 Long pupilId = pupilService.addNewPupil(new PupilEntity()).getId();
-                User newUser = userService.createUser(registrationRequest);
                 newUser.setAdditionalInfoId(pupilId);
                 userService.updateUser(newUser);
-                return new ResponseEntity<>("Pupil successfully created", HttpStatus.OK);
 
         }
+        checkService.addCheck(newUser);
+
         return new ResponseEntity<>("User successfully created", HttpStatus.OK);
     }
 
