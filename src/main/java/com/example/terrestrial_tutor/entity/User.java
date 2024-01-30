@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -50,8 +51,15 @@ public class User implements UserDetails {
     @Column(name = "role")
     ERole role;
 
+    @NonNull
+    @Column(name = "verification")
+    Boolean verification;
+
     @Column(name = "additional_info_id")
     Long additionalInfoId;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    CheckEntity check;
 
     @Transient
     private GrantedAuthority authorities;
@@ -64,6 +72,7 @@ public class User implements UserDetails {
                 String email,
                 String password,
                 ERole role,
+                Boolean verification,
                 GrantedAuthority authorities) {
         this.id = id;
         this.username = username;
@@ -73,6 +82,7 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.role = role;
+        this.verification = verification;
         this.authorities = authorities;
     }
 

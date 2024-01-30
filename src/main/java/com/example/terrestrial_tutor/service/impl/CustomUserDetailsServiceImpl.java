@@ -47,6 +47,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole(),
+                user.getVerification(),
                 authorities);
     }
 }
