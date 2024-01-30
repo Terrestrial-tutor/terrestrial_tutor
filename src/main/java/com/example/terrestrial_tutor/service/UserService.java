@@ -7,4 +7,5 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public interface UserService {
     User createUser(RegistrationRequest userIn);
+    User updateUser(User user);
 }

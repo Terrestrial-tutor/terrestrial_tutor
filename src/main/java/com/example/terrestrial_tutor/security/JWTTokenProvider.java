@@ -22,11 +22,10 @@ public class JWTTokenProvider {
 
         Map<String, Object> claimsMap = new HashMap<>();
         claimsMap.put("id", userId);
-        claimsMap.put("username", user.getUsername());
+        claimsMap.put("email", user.getEmail());
         claimsMap.put("name", user.getName());
         claimsMap.put("surname", user.getSurname());
         claimsMap.put("patronymic", user.getPatronymic());
-        claimsMap.put("email", user.getEmail());
         claimsMap.put("password", user.getPassword());
         claimsMap.put("role", user.getRole());
 

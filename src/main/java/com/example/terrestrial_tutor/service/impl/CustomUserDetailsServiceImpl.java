@@ -27,7 +27,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
         User user = userRepository.findUserByUsername(username);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username:" + username);
+            throw new UsernameNotFoundException("User not found with email:" + username);
         }
 
         return build(user);
@@ -40,7 +40,7 @@ public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
     public static User build(User user) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(user.getRole().name());
         return new User (user.getId(),
-                user.getUsername(),
+                user.getEmail(),
                 user.getName(),
                 user.getSurname(),
                 user.getPatronymic(),

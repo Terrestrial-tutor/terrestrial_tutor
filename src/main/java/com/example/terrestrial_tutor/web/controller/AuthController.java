@@ -1,6 +1,7 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.User;
 import com.example.terrestrial_tutor.entity.enums.ERole;
 import com.example.terrestrial_tutor.payload.request.LoginRequest;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
@@ -61,14 +62,20 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest, BindingResult bindResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindResult);
-        if (ObjectUtils.isEmpty(errors)) {
+        if (!ObjectUtils.isEmpty(errors)) {
             System.out.println(errors);
             return errors;
         }
-        userService.createUser(registrationRequest);
-        /*if (registrationRequest.getRole() == ERole.PUPIL) {
-            pupilService.addNewPupil(new PupilEntity());
-        }*/
+
+        switch (registrationRequest.getRole()) {
+            case PUPIL:
+                Long pupilId = pupilService.addNewPupil(new PupilEntity()).getId();
+                User newUser = userService.createUser(registrationRequest);
+                newUser.setAdditionalInfoId(pupilId);
+                userService.updateUser(newUser);
+                return new ResponseEntity<>("Pupil successfully created", HttpStatus.OK);
+
+        }
         return new ResponseEntity<>("User successfully created", HttpStatus.OK);
     }
 

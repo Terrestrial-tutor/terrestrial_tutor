@@ -11,8 +11,6 @@ import javax.validation.constraints.*;
 @PasswordMatches
 public class RegistrationRequest {
 
-    @NotEmpty (message = "Enter your username")
-    private String username;
     @NotEmpty (message = "Enter your name")
     private String name;
     @NotEmpty (message = "Enter your surname")

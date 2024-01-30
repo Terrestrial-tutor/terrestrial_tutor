@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,17 +30,25 @@ public class UserServiceImpl implements UserService {
         user.setName(userIn.getName());
         user.setSurname(userIn.getSurname());
         user.setPatronymic(userIn.getPatronymic());
-        user.setUsername(userIn.getUsername());
+        user.setUsername(userIn.getEmail());
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
         user.setRole(userIn.getRole());
 
         try {
-            LOG.info("Saving User {}", userIn.getUsername());
-            return userRepository.save(user);
+            LOG.info("Saving User {}", userIn.getEmail());
+            if (userRepository.findUserByUsername(userIn.getEmail()) != null) {
+                throw new UserExistException("The user " + user.getUsername() + "already exist");
+            } else {
+                return userRepository.save(user);
+            }
         } catch (Exception ex) {
             LOG.error("Error during registration");
             throw new UserExistException("The user " + user.getUsername() + "already exist");
         }
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
     }
 
 }
