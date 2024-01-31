@@ -1,4 +1,21 @@
+networks:
+  default:
+    name: localnet
+    external: true
+
 services:
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./config/nginx.conf/:/etc/nginx/conf.d/nginx.conf
+      - ./frontend/dist/frontend/browser:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    links:
+      - frontend
+    networks:
+      - default
 
   builder-be:
     image: backend-builder
@@ -6,6 +23,8 @@ services:
       context: .
       dockerfile: Dockerfile
       target: builder
+    networks:
+      - default
 
   backend:
     image: backend
@@ -14,7 +33,7 @@ services:
       dockerfile: Dockerfile
       target: app
     ports:
-      - "8080:8080"
+      - "8181:8181"
     depends_on:
        - builder-be
 #       - postgres
@@ -23,6 +42,17 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://87.249.49.62:5432/terrestrial_tutor
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
+    networks:
+      - default
+
+  frontend:
+    image: node:18.15.0-alpine
+    working_dir: /usr/src/app
+    command: sh -c "apk add npm && npm install && npm run build && npm run watch"
+    volumes:
+      - ./frontend:/usr/src/app
+    networks:
+      - default
 
 #Uncomment if it's server
 #  postgres:
