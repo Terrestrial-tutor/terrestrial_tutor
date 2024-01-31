@@ -8,12 +8,11 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./config/nginx.conf/:/etc/nginx/conf.d/nginx.confZz
-      - ./frontend/src:/usr/share/nginx/html/
+      - ./config/nginx.conf/:/etc/nginx/conf.d/nginx.conf
+      - ./frontend/dist/frontend/browser:/usr/share/nginx/html
     ports:
       - "80:80"
     links:
-      - backend
       - frontend
     networks:
       - default
@@ -47,13 +46,11 @@ services:
       - default
 
   frontend:
-    image: frontend
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: frontend
+    image: node:18.15.0-alpine
+    working_dir: /usr/src/app
+    command: sh -c "apk add npm && npm install && npm run build && npm run watch"
     volumes:
-      - './frontend:/app'
+      - ./frontend:/usr/src/app
     networks:
       - default
 
