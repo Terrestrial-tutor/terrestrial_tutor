@@ -76,7 +76,6 @@ public class AuthController {
                 Long pupilId = pupilService.addNewPupil(new PupilEntity()).getId();
                 newUser.setAdditionalInfoId(pupilId);
                 userService.updateUser(newUser);
-
         }
         checkService.addCheck(newUser);
 

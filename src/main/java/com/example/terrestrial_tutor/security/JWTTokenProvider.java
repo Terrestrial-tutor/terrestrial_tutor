@@ -1,8 +1,10 @@
 package com.example.terrestrial_tutor.security;
 
 import com.example.terrestrial_tutor.entity.User;
+import com.example.terrestrial_tutor.exceptions.NotVerificationException;
 import io.jsonwebtoken.*;
 import org.slf4j.*;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,11 @@ public class JWTTokenProvider {
 
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
+
+        if (!user.getVerification()) {
+            LOG.error("User is not verification");
+            throw new NotVerificationException("User is not verification");
+        }
 
         String userId = Long .toString(user.getId());
 
