@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './constants.component.css'
 })
 export class ConstantsComponent {
-  static MAIN_API_PATH: string = 'localhost:8181/api/';
+  static MAIN_API_PATH: string = 'http://localhost:8181/api/';
 }

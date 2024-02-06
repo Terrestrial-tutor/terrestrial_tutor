@@ -7,6 +7,7 @@ import com.example.terrestrial_tutor.entity.enums.ERole;
 import com.example.terrestrial_tutor.payload.request.LoginRequest;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.payload.response.JWTTokenSuccessResponse;
+import com.example.terrestrial_tutor.payload.response.RegistrationSuccess;
 import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
@@ -79,7 +80,7 @@ public class AuthController {
         }
         checkService.addCheck(newUser);
 
-        return new ResponseEntity<>("User successfully created", HttpStatus.OK);
+        return new ResponseEntity<>(new RegistrationSuccess("User registration success"), HttpStatus.OK);
     }
 
 }
