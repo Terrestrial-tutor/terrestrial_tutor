@@ -1,19 +1,21 @@
-restart:
+restart_backend:
+    docker compose build backend
 	docker stop terrestrial_tutor-backend-1
 	docker rm terrestrial_tutor-backend-1
-	docker compose build backend
-	docker compose up -d
+	docker compose up -d backend
+	docker compose ps
+
+restart_frontend:
+    docker compose down nginx frontend
+    docker compose up -d nginx
+    docker compose ps
 
 start:
 	docker compose build backend
 	docker compose up -d
 
-logs:
+logs_backend:
 	docker compose logs -f backend
 
-server_restart_backend_git:
-	git pull
-	docker compose build backend
-	docker stop terrestrial_tutor-backend-1
-	docker rm terrestrial_tutor-backend-1
-	docker compose up -d backend
+logs_frontend:
+	docker compose logs -f frontend
