@@ -76,7 +76,7 @@ public class AuthController {
         }
         checkService.addCheck(newUser);
 
-        return new ResponseEntity<>("User successfully created", HttpStatus.OK);
+        return new ResponseEntity<>(new RegistrationSuccess("User registration success"), HttpStatus.OK);
     }
 
 }
