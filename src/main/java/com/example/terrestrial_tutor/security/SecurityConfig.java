@@ -1,6 +1,7 @@
 package com.example.terrestrial_tutor.security;
 
-import com.example.terrestrial_tutor.service.CustomUserDetailsService;
+import com.example.terrestrial_tutor.service.PupilDetailsService;
+import com.example.terrestrial_tutor.service.TutorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private PupilDetailsService pupilUserDetailsService;
+    @Autowired
+    private TutorDetailsService tutorUserDetailsService;
 
 
     @Override
@@ -40,7 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth
+                .userDetailsService(pupilUserDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder())
+                .and()
+                .userDetailsService(tutorUserDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Override

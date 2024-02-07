@@ -1,5 +1,6 @@
 package com.example.terrestrial_tutor.entity;
 
+import com.example.terrestrial_tutor.entity.enums.ERole;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,10 +21,12 @@ public class CheckEntity {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
+    @Column(name = "candidate_role")
+    ERole role;
+
     @Column(name = "date")
     Date date;
 
-    @OneToOne()
-    @JoinColumn(name = "candidate")
-    User candidate;
+    @Column(name = "candidate_id")
+    Long candidateId;
 }
