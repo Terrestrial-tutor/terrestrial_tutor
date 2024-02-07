@@ -8,7 +8,6 @@ import com.example.terrestrial_tutor.payload.response.JWTTokenSuccessResponse;
 import com.example.terrestrial_tutor.payload.response.RegistrationSuccess;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
-//import com.example.terrestrial_tutor.service.CheckService;
 import com.example.terrestrial_tutor.service.CheckService;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.TutorService;
