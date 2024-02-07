@@ -26,10 +26,10 @@ public class PupilController {
     @NonNull
     PupilRepository pupilRepository;
 
-    /*@PostMapping("/pupil/add")
+    @PostMapping("/pupil/add")
     public ResponseEntity<PupilEntity> addPupil(@RequestBody PupilEntity pupil) {
         return new ResponseEntity<>(pupilService.addNewPupil(pupil), HttpStatus.OK);
-    }*/
+    }
 
     @GetMapping("/pupil/find")
     public ResponseEntity<PupilEntity> findPupilById(@RequestHeader Long id) {

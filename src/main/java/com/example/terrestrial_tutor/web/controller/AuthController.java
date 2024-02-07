@@ -1,16 +1,19 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
+import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.User;
 import com.example.terrestrial_tutor.entity.enums.ERole;
 import com.example.terrestrial_tutor.payload.request.LoginRequest;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.payload.response.JWTTokenSuccessResponse;
 import com.example.terrestrial_tutor.payload.response.RegistrationSuccess;
+import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
 import com.example.terrestrial_tutor.service.CheckService;
 import com.example.terrestrial_tutor.service.PupilService;
-import com.example.terrestrial_tutor.service.TutorService;
+import com.example.terrestrial_tutor.service.UserService;
 import com.example.terrestrial_tutor.validators.ResponseErrorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +41,9 @@ public class AuthController {
     @Autowired
     private ResponseErrorValidation responseErrorValidation;
     @Autowired
-    PupilService pupilService;
+    private UserService userService;
     @Autowired
-    TutorService tutorService;
+    PupilService pupilService;
     @Autowired
     CheckService checkService;
 
@@ -68,11 +70,13 @@ public class AuthController {
             System.out.println(errors);
             return errors;
         }
-        UserDetails newUser = null;
-        if (registrationRequest.getRole() == ERole.PUPIL) {
-            newUser = pupilService.addNewPupil(registrationRequest);
-        } else {
-            newUser = tutorService.addNewTutor(registrationRequest);
+
+        User newUser = userService.createUser(registrationRequest);
+        switch (registrationRequest.getRole()) {
+            case PUPIL:
+                Long pupilId = pupilService.addNewPupil(new PupilEntity()).getId();
+                newUser.setAdditionalInfoId(pupilId);
+                userService.updateUser(newUser);
         }
         checkService.addCheck(newUser);
 

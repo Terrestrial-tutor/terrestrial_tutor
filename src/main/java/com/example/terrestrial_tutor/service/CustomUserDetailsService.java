@@ -1,10 +1,10 @@
 package com.example.terrestrial_tutor.service;
 
-import com.example.terrestrial_tutor.entity.TutorEntity;
+import com.example.terrestrial_tutor.entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface TutorDetailsService extends UserDetailsService {
+public interface CustomUserDetailsService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
-    TutorEntity loadTutorById(Long id);
+    User loadUserById(Long id);
 }
