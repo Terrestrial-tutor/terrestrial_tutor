@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "supports_additional_info", schema = "public")
+@Table(name = "supports", schema = "public")
 public class SupportEntity {
 
     @Id
