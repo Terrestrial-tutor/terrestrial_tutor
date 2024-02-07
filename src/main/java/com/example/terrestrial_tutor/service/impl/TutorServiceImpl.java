@@ -1,12 +1,12 @@
 package com.example.terrestrial_tutor.service.impl;
 
-import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.exceptions.UserExistException;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.repository.TutorRepository;
 import com.example.terrestrial_tutor.security.JWTAuthenticationFilter;
-import com.example.terrestrial_tutor.service.PupilService;
+import com.example.terrestrial_tutor.service.TutorService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PupilServiceImpl implements PupilService {
+public class TutorServiceImpl implements TutorService {
 
     public static final Logger LOG = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
@@ -29,28 +29,28 @@ public class PupilServiceImpl implements PupilService {
     PupilRepository pupilRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public PupilEntity addNewPupil(RegistrationRequest userIn) {
-        PupilEntity pupil = new PupilEntity();
-        pupil.setEmail(userIn.getEmail());
-        pupil.setName(userIn.getName());
-        pupil.setSurname(userIn.getSurname());
-        pupil.setPatronymic(userIn.getPatronymic());
-        pupil.setUsername(userIn.getEmail());
-        pupil.setPassword(passwordEncoder.encode(userIn.getPassword()));
-        pupil.setRole(userIn.getRole());
+    public TutorEntity addNewTutor(RegistrationRequest userIn) {
+        TutorEntity tutor = new TutorEntity();
+        tutor.setEmail(userIn.getEmail());
+        tutor.setName(userIn.getName());
+        tutor.setSurname(userIn.getSurname());
+        tutor.setPatronymic(userIn.getPatronymic());
+        tutor.setUsername(userIn.getEmail());
+        tutor.setPassword(passwordEncoder.encode(userIn.getPassword()));
+        tutor.setRole(userIn.getRole());
 
         try {
             LOG.info("Saving User {}", userIn.getEmail());
             if (tutorRepository.findTutorEntityByUsername(userIn.getEmail()) != null
                     || pupilRepository.findPupilEntityByUsername(userIn.getEmail()) != null) {
-                throw new UserExistException("Login " + pupil.getUsername() + "already exist");
+                throw new UserExistException("Login " + tutor.getUsername() + "already exist");
             } else {
-                return pupilRepository.save(pupil);
+                return tutorRepository.save(tutor);
             }
         } catch (Exception ex) {
             LOG.error("Error during registration");
-            throw new UserExistException("The Login " + pupil.getUsername() + "already exist");
+            throw new UserExistException("The Login " + tutor.getUsername() + "already exist");
         }
     }
-    public PupilEntity findPupilById(Long id) { return pupilRepository.findPupilEntityById(id); }
+    public TutorEntity findTutorById(Long id) { return tutorRepository.findTutorEntityById(id); }
 }

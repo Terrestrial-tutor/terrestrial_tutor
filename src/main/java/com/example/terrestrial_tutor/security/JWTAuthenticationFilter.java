@@ -1,7 +1,10 @@
 package com.example.terrestrial_tutor.security;
 
-import com.example.terrestrial_tutor.entity.User;
-import com.example.terrestrial_tutor.service.CustomUserDetailsService;
+import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.TutorEntity;
+import com.example.terrestrial_tutor.entity.enums.ERole;
+import com.example.terrestrial_tutor.service.PupilDetailsService;
+import com.example.terrestrial_tutor.service.TutorDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +28,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
     @Autowired
-    CustomUserDetailsService customUserDetailsService;
+    PupilDetailsService pupilDetailsService;
+    TutorDetailsService tutorDetailsService;
 
     private String getJWTFromRequest(HttpServletRequest request) {
-        String tutorToken = request.getHeader(SecurityConstants.HEADER_STRING);
-        if (StringUtils.hasText(tutorToken) && tutorToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            return tutorToken.split(" ")[1];
+        String reqToken = request.getHeader(SecurityConstants.HEADER_STRING);
+        if (StringUtils.hasText(reqToken) && reqToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+            return reqToken.split(" ")[1];
         }
         return null;
     }
@@ -41,10 +45,19 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             String jwt = getJWTFromRequest(request);
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
-                User userDetails = customUserDetailsService.loadUserById(userId);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, Collections.emptyList()
-                );
+                ERole userRole = jwtTokenProvider.getUserRoleFromToken(jwt);
+                UsernamePasswordAuthenticationToken authentication;
+                if (userRole == ERole.PUPIL) {
+                    PupilEntity pupilDetails = pupilDetailsService.loadPupilById(userId);
+                    authentication = new UsernamePasswordAuthenticationToken(
+                            pupilDetails, null, Collections.emptyList()
+                    );
+                } else {
+                    TutorEntity tutorDetails = tutorDetailsService.loadTutorById(userId);
+                    authentication = new UsernamePasswordAuthenticationToken(
+                            tutorDetails, null, Collections.emptyList()
+                    );
+                }
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
