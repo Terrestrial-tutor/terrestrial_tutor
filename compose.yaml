@@ -1,7 +1,9 @@
 networks:
-  default:
-    name: localnet
-    external: true
+  localnet:
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+          gateway: 10.0.0.1
 
 services:
 
@@ -16,7 +18,8 @@ services:
     links:
       - frontend
     networks:
-      - default
+      localnet:
+        ipv4_address: 10.0.0.2
 
   builder-be:
     image: backend-builder
@@ -25,7 +28,8 @@ services:
       dockerfile: Dockerfile
       target: builder
     networks:
-      - default
+      localnet:
+        ipv4_address: 10.0.0.3
 
   backend:
     image: backend
@@ -44,8 +48,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
     networks:
-        default:
-          ipv4_address: 172.29.0.5
+      localnet:
+        ipv4_address: 10.0.0.4
 
   frontend:
     image: node:20.11.0-alpine
@@ -54,7 +58,8 @@ services:
     volumes:
       - ./frontend:/usr/src/app
     networks:
-      - default
+      localnet:
+        ipv4_address: 10.0.0.5
 
 #Uncomment if it's server
 #  postgres:
