@@ -8,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './constants.component.css'
 })
 export class ConstantsComponent {
-  static MAIN_API_PATH: string = 'http://tertut.local/api/';
+  static MAIN_API_PATH: string = 'http://87.249.49.62/api/';
+  //static MAIN_API_PATH: string = 'http://localhost/api/';
 }
