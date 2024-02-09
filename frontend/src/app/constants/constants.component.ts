@@ -9,5 +9,5 @@ import { Component } from '@angular/core';
 })
 export class ConstantsComponent {
   static MAIN_API_PATH: string = 'http://87.249.49.62/api/';
-  //static MAIN_API_PATH: string = 'http://localhost/api/';
+  //static MAIN_API_PATH: string = 'http://localhost:8181/api/';
 }
