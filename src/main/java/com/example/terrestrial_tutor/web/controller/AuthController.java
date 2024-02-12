@@ -1,20 +1,27 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
+import com.example.terrestrial_tutor.entity.AdminEntity;
+import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
+import com.example.terrestrial_tutor.exceptions.NotAdminException;
 import com.example.terrestrial_tutor.payload.request.LoginRequest;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.payload.response.JWTTokenSuccessResponse;
 import com.example.terrestrial_tutor.payload.response.RegistrationSuccess;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
+//import com.example.terrestrial_tutor.service.CheckService;
+import com.example.terrestrial_tutor.service.AdminService;
 import com.example.terrestrial_tutor.service.CheckService;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.TutorService;
 import com.example.terrestrial_tutor.validators.ResponseErrorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,6 +51,8 @@ public class AuthController {
     TutorService tutorService;
     @Autowired
     CheckService checkService;
+    @Autowired
+    AdminService adminService;
 
     @PostMapping("/auth/login")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
@@ -58,7 +67,13 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = SecurityConstants.TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt));
+        if (authentication.getPrincipal() instanceof AdminEntity) {
+            return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.ADMIN));
+        } else if (authentication.getPrincipal() instanceof PupilEntity) {
+            return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.PUPIL));
+        } else {
+            return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.TUTOR));
+        }
     }
 
     @PostMapping("/auth/registration")
@@ -77,6 +92,21 @@ public class AuthController {
         checkService.addCheck(newUser);
 
         return new ResponseEntity<>(new RegistrationSuccess("User registration success"), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/registration/admin")
+    public ResponseEntity<Object> registerAdmin(@Valid @RequestBody RegistrationRequest registrationRequest, BindingResult bindResult) {
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindResult);
+        if (!ObjectUtils.isEmpty(errors)) {
+            System.out.println(errors);
+            return errors;
+        }
+        if (registrationRequest.getRole() != ERole.ADMIN) {
+            throw new NotAdminException();
+        }
+        adminService.addNewAdmin(registrationRequest);
+
+        return new ResponseEntity<>(new RegistrationSuccess("Admin registration success"), HttpStatus.OK);
     }
 
 }

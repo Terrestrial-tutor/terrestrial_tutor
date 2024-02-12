@@ -1,0 +1,29 @@
+<div>
+  <h1>Checks</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Роль</th>
+        <th>Дата</th>
+        <th>Время</th>
+        <th>Логин</th>
+        <th>Одобрение</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let check of checks">
+      <tr>
+        <td>{{check.surname}}</td>
+        <td>{{check.name}}</td>
+        <td>{{check.patronymic}}</td>
+        <td>{{check.role}}</td>
+        <td>{{check.date | date:'dd.MM.yyyy'}}</td>
+        <td>{{check.date | date:'HH:mm'}}</td>
+        <td>{{check.username}}</td>
+        <td><button (click)="deleteCheck(check.id)">Одобрить</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
