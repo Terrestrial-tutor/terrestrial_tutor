@@ -52,5 +52,16 @@ public class TutorServiceImpl implements TutorService {
             throw new UserExistException("The Login " + tutor.getUsername() + "already exist");
         }
     }
+
+    public void deleteTutorById(Long id) {
+        tutorRepository.deleteById(id);
+    }
+
+    public TutorEntity verifyTutor(Long id) {
+        TutorEntity tutor = tutorRepository.findTutorEntityById(id);
+        tutor.setVerification(true);
+        return tutorRepository.save(tutor);
+    }
+
     public TutorEntity findTutorById(Long id) { return tutorRepository.findTutorEntityById(id); }
 }

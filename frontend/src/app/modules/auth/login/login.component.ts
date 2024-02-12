@@ -44,13 +44,15 @@ export class LoginComponent implements OnInit {
       username: this.loginForm.value.username,
       password: this.loginForm.value.password
     }).subscribe(data => {
-      console.log(data);
-
       this.tokenStorage.saveToken(data.token);
       this.tokenStorage.saveUser(data);
-      console.log(data);
-      /*this.router.navigate(['/']);
-      window.location.reload();*/
+      console.log(data.role);
+      if (data.role == 'ADMIN') {
+        this.router.navigate(['/admin']);
+      }
+      //this.router.navigate(['/admin']);
+      // this.router.navigate(['/']);
+      // window.location.reload();
     }, error => {
       console.log(error);
     });

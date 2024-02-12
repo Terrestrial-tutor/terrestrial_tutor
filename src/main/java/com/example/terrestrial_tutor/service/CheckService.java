@@ -11,4 +11,6 @@ public interface CheckService {
     CheckEntity addCheck(UserDetails newUser);
 
     CheckEntity deleteCheck(Long id);
+
+    CheckEntity findCheckById(Long id);
 }

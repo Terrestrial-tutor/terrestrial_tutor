@@ -1,8 +1,10 @@
 package com.example.terrestrial_tutor.security;
 
+import com.example.terrestrial_tutor.entity.AdminEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
+import com.example.terrestrial_tutor.service.AdminDetailsService;
 import com.example.terrestrial_tutor.service.PupilDetailsService;
 import com.example.terrestrial_tutor.service.TutorDetailsService;
 import org.slf4j.Logger;
@@ -29,7 +31,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private JWTTokenProvider jwtTokenProvider;
     @Autowired
     PupilDetailsService pupilDetailsService;
+    @Autowired
     TutorDetailsService tutorDetailsService;
+    @Autowired
+    AdminDetailsService adminDetailsService;
 
     private String getJWTFromRequest(HttpServletRequest request) {
         String reqToken = request.getHeader(SecurityConstants.HEADER_STRING);
@@ -52,10 +57,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                     authentication = new UsernamePasswordAuthenticationToken(
                             pupilDetails, null, Collections.emptyList()
                     );
-                } else {
+                } else if (userRole == ERole.TUTOR){
                     TutorEntity tutorDetails = tutorDetailsService.loadTutorById(userId);
                     authentication = new UsernamePasswordAuthenticationToken(
                             tutorDetails, null, Collections.emptyList()
+                    );
+                } else {
+                    AdminEntity adminDetail = adminDetailsService.loadAdminById(userId);
+                    authentication = new UsernamePasswordAuthenticationToken(
+                            adminDetail, null, Collections.emptyList()
                     );
                 }
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -64,7 +74,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception ex) {
             LOG.error("Could not set user authentication");
         }
-
         filterChain.doFilter(request, response);
     }
 }
