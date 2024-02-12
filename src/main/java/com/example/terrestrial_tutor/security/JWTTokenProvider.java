@@ -1,4 +1,5 @@
 package com.example.terrestrial_tutor.security;
+import com.example.terrestrial_tutor.entity.AdminEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
@@ -27,10 +28,15 @@ public class JWTTokenProvider {
         if (user instanceof PupilEntity pupil) {
             userId = Long.toString(pupil.getId());
             claimsMap = getClaims(userId, pupil.getEmail(), pupil.getRole(), pupil.getVerification());
-        } else {
-            TutorEntity tutor = (TutorEntity) user;
+        } else if (user instanceof TutorEntity tutor){
             userId = Long.toString(tutor.getId());
             claimsMap = getClaims(userId, tutor.getEmail(), tutor.getRole(), tutor.getVerification());
+        } else {
+            AdminEntity admin = (AdminEntity) user;
+            userId = Long.toString(admin.getId());
+            claimsMap.put("id", userId);
+            claimsMap.put("email", admin.getEmail());
+            claimsMap.put("role", admin.getRole());
         }
 
         return Jwts.builder()
@@ -57,7 +63,7 @@ public class JWTTokenProvider {
         try {
             Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET)
-                    .parseClaimsJwt(token);
+                    .parseClaimsJws(token);
             return true;
         } catch (MalformedJwtException |
                  UnsupportedJwtException |
@@ -81,7 +87,14 @@ public class JWTTokenProvider {
                 .setSigningKey(SecurityConstants.SECRET)
                 .parseClaimsJws(token)
                 .getBody();
-        return (ERole) claims.get("role");
+        Object role = claims.get("role");
+        if (role.equals("ADMIN")) {
+            return ERole.ADMIN;
+        } else if (role.equals("PUPIL")) {
+            return ERole.PUPIL;
+        } else {
+            return ERole.TUTOR;
+        }
     }
 
 }
