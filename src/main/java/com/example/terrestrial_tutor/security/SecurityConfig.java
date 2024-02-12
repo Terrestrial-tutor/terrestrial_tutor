@@ -1,5 +1,6 @@
 package com.example.terrestrial_tutor.security;
 
+import com.example.terrestrial_tutor.service.AdminDetailsService;
 import com.example.terrestrial_tutor.service.PupilDetailsService;
 import com.example.terrestrial_tutor.service.TutorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private PupilDetailsService pupilUserDetailsService;
     @Autowired
     private TutorDetailsService tutorUserDetailsService;
+    @Autowired
+    private AdminDetailsService adminDetailsService;
 
 
     @Override
@@ -48,6 +51,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and()
                 .userDetailsService(tutorUserDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder())
+                .and()
+                .userDetailsService(adminDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder());
     }
 

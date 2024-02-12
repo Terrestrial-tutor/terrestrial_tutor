@@ -52,5 +52,16 @@ public class PupilServiceImpl implements PupilService {
             throw new UserExistException("The Login " + pupil.getUsername() + "already exist");
         }
     }
+
+    public void deletePupilById(Long id) {
+        pupilRepository.deleteById(id);
+    }
+
+    public PupilEntity verifyPupil(Long id) {
+        PupilEntity pupil = pupilRepository.findPupilEntityById(id);
+        pupil.setVerification(true);
+        return pupilRepository.save(pupil);
+    }
+
     public PupilEntity findPupilById(Long id) { return pupilRepository.findPupilEntityById(id); }
 }

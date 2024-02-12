@@ -54,4 +54,8 @@ public class CheckServiceImpl implements CheckService {
         }
     }
 
+    public CheckEntity findCheckById(Long id) {
+        return checkRepository.findCheckEntityById(id);
+    }
+
 }
