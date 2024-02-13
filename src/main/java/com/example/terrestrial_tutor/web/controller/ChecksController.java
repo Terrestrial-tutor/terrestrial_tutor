@@ -1,7 +1,7 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
-import com.example.terrestrial_tutor.dto.Check;
+import com.example.terrestrial_tutor.dto.CheckDTO;
 import com.example.terrestrial_tutor.dto.facade.CheckFacade;
 import com.example.terrestrial_tutor.entity.CheckEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
@@ -32,8 +32,8 @@ public class ChecksController {
     private CheckFacade checkFacade;
 
     @GetMapping("/check/all")
-    public ResponseEntity<List<Check>> checks() {
-        List<Check> checkList =checkService.getAllChecks()
+    public ResponseEntity<List<CheckDTO>> checks() {
+        List<CheckDTO> checkList =checkService.getAllChecks()
                 .stream()
                 .map(checkFacade::checkToCheckDTO)
                 .toList();
