@@ -1,13 +1,12 @@
 package com.example.terrestrial_tutor.dto.facade;
 
-import com.example.terrestrial_tutor.dto.Check;
+import com.example.terrestrial_tutor.dto.CheckDTO;
 import com.example.terrestrial_tutor.entity.CheckEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.TutorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -20,8 +19,8 @@ public class CheckFacade {
     @Autowired
     TutorService tutorService;
 
-    public Check checkToCheckDTO(CheckEntity checkEntity) {
-        Check checkDTO = new Check();
+    public CheckDTO checkToCheckDTO(CheckEntity checkEntity) {
+        CheckDTO checkDTO = new CheckDTO();
         HashMap<String, String> claims = new HashMap<>();
         Long userId = checkEntity.getCandidateId();
         if (pupilService.findPupilById(userId) != null) {

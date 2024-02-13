@@ -7,11 +7,6 @@ import {Router, RouterLink} from "@angular/router";
 @Component({
   selector: 'app-login',
   templateUrl: 'login.component.html',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink
-  ],
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
@@ -46,9 +41,11 @@ export class LoginComponent implements OnInit {
     }).subscribe(data => {
       this.tokenStorage.saveToken(data.token);
       this.tokenStorage.saveUser(data);
-      console.log(data.role);
       if (data.role == 'ADMIN') {
         this.router.navigate(['/admin']);
+      }
+      if (data.role == 'PUPIL') {
+        this.router.navigate(['/pupil']);
       }
       //this.router.navigate(['/admin']);
       // this.router.navigate(['/']);
