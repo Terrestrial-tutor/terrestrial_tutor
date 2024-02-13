@@ -39,14 +39,12 @@ public class PupilController {
         return new ResponseEntity<>(pupilService.findPupilById(id), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost")
     @GetMapping("/pupil")
     public ResponseEntity<PupilDTO> getCurrentPupil(Principal principal) {
         PupilDTO pupil = pupilFacade.pupilToPupilDTO(pupilService.getCurrentPupil(principal));
         return new ResponseEntity<PupilDTO>(pupil, HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost")
     @PostMapping("/pupil/add/subjects")
     public ResponseEntity<PupilDTO> addSubjects(Principal principal, @RequestBody List<String> subjects) {
         PupilEntity pupil = pupilService.getCurrentPupil(principal);
