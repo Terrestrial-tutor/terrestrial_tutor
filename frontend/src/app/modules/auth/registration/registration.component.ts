@@ -5,13 +5,8 @@ import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink
-  ],
   templateUrl: './registration.component.html',
-  styleUrl: './registration.component.css'
+  styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit{
   // @ts-ignore
