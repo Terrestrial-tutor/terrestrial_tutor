@@ -1,23 +1,19 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Check} from "../../models/Check";
 import {AdminService} from "./services/admin.service";
-import {DatePipe, NgForOf} from "@angular/common";
+import {TokenStorageService} from "../../security/token-storage.service";
 
 @Component({
   selector: 'app-admin',
-  standalone: true,
-  imports: [
-    NgForOf,
-    DatePipe
-  ],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrls: ['./admin.component.css'],
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
 
   checks: Check[] = []
 
-  constructor(private adminService: AdminService) {
+  constructor(private adminService: AdminService,
+              private tokenService: TokenStorageService) {
   }
 
   ngOnInit(): void {
@@ -27,6 +23,10 @@ export class AdminComponent {
 
   deleteCheck(id: number) {
     this.adminService.deleteCheck(id).subscribe(check => this.checks.splice(check));
+  }
+
+  logOut(): void {
+    this.tokenService.logOut();
   }
 
 }

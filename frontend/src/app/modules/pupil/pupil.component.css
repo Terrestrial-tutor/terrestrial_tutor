@@ -1,0 +1,31 @@
+.mat-tab-group {
+  border: 1px solid #ccc; /* Граница */
+  border-radius: 4px; /* Скругление углов */
+}
+
+.mat-tab-label {
+  background-color: #f0f0f0; /* Цвет фона заголовка вкладки */
+  border-bottom: 1px solid #ccc; /* Граница снизу */
+}
+
+.mat-tab-label:hover {
+  background-color: #e0e0e0; /* Цвет фона заголовка вкладки при наведении */
+}
+
+.mat-tab-label-active {
+  background-color: #fff; /* Цвет фона заголовка активной вкладки */
+  border-bottom: 2px solid #007bff; /* Граница снизу для активной вкладки */
+  color: #007bff; /* Цвет текста активной вкладки */
+}
+
+.mat-tab-body-wrapper {
+  border-top: 1px solid #ccc; /* Граница сверху для контента вкладок */
+}
+
+.mat-tab-body {
+  padding: 20px; /* Отступы внутри контента вкладок */
+}
+
+.info {
+  padding: 10px;
+}

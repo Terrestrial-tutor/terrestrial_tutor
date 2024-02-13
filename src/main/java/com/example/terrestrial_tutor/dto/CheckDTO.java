@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class Check {
+public class CheckDTO {
     Long id;
     String username;
     String name;
