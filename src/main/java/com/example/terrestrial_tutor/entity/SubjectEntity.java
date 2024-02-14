@@ -25,6 +25,10 @@ public class SubjectEntity {
     @Column(name = "name")
     String name;
 
+    @NonNull
+    @Column(name = "count_level")
+    int countLevel;
+
     @ManyToMany()
     @JoinColumn(name = "tutors")
     List<TutorEntity> tutors;
@@ -32,4 +36,7 @@ public class SubjectEntity {
     @ManyToMany()
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
+
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    List<TaskEntity> tasks = new ArrayList<>();
 }

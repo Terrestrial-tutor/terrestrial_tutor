@@ -22,6 +22,7 @@ public class TaskEntity {
     @NonNull
     @Column(name = "name")
     String name;
+
     /*
     @NonNull
     @Column(name = "checking")
@@ -50,6 +51,18 @@ public class TaskEntity {
     @NonNull
     @Column(name = "answer")
     String answer;
+
+    @ManyToOne()
+    @JoinColumn(name = "subject")
+    SubjectEntity subject;
+
+    @NonNull
+    @Column(name = "level1")
+    String level1;
+
+    @NonNull
+    @Column(name = "level2")
+    String level2;
 
     //ban_commands
 
