@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -63,6 +65,10 @@ public class TaskEntity {
     @NonNull
     @Column(name = "level2")
     String level2;
+
+    @ManyToMany()
+    @JoinColumn(name = "homeworks")
+    List<HomeworkEntity> homeworks = new ArrayList<>();
 
     //ban_commands
 
