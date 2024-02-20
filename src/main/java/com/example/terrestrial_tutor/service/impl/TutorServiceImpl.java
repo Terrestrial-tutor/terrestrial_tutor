@@ -63,5 +63,9 @@ public class TutorServiceImpl implements TutorService {
         return tutorRepository.save(tutor);
     }
 
+    public TutorEntity updateTutor(TutorEntity tutor) {
+        return tutorRepository.save(tutor);
+    }
+
     public TutorEntity findTutorById(Long id) { return tutorRepository.findTutorEntityById(id); }
 }

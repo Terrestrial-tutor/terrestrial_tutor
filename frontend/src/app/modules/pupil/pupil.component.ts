@@ -3,6 +3,8 @@ import {PupilService} from "./services/pupil.service";
 import {Pupil} from "../../models/Pupil";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TokenStorageService} from "../../security/token-storage.service";
+import {SubjectsService} from "../subjects/services/subjects.service";
+import {Subject} from "../../models/Subject";
 
 @Component({
   selector: 'app-pupil',
@@ -14,7 +16,8 @@ export class PupilComponent {
   pupil: Pupil | undefined;
 
   constructor(private pupilService: PupilService,
-              private tokenService: TokenStorageService) {}
+              private tokenService: TokenStorageService,
+              private subjectsService: SubjectsService) {}
 
   ngOnInit(): void {
     // @ts-ignore
@@ -25,10 +28,6 @@ export class PupilComponent {
 
   logoutPupil(): void {
     this.tokenService.logOut();
-  }
-
-  addSubjects(){
-    this.pupilService.addSubjects(['информатика']).subscribe();
   }
 
 }

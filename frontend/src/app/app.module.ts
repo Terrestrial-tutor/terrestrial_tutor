@@ -14,6 +14,18 @@ import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ConstantsComponent} from "./constants/constants.component";
 import {MatTabsModule} from "@angular/material/tabs";
+import { SubjectsComponent } from './modules/subjects/subjects.component';
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {MatButtonModule} from "@angular/material/button";
+import { PupilsDialogComponent } from './modules/admin/dialogs/pupils-dialog/pupils-dialog.component';
+import {MatListModule} from "@angular/material/list";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatInputModule} from "@angular/material/input";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -22,7 +34,9 @@ import {MatTabsModule} from "@angular/material/tabs";
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
-    ConstantsComponent
+    ConstantsComponent,
+    SubjectsComponent,
+    PupilsDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +45,17 @@ import {MatTabsModule} from "@angular/material/tabs";
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatListModule,
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
   ],
   providers: [authInterceptorProviders, authErrorInterceptorProviders],
   bootstrap: [AppComponent]

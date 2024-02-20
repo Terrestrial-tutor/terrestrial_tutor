@@ -33,8 +33,10 @@ export class AuthGuardService implements CanActivate{
           return false;
         }
       }
-      if (state.url.includes('admin') && currentUser.role == 'PUPIL') {
-        this.router.navigate(['/pupil']);
+      if (state.url.includes('admin') && currentUser.role != 'ADMIN') {
+        if (currentUser.role == 'PUPIL') {
+          this.router.navigate(['/pupil']);
+        }
         return false;
       }
       return true;

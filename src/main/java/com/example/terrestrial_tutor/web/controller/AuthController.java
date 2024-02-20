@@ -33,6 +33,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 @CrossOrigin
 @Api
@@ -86,22 +87,25 @@ public class AuthController {
         UserDetails newUser = null;
         if (registrationRequest.getRole() == ERole.PUPIL) {
             newUser = pupilService.addNewPupil(registrationRequest);
-        } else {
+        } else if (registrationRequest.getRole() == ERole.TUTOR){
             newUser = tutorService.addNewTutor(registrationRequest);
+        } else {
+            throw new NotAdminException();
         }
         checkService.addCheck(newUser);
 
         return new ResponseEntity<>(new RegistrationSuccess("User registration success"), HttpStatus.OK);
     }
 
-    @PostMapping("/auth/registration/admin")
-    public ResponseEntity<Object> registerAdmin(@Valid @RequestBody RegistrationRequest registrationRequest, BindingResult bindResult) {
+    @PostMapping("/auth/registration/admin/{secret}")
+    public ResponseEntity<Object> registerAdmin(@Valid @RequestBody RegistrationRequest registrationRequest
+            , BindingResult bindResult, @PathVariable String secret) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindResult);
         if (!ObjectUtils.isEmpty(errors)) {
             System.out.println(errors);
             return errors;
         }
-        if (registrationRequest.getRole() != ERole.ADMIN) {
+        if (registrationRequest.getRole() != ERole.ADMIN || !secret.equals("tErRrEsTrIaLtUtOr")) {
             throw new NotAdminException();
         }
         adminService.addNewAdmin(registrationRequest);

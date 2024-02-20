@@ -16,8 +16,10 @@ export class PupilService {
     return this.http.get(PUPIL_API);
   }
 
-  addSubjects(subjects: string[]): Observable<any> {
-    return this.http.post(PUPIL_API + 'add/subjects', subjects);
+  addSubjects(subject: string | undefined, ids: number[] | undefined): Observable<any> {
+    return this.http.post(PUPIL_API + `add/subjects/`, {subject, ids});
   }
+
+
 
 }

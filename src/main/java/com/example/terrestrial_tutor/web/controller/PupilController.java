@@ -5,7 +5,10 @@ import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
+import com.example.terrestrial_tutor.payload.request.AddSubjectRequest;
 import com.example.terrestrial_tutor.service.PupilService;
+import com.example.terrestrial_tutor.service.SubjectService;
+import com.example.terrestrial_tutor.service.TutorService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
 import java.security.Principal;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,7 +31,12 @@ public class PupilController {
     @NonNull
     PupilService pupilService;
     @Autowired
+    @NonNull
+    TutorService tutorService;
+    @Autowired
     private PupilFacade pupilFacade;
+    @Autowired
+    private SubjectService subjectService;
 
     /*@PostMapping("/pupil/add")
     public ResponseEntity<PupilEntity> addPupil(@RequestBody PupilEntity pupil) {
@@ -46,18 +55,25 @@ public class PupilController {
     }
 
     @PostMapping("/pupil/add/subjects")
-    public ResponseEntity<PupilDTO> addSubjects(Principal principal, @RequestBody List<String> subjects) {
-        PupilEntity pupil = pupilService.getCurrentPupil(principal);
-        List<SubjectEntity> subjectEntity = (List<SubjectEntity>) subjects
-                .stream()
-                .map(subject -> {
-                    SubjectEntity subjectEntity1 = new SubjectEntity();
-                    subjectEntity1.setName(subject);
-                    subjectEntity1.setPupils((List<PupilEntity>) pupil);
-                    return subjectEntity1;
-                });
-        PupilDTO pupilDTO = pupilFacade.pupilToPupilDTO(pupilService.addSubjects(principal, subjectEntity));
-        return new ResponseEntity<>(pupilDTO,HttpStatus.OK);
+    public ResponseEntity<List<PupilDTO>> addSubjects(@RequestBody AddSubjectRequest addSubjectRequest) {
+        String subject = addSubjectRequest.getSubject();
+        List<Long> ids = addSubjectRequest.getIds();
+        List<PupilEntity> pupils = pupilService.findPupilsByIds(ids);
+        List<PupilDTO> pupilsDTO = new ArrayList<>();
+        for (PupilEntity pupil : pupils) {
+            SubjectEntity currentSubject = subjectService.findSubjectByName(subject);
+            if (currentSubject != null && !pupil.getSubjects().contains(currentSubject)) {
+                pupil.getSubjects().add(currentSubject);
+                currentSubject.getPupils().add(pupil);
+                subjectService.updateSubject(currentSubject);
+            } else {
+                throw new EntityExistsException();
+            }
+            pupilService.updatePupil(pupil);
+            pupilsDTO.add(pupilFacade.pupilToPupilDTO(pupil));
+        }
+
+        return new ResponseEntity<>(pupilsDTO,HttpStatus.OK);
     }
 
 }
