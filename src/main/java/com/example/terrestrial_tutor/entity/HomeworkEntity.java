@@ -40,4 +40,7 @@ public class HomeworkEntity {
     @ManyToOne()
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
+
+    @ManyToMany(mappedBy = "homeworks", fetch = FetchType.LAZY)
+    List<TaskEntity> tasks = new ArrayList<>();
 }
