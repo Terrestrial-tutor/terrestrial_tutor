@@ -40,11 +40,11 @@ public class TaskEntity {
     @NonNull
     @Column(name = "complexity")
     String complexity;
-
+    */
     @Column(name = "task_text")
     String taskText;
 
-     */
+
 
     //task_images
 
