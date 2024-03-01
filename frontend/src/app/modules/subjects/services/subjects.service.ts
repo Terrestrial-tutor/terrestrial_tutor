@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ConstantsComponent} from "../../../constants/constants.component";
 import {Observable} from "rxjs";
+import {EnvironmentService} from "../../../../environments/environment.service";
 
-const SUBJECTS_API = ConstantsComponent.MAIN_API_PATH + 'subjects/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubjectsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private apiService: EnvironmentService) { }
+
+  private SUBJECTS_API = this.apiService.apiUrl + 'subjects/';
 
   getAllSubjects(): Observable<any> {
-    return this.http.get(SUBJECTS_API);
+    return this.http.get(this.SUBJECTS_API);
   }
 
 }

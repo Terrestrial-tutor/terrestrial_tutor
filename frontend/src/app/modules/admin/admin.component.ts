@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, PipeTransform} from '@angular/core';
 import {Check} from "../../models/Check";
 import {AdminService} from "./services/admin.service";
 import {TokenStorageService} from "../../security/token-storage.service";
@@ -8,9 +8,10 @@ import {PupilService} from "../pupil/services/pupil.service";
 import {TutorList} from "../../models/TutorList";
 import {Pupil} from "../../models/Pupil";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
-import {PupilsDialogComponent} from "./dialogs/pupils-dialog/pupils-dialog.component";
-import {HttpClient} from "@angular/common/http";
-import {ConstantsComponent} from "../../constants/constants.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {PupilSelect} from "../../models/PupilSelect";
+import {FormControl} from "@angular/forms";
+import {map, Observable, OperatorFunction, pipe, startWith} from "rxjs";
 
 @Component({
   selector: 'app-admin',
@@ -26,19 +27,25 @@ export class AdminComponent implements OnInit {
   // @ts-ignore
   selectedTutor: TutorList;
   pupils: Pupil[] = [];
-  searchTutor: string = '';
   filteredTutors: TutorList[] = [];
   isChecksPageLoaded: boolean = false;
   isPupilsLoaded: boolean = true;
+  isNewPupilsLoaded: boolean = true;
+  newPupils: PupilSelect[] = [];
+  active: any;
+  filter = new FormControl('');
+  filteredPupils: PupilSelect[] = [];
 
   constructor(private adminService: AdminService,
               private tokenService: TokenStorageService,
               private subjectsService: SubjectsService,
               private pupilService: PupilService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
+    this.selectedSubject = "Выбирете предмет";
     this.adminService.getAllChecks()
       .subscribe(checks => {
         this.checks = checks;
@@ -57,10 +64,6 @@ export class AdminComponent implements OnInit {
   logOut(): void {
     this.tokenService.logOut();
   }
-
-  /*addSubjects(){
-    this.pupilService.addSubjects([this.selectedSubject], this.pupil?.id).subscribe();
-  }*/
 
   getAllSubjects(): void {
     this.subjectsService.getAllSubjects().subscribe(data => {
@@ -83,34 +86,41 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.width = '50%';
-    dialogConfig.height = '500px';
-    dialogConfig.data = {subject: this.selectedSubject, tutor: this.selectedTutor};
-    const dialogRef = this.dialog.open(PupilsDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      let newPupilsIds: number[] = [];
-      for (let pupil of result) {
-        newPupilsIds.push(pupil.id);
-      }
+  search(text: any) {
+    this.filteredPupils = this.newPupils.filter(pupil => {
+      return pupil.pupil.username.toLowerCase().includes(text) ||
+        pupil.pupil.name.toLowerCase().includes(text) ||
+        pupil.pupil.surname.toLowerCase().includes(text) ||
+        pupil.pupil.patronymic.toLowerCase().includes(text);
+    });
+  }
+
+  open(content: any) {
+    this.newPupils = [];
+    this.adminService.findPupilsWithoutSubject(this.selectedSubject).subscribe(pupils => {
+      this.newPupils = pupils.map((pupil: any) => {
+        return new PupilSelect(pupil, false);
+      });
+      this.filteredPupils = this.newPupils;
+      this.isPupilsLoaded = true;
+    });
+    this.filter.valueChanges.subscribe((text) => {
+      this.search(text);
+    });
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(selectedPupils => {
+      let newPupilsIds = selectedPupils.map((pupil: Pupil) => {
+        return pupil.id;
+      })
       this.pupilService.addSubjects(this.selectedSubject, newPupilsIds).subscribe();
       this.adminService.addPupilsForTutor(newPupilsIds, this.selectedTutor.id).subscribe(pupils => {
         this.pupils = pupils;
       });
-    })
+    }).finally(() => {});
+    this.isPupilsLoaded = false;
   }
 
-  filterTutors() {
-    if (!this.searchTutor) {
-      this.filteredTutors = [];
-      return;
-    }
-    this.filteredTutors = this.tutorsBySubjects.filter(item => {
-      return item.username.toLowerCase().includes(this.searchTutor.toLowerCase()) ||
-        item.name.toLowerCase().includes(this.searchTutor.toLowerCase()) ||
-        item.surname.toLowerCase().includes(this.searchTutor.toLowerCase()) ||
-        item.patronymic.toLowerCase().includes(this.searchTutor.toLowerCase());
-    });
+  close(modal: any) {
+    modal.close(this.newPupils.filter(pupil => pupil.isSelected).map(pupil => pupil.pupil));
   }
+
 }

@@ -1,49 +1,121 @@
-<div>
-  <button (click)="logOut()">logout</button>
-  <mat-tab-group>
-    <mat-tab label="Верефикация">
-      <mat-spinner *ngIf="!isChecksPageLoaded"></mat-spinner>
+<button (click)="logOut()">logout</button>
+
+<!-- Создание вкладок -->
+
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+
+  <!-- Вкладка с заявками на регу -->
+
+  <li ngbNavItem>
+    <a ngbNavLink>Заявки</a>
+    <ng-template ngbNavContent>
+      <div *ngIf="!isChecksPageLoaded" class="spinner-border" role="status"></div>
       <table *ngIf="isChecksPageLoaded">
         <thead>
-          <tr>
-            <th>Фамилия</th>
-            <th>Имя</th>
-            <th>Отчество</th>
-            <th>Роль</th>
-            <th>Дата</th>
-            <th>Время</th>
-            <th>Логин</th>
-            <th>Одобрение</th>
-          </tr>
+        <tr>
+          <th>Фамилия</th>
+          <th>Имя</th>
+          <th>Отчество</th>
+          <th>Роль</th>
+          <th>Дата</th>
+          <th>Время</th>
+          <th>Логин</th>
+          <th>Одобрение</th>
+        </tr>
         </thead>
         <tbody *ngFor="let check of checks">
-          <tr>
-            <td>{{check.surname}}</td>
-            <td>{{check.name}}</td>
-            <td>{{check.patronymic}}</td>
-            <td>{{check.role}}</td>
-            <td>{{check.date | date:'dd.MM.yyyy'}}</td>
-            <td>{{check.date | date:'HH:mm'}}</td>
-            <td>{{check.username}}</td>
-            <td><button (click)="deleteCheck(check.id)">Одобрить</button></td>
-          </tr>
+        <tr>
+          <td>{{check.surname}}</td>
+          <td>{{check.name}}</td>
+          <td>{{check.patronymic}}</td>
+          <td>{{check.role}}</td>
+          <td>{{check.date | date:'dd.MM.yyyy'}}</td>
+          <td>{{check.date | date:'HH:mm'}}</td>
+          <td>{{check.username}}</td>
+          <td><button (click)="deleteCheck(check.id)">Одобрить</button></td>
+        </tr>
         </tbody>
       </table>
-    </mat-tab>
-    <mat-tab label="Добавление учеников">
-      <mat-label>Добавление</mat-label>
-      <mat-select [(ngModel)]="selectedSubject" (selectionChange)="findTutorsBySubject()" placeholder="Выберете предмет">
-        <mat-option *ngFor="let subject of subjects" [value]="subject.subjectName">{{ subject.subjectName }}</mat-option>
-      </mat-select>
-      <mat-select [(ngModel)]="selectedTutor" (selectionChange)="getTutorPupilsBySubject()" placeholder="Выберете преподавателя">
-        <input matInput placeholder="Поиск..." [(ngModel)]="searchTutor" (input)="filterTutors()">
-        <mat-option *ngFor="let tutor of tutorsBySubjects" [value]="tutor">{{ tutor.username }}</mat-option>
-      </mat-select>
-      <mat-spinner *ngIf="!isPupilsLoaded"></mat-spinner>
+    </ng-template>
+
+  </li>
+
+  <!-- Вкладка с добавлением учеников -->
+
+  <li ngbNavItem>
+    <a ngbNavLink>Добавление учеников</a>
+
+    <!-- Выбор предмета -->
+
+    <ng-template ngbNavContent>
+      <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-outline-primary" ngbDropdownToggle>{{selectedSubject}}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem *ngFor="let subject of subjects" (click)="selectedSubject=subject.subjectName;findTutorsBySubject()">{{ subject.subjectName }}</button>
+        </div>
+      </div>
+
+      <!-- Выбор препода -->
+
+      <div ngbDropdown class="d-inline-block" *ngIf="selectedSubject != 'Выбирете предмет'">
+        <button *ngIf="selectedTutor != undefined" type="button" class="btn btn-outline-primary" ngbDropdownToggle>{{selectedTutor.surname + ' ' + selectedTutor.name + selectedTutor.patronymic}}</button>
+        <button *ngIf="selectedTutor == undefined" type="button" class="btn btn-outline-primary" ngbDropdownToggle>Выбирите преподавателя</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem *ngFor="let tutor of tutorsBySubjects" (click)="selectedTutor=tutor;getTutorPupilsBySubject()">{{ tutor.surname + ' ' + tutor.name + tutor.patronymic }}</button>
+        </div>
+      </div>
+      <div *ngIf="!isPupilsLoaded" class="spinner-border" role="status"></div>
+
+      <!-- Вывод найденых учеников -->
+
       <ol *ngIf="isPupilsLoaded">
         <li *ngFor="let pupil of pupils">{{ pupil.username }}</li>
       </ol>
-      <button mat-button (click)="openDialog()">Выбрать учеников</button>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+
+      <!-- Создание далогового окна с таблицей учеников -->
+
+      <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title">Выбор ученика</h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3 row">
+              <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
+              <div class="col-xs-3 col-sm-auto">
+                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+              </div>
+            </div>
+          </form>
+          <div *ngIf="!isNewPupilsLoaded" class="spinner-border" role="status"></div>
+          <table class="table table-striped" *ngIf="isNewPupilsLoaded">
+            <thead>
+            <tr>
+              <th scope="col">Выбор</th>
+              <th scope="col">Фамилия</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Отчество</th>
+              <th scope="col">Почта</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let pupil of filteredPupils">
+              <td><input type="checkbox" [(ngModel)]="pupil.isSelected" /></td>
+              <td><ngb-highlight [result]="pupil.pupil.surname" [term]="filter.value"></ngb-highlight></td>
+              <td><ngb-highlight [result]="pupil.pupil.name" [term]="filter.value"></ngb-highlight></td>
+              <td><ngb-highlight [result]="pupil.pupil.patronymic" [term]="filter.value"></ngb-highlight></td>
+              <td [ngClass]="{'highlighted': filter.value}"><ngb-highlight [result]="pupil.pupil.username" [term]="filter.value"></ngb-highlight></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="close(modal)" [disabled]="newPupils.length == 0">Добавить</button>
+        </div>
+      </ng-template>
+      <button class="btn btn-lg btn-outline-primary" (click)="open(content)" *ngIf="selectedTutor != undefined">Выбрать учеников</button>
+    </ng-template>
+  </li>
+</ul>
+<div [ngbNavOutlet]="nav"></div>

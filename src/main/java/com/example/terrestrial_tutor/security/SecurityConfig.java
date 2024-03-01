@@ -15,11 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,9 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Autowired
-    private PupilDetailsService pupilUserDetailsService;
+    private PupilDetailsService pupilDetailsService;
     @Autowired
-    private TutorDetailsService tutorUserDetailsService;
+    private TutorDetailsService tutorDetailsService;
     @Autowired
     private AdminDetailsService adminDetailsService;
 
@@ -52,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(pupilUserDetailsService)
+                .userDetailsService(pupilDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and()
-                .userDetailsService(tutorUserDetailsService)
+                .userDetailsService(tutorDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and()
                 .userDetailsService(adminDetailsService)
