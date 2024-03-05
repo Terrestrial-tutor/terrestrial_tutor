@@ -62,7 +62,7 @@ public class PupilServiceImpl implements PupilService {
         String username = principal.getName();
         try {
             return pupilRepository.findPupilEntityByUsername(username);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new UserExistException("Login " + username + "not found");
         }
     }
@@ -85,5 +85,7 @@ public class PupilServiceImpl implements PupilService {
         return pupilRepository.findAll();
     }
 
-    public PupilEntity findPupilById(Long id) { return pupilRepository.findPupilEntityById(id); }
+    public PupilEntity findPupilById(Long id) {
+        return pupilRepository.findPupilEntityById(id);
+    }
 }

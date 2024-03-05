@@ -28,8 +28,9 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 1
+     *
      * @param subject - учебный предмет
-     * @param level1 - уровень выбора 1
+     * @param level1  - уровень выбора 1
      * @return Лист заданий по учебному прдмету и уровню выбора 1
      */
     public List<TaskEntity> getTasksBySubjectAndLevel1 (SubjectEntity subject, String level1){
@@ -38,6 +39,7 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 2 | null, если у предмета нет 2 уровня
+     *
      * @param subject - учебный предмет
      * @param level1 - верхний уровень темы
      * @param level2 - уровень темы 2

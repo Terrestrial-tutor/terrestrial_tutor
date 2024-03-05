@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../../../environments/environment";
@@ -11,17 +11,18 @@ import {EnvironmentService} from "../../../../environments/environment.service";
 export class AdminService {
 
   constructor(private http: HttpClient,
-              private apiService: EnvironmentService) { }
+              private apiService: EnvironmentService) {
+  }
 
   private CHECK_API = this.apiService.apiUrl + 'check/';
   private ADMIN_API = this.apiService.apiUrl + 'admin/';
   private TUTOR_API = this.apiService.apiUrl + 'tutor/';
 
-  getAllChecks(): Observable<any>{
+  getAllChecks(): Observable<any> {
     return this.http.get(this.CHECK_API + 'all');
   }
 
-  deleteCheck(id: number): Observable<any>{
+  deleteCheck(id: number): Observable<any> {
     return this.http.delete(this.CHECK_API + `close/${id}`);
   }
 
