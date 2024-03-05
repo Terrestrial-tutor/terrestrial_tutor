@@ -3,6 +3,7 @@ package com.example.terrestrial_tutor.web.controller;
 import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.entity.AdminEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
 import com.example.terrestrial_tutor.exceptions.NotAdminException;
 import com.example.terrestrial_tutor.payload.request.LoginRequest;
@@ -12,10 +13,7 @@ import com.example.terrestrial_tutor.payload.response.RegistrationSuccess;
 import com.example.terrestrial_tutor.security.JWTTokenProvider;
 import com.example.terrestrial_tutor.security.SecurityConstants;
 //import com.example.terrestrial_tutor.service.CheckService;
-import com.example.terrestrial_tutor.service.AdminService;
-import com.example.terrestrial_tutor.service.CheckService;
-import com.example.terrestrial_tutor.service.PupilService;
-import com.example.terrestrial_tutor.service.TutorService;
+import com.example.terrestrial_tutor.service.*;
 import com.example.terrestrial_tutor.validators.ResponseErrorValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -54,6 +52,8 @@ public class AuthController {
     CheckService checkService;
     @Autowired
     AdminService adminService;
+    @Autowired
+    SupportService supportService;
 
     @PostMapping("/auth/login")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
@@ -72,6 +72,8 @@ public class AuthController {
             return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.ADMIN));
         } else if (authentication.getPrincipal() instanceof PupilEntity) {
             return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.PUPIL));
+        } else if (authentication.getPrincipal() instanceof SupportEntity) {
+            return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.SUPPORT));
         } else {
             return ResponseEntity.ok(new JWTTokenSuccessResponse(true, jwt, ERole.TUTOR));
         }
@@ -111,6 +113,22 @@ public class AuthController {
         adminService.addNewAdmin(registrationRequest);
 
         return new ResponseEntity<>(new RegistrationSuccess("Admin registration success"), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/registration/support/{secret}")
+    public ResponseEntity<Object> registerSupport(@Valid @RequestBody RegistrationRequest registrationRequest
+            , BindingResult bindResult, @PathVariable String secret) {
+        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindResult);
+        if (!ObjectUtils.isEmpty(errors)) {
+            System.out.println(errors);
+            return errors;
+        }
+        if (registrationRequest.getRole() != ERole.SUPPORT || !secret.equals("tErRrEsTrIaLtUtOr")) {
+            throw new NotAdminException();
+        }
+        supportService.addNewSupport(registrationRequest);
+
+        return new ResponseEntity<>(new RegistrationSuccess("Support registration success"), HttpStatus.OK);
     }
 
 }
