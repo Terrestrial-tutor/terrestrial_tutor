@@ -8,7 +8,7 @@ import {RouterLink} from "@angular/router";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit{
+export class RegistrationComponent implements OnInit {
   // @ts-ignore
   public registrationForm: FormGroup;
 

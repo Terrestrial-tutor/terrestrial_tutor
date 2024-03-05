@@ -19,22 +19,24 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 1
+     *
      * @param subject - учебный предмет
-     * @param level1 - уровень выбора 1
+     * @param level1  - уровень выбора 1
      * @return Лист заданий по учебному прдмету и уровню выбора 1
      */
-    public List<TaskEntity> getTasksBySubjectAndLevel1 (SubjectEntity subject, String level1){
+    public List<TaskEntity> getTasksBySubjectAndLevel1(SubjectEntity subject, String level1) {
         return taskRepository.findTaskEntitiesBySubjectAndLevel1(subject, level1);
     }
 
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 2 | null, если у предмета нет 2 уровня
+     *
      * @param subject - учебный предмет
-     * @param level2 - уровень выбора 2
+     * @param level2  - уровень выбора 2
      * @return Лист заданий по учебному прдмету и уровню выбора 2 | null, если у предмета нет 2 уровня
      */
-    public List<TaskEntity> getTasksBySubjectAndLevel2 (SubjectEntity subject, String level2){
-        if(subject.getCountLevel() > 1)
+    public List<TaskEntity> getTasksBySubjectAndLevel2(SubjectEntity subject, String level2) {
+        if (subject.getCountLevel() > 1)
             return taskRepository.findTaskEntitiesBySubjectAndLevel2(subject, level2);
         else
             return null;

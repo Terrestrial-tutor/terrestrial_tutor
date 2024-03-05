@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {EnvironmentService} from "../../environments/environment.service";
@@ -10,7 +10,8 @@ import {EnvironmentService} from "../../environments/environment.service";
 export class AuthService {
 
   constructor(private http: HttpClient,
-              private apiService: EnvironmentService) { }
+              private apiService: EnvironmentService) {
+  }
 
   private AUTH_API = this.apiService.apiUrl + 'auth/';
 

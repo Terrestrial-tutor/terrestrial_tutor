@@ -8,7 +8,10 @@ import java.util.List;
 
 public interface SubjectService {
     SubjectEntity findSubjectByName(String name);
+
     List<TutorEntity> findSubjectTutors(String subject);
+
     List<SubjectEntity> getAllSubjects();
+
     SubjectEntity updateSubject(SubjectEntity subject);
 }

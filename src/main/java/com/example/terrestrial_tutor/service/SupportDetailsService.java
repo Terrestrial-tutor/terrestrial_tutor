@@ -7,5 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface SupportDetailsService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
+
     SupportEntity loadSupportById(Long id);
 }
