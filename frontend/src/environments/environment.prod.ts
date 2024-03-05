@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  MAIN_API_PATH: 'http://87.249.49.62/api/'
 };

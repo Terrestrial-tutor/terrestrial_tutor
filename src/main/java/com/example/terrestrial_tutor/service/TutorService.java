@@ -8,4 +8,5 @@ public interface TutorService {
     TutorEntity findTutorById(Long id);
     TutorEntity verifyTutor(Long id);
     void deleteTutorById(Long id);
+    TutorEntity updateTutor(TutorEntity tutor);
 }

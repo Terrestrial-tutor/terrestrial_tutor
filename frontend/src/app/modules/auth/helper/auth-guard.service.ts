@@ -24,17 +24,18 @@ export class AuthGuardService implements CanActivate{
       }
     } else {
       if (state.url.includes('login') || state.url.includes('registration')) {
-        if (currentUser.role == 'PUPIL') {
-          this.router.navigate(['/pupil']);
-          return false;
-        }
-        if (currentUser.role == 'ADMIN') {
-          this.router.navigate(['/admin']);
-          return false;
-        }
+        return false
       }
-      if (state.url.includes('admin') && currentUser.role == 'PUPIL') {
-        this.router.navigate(['/pupil']);
+      if (state.url.includes('admin') && currentUser.role != 'ADMIN') {
+        this.router.navigate([currentUser.role.toLowerCase()]);
+        return false;
+      }
+      if (state.url.includes('pupil') && currentUser.role != 'PUPIL') {
+        this.router.navigate([currentUser.role.toLowerCase()]);
+        return false;
+      }
+      if (state.url.includes('tutor') && currentUser.role != 'TUTOR') {
+        this.router.navigate([currentUser.role.toLowerCase()]);
         return false;
       }
       return true;

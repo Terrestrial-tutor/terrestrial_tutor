@@ -7,3 +7,7 @@ td, th {
   border: 2px solid #000000;
   padding: 8px;
 }
+
+.custom-highlight {
+  background-color: yellow; /* Устанавливаем желтый цвет фона */
+}

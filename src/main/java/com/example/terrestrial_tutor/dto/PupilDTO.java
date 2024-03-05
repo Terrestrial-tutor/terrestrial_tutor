@@ -15,4 +15,7 @@ public class PupilDTO {
     List<String> subjects;
     List<String> tutors;
     String username;
+    String name;
+    String surname;
+    String patronymic;
 }

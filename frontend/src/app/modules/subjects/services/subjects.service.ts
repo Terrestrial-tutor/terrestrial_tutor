@@ -7,21 +7,15 @@ import {EnvironmentService} from "../../../../environments/environment.service";
 @Injectable({
   providedIn: 'root'
 })
-export class PupilService {
+export class SubjectsService {
 
   constructor(private http: HttpClient,
               private apiService: EnvironmentService) { }
 
-  private PUPIL_API = this.apiService.apiUrl + 'pupil/';
+  private SUBJECTS_API = this.apiService.apiUrl + 'subjects/';
 
-  getCurrentUser(): Observable<any> {
-    return this.http.get(this.PUPIL_API);
+  getAllSubjects(): Observable<any> {
+    return this.http.get(this.SUBJECTS_API);
   }
-
-  addSubjects(subject: string | undefined, ids: number[] | undefined): Observable<any> {
-    return this.http.post(this.PUPIL_API + `add/subjects/`, {subject, ids});
-  }
-
-
 
 }

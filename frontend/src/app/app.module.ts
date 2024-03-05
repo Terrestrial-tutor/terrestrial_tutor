@@ -12,8 +12,19 @@ import {AdminComponent} from "./modules/admin/admin.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ConstantsComponent} from "./constants/constants.component";
 import {MatTabsModule} from "@angular/material/tabs";
+import { SubjectsComponent } from './modules/subjects/subjects.component';
+import {MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
+import {MatButtonModule} from "@angular/material/button";
+import {MatListModule} from "@angular/material/list";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {MatInputModule} from "@angular/material/input";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -22,7 +33,7 @@ import {MatTabsModule} from "@angular/material/tabs";
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
-    ConstantsComponent
+    SubjectsComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +42,19 @@ import {MatTabsModule} from "@angular/material/tabs";
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    MatTabsModule
+    MatTabsModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatListModule,
+    MatDialogModule,
+    MatTableModule,
+    MatSortModule,
+    MatCheckboxModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    NgbAlertModule,
+    NgbModule
   ],
   providers: [authInterceptorProviders, authErrorInterceptorProviders],
   bootstrap: [AppComponent]

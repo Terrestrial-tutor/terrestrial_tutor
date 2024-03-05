@@ -1,6 +1,7 @@
 package com.example.terrestrial_tutor.security;
 import com.example.terrestrial_tutor.entity.AdminEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
+import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.entity.enums.ERole;
 import com.example.terrestrial_tutor.exceptions.NotVerificationException;
@@ -31,12 +32,13 @@ public class JWTTokenProvider {
         } else if (user instanceof TutorEntity tutor){
             userId = Long.toString(tutor.getId());
             claimsMap = getClaims(userId, tutor.getEmail(), tutor.getRole(), tutor.getVerification());
+        } else if (user instanceof SupportEntity support){
+            userId = Long.toString(support.getId());
+            claimsMap = getClaims(userId, support.getEmail(), support.getRole(), true);
         } else {
             AdminEntity admin = (AdminEntity) user;
             userId = Long.toString(admin.getId());
-            claimsMap.put("id", userId);
-            claimsMap.put("email", admin.getEmail());
-            claimsMap.put("role", admin.getRole());
+            claimsMap = getClaims(userId, admin.getEmail(), admin.getRole(), true);
         }
 
         return Jwts.builder()
@@ -92,6 +94,8 @@ public class JWTTokenProvider {
             return ERole.ADMIN;
         } else if (role.equals("PUPIL")) {
             return ERole.PUPIL;
+        } else if (role.equals("SUPPORT")) {
+            return ERole.SUPPORT;
         } else {
             return ERole.TUTOR;
         }

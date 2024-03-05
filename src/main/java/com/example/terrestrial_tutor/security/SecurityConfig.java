@@ -2,6 +2,7 @@ package com.example.terrestrial_tutor.security;
 
 import com.example.terrestrial_tutor.service.AdminDetailsService;
 import com.example.terrestrial_tutor.service.PupilDetailsService;
+import com.example.terrestrial_tutor.service.SupportDetailsService;
 import com.example.terrestrial_tutor.service.TutorDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,11 +24,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Autowired
-    private PupilDetailsService pupilUserDetailsService;
+    private PupilDetailsService pupilDetailsService;
     @Autowired
-    private TutorDetailsService tutorUserDetailsService;
+    private TutorDetailsService tutorDetailsService;
     @Autowired
     private AdminDetailsService adminDetailsService;
+    @Autowired
+    private SupportDetailsService supportDetailsService;
 
 
     @Override
@@ -40,20 +43,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(SecurityConstants.SIGN_UP_URLS).permitAll()
                 .anyRequest().authenticated();
-
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(pupilUserDetailsService)
+                .userDetailsService(pupilDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and()
-                .userDetailsService(tutorUserDetailsService)
+                .userDetailsService(tutorDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder())
                 .and()
                 .userDetailsService(adminDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder())
+                .and()
+                .userDetailsService(supportDetailsService)
                 .passwordEncoder(bCryptPasswordEncoder());
     }
 

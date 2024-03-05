@@ -37,6 +37,9 @@ public class PupilFacade {
                 })
                 .toList()));
         pupilDTO.setUsername(pupil.getUsername());
+        pupilDTO.setName(pupil.getName());
+        pupilDTO.setSurname(pupil.getSurname());
+        pupilDTO.setPatronymic(pupil.getPatronymic());
         return pupilDTO;
     }
 }
