@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
     SubjectEntity findSubjectEntityById(Long id);
+
     SubjectEntity findSubjectEntityByName(String name);
 }
