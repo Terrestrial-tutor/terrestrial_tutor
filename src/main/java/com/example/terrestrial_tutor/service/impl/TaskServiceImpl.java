@@ -1,5 +1,6 @@
 package com.example.terrestrial_tutor.service.impl;
 
+import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
 import com.example.terrestrial_tutor.exceptions.CustomException;
@@ -88,5 +89,18 @@ public class TaskServiceImpl implements TaskService {
             }
         }
         return tasks;
+    }
+
+    public TaskEntity addNewTask(TaskDTO dto) {
+        TaskEntity newTask = new TaskEntity();
+        newTask.setName(dto.getName());
+        newTask.setAnswer(dto.getAnswer());
+        newTask.setLevel1(dto.getLevel1());
+        newTask.setLevel2(dto.getLevel2());
+        newTask.setSubject(subjectService.findSubjectByName(dto.getSubject()));
+        newTask.setTaskText(dto.getTaskText());
+        newTask.setAnswerType(dto.getAnswerType());
+        newTask.setChecking(dto.getChecking());
+        return taskRepository.save(newTask);
     }
 }
