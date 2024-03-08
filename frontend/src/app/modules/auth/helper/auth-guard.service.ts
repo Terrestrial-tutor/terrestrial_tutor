@@ -25,6 +25,7 @@ export class AuthGuardService implements CanActivate {
       }
     } else {
       if (state.url.includes('login') || state.url.includes('registration')) {
+        this.router.navigate([currentUser.role.toLowerCase()]);
         return false
       }
       if (state.url.includes('admin') && currentUser.role != 'ADMIN') {
@@ -36,6 +37,10 @@ export class AuthGuardService implements CanActivate {
         return false;
       }
       if (state.url.includes('tutor') && currentUser.role != 'TUTOR') {
+        this.router.navigate([currentUser.role.toLowerCase()]);
+        return false;
+      }
+      if (state.url.includes('support') && currentUser.role != 'SUPPORT') {
         this.router.navigate([currentUser.role.toLowerCase()]);
         return false;
       }
