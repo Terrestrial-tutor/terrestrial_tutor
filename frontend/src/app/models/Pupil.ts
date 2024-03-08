@@ -6,4 +6,7 @@ export interface Pupil {
   subjects: string[];
   tutors: string[];
   username: string;
+  name: string;
+  surname: string;
+  patronymic: string;
 }

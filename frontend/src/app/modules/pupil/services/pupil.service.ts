@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
-import {ConstantsComponent} from "../../../constants/constants.component";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import {EnvironmentService} from "../../../../environments/environment.service";
 
-const PUPIL_API = ConstantsComponent.MAIN_API_PATH + 'pupil/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PupilService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private apiService: EnvironmentService) { }
+
+  private PUPIL_API = this.apiService.apiUrl + 'pupil/';
 
   getCurrentUser(): Observable<any> {
-    return this.http.get(PUPIL_API);
+    return this.http.get(this.PUPIL_API);
   }
 
-  addSubjects(subjects: string[]): Observable<any> {
-    return this.http.post(PUPIL_API + 'add/subjects', subjects);
+  addSubjects(subject: string | undefined, ids: number[] | undefined): Observable<any> {
+    return this.http.post(this.PUPIL_API + `add/subjects/`, {subject, ids});
   }
+
+
 
 }

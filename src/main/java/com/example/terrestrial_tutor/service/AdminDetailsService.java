@@ -7,5 +7,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AdminDetailsService extends UserDetailsService {
     UserDetails loadUserByUsername(String username);
+
     AdminEntity loadAdminById(Long id);
 }

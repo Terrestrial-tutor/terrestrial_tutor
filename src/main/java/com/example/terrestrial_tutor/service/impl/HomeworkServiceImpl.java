@@ -19,15 +19,15 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
     HomeworkRepository homeworkRepository;
 
-    public List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil){
+    public List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil) {
         return homeworkRepository.findHomeworkEntitiesByPupil(pupil);
     }
 
-    public List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor){
+    public List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor) {
         return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
     }
 
-    public HomeworkEntity addHomework(HomeworkAddRequest request){
+    public HomeworkEntity addHomework(HomeworkAddRequest request) {
         HomeworkEntity newHomework = new HomeworkEntity();
         newHomework.setName(request.getName());
         newHomework.setSoluteTime(request.getSoluteTime());

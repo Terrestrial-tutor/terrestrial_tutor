@@ -22,11 +22,16 @@ public class CheckServiceImpl implements CheckService {
 
     @Autowired
     CheckRepository checkRepository;
-    public List<CheckEntity> getAllChecks(){return  checkRepository.findAll();}
 
-    public CheckEntity getCheck(Long id){return checkRepository.findCheckEntityById(id);}
+    public List<CheckEntity> getAllChecks() {
+        return checkRepository.findAll();
+    }
 
-    public CheckEntity addCheck(UserDetails newUser){
+    public CheckEntity getCheck(Long id) {
+        return checkRepository.findCheckEntityById(id);
+    }
+
+    public CheckEntity addCheck(UserDetails newUser) {
         CheckEntity newCheck = new CheckEntity();
         newCheck.setDate(new Date());
         if (newUser instanceof PupilEntity pupil) {
@@ -44,7 +49,7 @@ public class CheckServiceImpl implements CheckService {
 
     }
 
-    public CheckEntity deleteCheck(Long id){
+    public CheckEntity deleteCheck(Long id) {
         CheckEntity check = getCheck(id);
         try {
             checkRepository.delete(check);

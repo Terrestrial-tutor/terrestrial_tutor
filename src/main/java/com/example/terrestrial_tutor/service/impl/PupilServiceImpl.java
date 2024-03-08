@@ -58,26 +58,11 @@ public class PupilServiceImpl implements PupilService {
         }
     }
 
-    public void deletePupilById(Long id) {
-        pupilRepository.deleteById(id);
-    }
-
     public PupilEntity getCurrentPupil(Principal principal) {
         String username = principal.getName();
         try {
             return pupilRepository.findPupilEntityByUsername(username);
-        } catch (Exception ex){
-            throw new UserExistException("Login " + username + "not found");
-        }
-    }
-
-    public PupilEntity addSubjects(Principal principal, List<SubjectEntity> subjects) {
-        String username = principal.getName();
-        try {
-            PupilEntity pupil = pupilRepository.findPupilEntityByUsername(username);
-            pupil.setSubjects(subjects);
-            return pupilRepository.save(pupil);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new UserExistException("Login " + username + "not found");
         }
     }
@@ -88,5 +73,19 @@ public class PupilServiceImpl implements PupilService {
         return pupilRepository.save(pupil);
     }
 
-    public PupilEntity findPupilById(Long id) { return pupilRepository.findPupilEntityById(id); }
+    public PupilEntity updatePupil(PupilEntity pupil) {
+        return pupilRepository.save(pupil);
+    }
+
+    public List<PupilEntity> findPupilsByIds(List<Long> ids) {
+        return pupilRepository.findAllById(ids);
+    }
+
+    public List<PupilEntity> findAllPupils() {
+        return pupilRepository.findAll();
+    }
+
+    public PupilEntity findPupilById(Long id) {
+        return pupilRepository.findPupilEntityById(id);
+    }
 }
