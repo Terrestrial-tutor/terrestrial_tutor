@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {EnvironmentService} from "../../environments/environment.service";
+import {catchError} from "rxjs/operators";
 
 
 @Injectable({
@@ -10,16 +11,21 @@ import {EnvironmentService} from "../../environments/environment.service";
 export class AuthService {
 
   constructor(private http: HttpClient,
-              private apiService: EnvironmentService) { }
+              private apiService: EnvironmentService) {
+  }
 
   private AUTH_API = this.apiService.apiUrl + 'auth/';
 
   public login(user: { username: any; password: any; }): Observable<any> {
-    console.log("ok");
     return this.http.post(this.AUTH_API + 'login', {
       username: user.username,
       password: user.password
-    });
+    }).pipe(data => {
+      return data;
+    }, catchError(err => {
+      console.log(err.status)
+      return [];
+    }));
   }
 
   public register(user: {

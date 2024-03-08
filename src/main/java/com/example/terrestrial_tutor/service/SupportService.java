@@ -9,10 +9,15 @@ import java.util.List;
 
 public interface SupportService {
     SupportEntity addNewSupport(RegistrationRequest userIn);
+
     SupportEntity findSupportById(Long id);
+
     List<SupportEntity> findSupportsByIds(List<Long> ids);
+
     SupportEntity getCurrentSupport(Principal principal);
+
     SupportEntity updateSupport(SupportEntity support);
+
     List<SupportEntity> findAllSupports();
 
 }

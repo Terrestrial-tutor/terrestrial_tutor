@@ -41,7 +41,7 @@ public class AdminDetailsServiceImpl implements AdminDetailsService {
 
     public static AdminEntity build(AdminEntity admin) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(admin.getRole().name());
-        return new AdminEntity (admin.getId(),
+        return new AdminEntity(admin.getId(),
                 admin.getEmail(),
                 admin.getName(),
                 admin.getSurname(),

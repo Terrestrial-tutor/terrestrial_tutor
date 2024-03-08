@@ -38,7 +38,7 @@ public class TutorDetailsServiceImpl implements TutorDetailsService {
 
     public static TutorEntity build(TutorEntity tutor) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(tutor.getRole().name());
-        return new TutorEntity (tutor.getId(),
+        return new TutorEntity(tutor.getId(),
                 tutor.getEmail(),
                 tutor.getName(),
                 tutor.getSurname(),

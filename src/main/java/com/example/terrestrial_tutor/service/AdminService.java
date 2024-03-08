@@ -6,5 +6,6 @@ import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 
 public interface AdminService {
     AdminEntity addNewAdmin(RegistrationRequest userIn);
+
     AdminEntity findAdminById(Long id);
 }

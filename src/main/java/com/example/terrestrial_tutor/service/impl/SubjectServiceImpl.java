@@ -3,7 +3,6 @@ package com.example.terrestrial_tutor.service.impl;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.exceptions.CustomException;
 
-
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
@@ -25,6 +24,11 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectEntity findSubjectByName(String name) {
         return subjectRepository.findSubjectEntityByName(name);
+    }
+
+    @Override
+    public SubjectEntity addSubject(String name, int count_level) {
+        return null;
     }
 
     public SubjectEntity updateSubject(SubjectEntity subject) {

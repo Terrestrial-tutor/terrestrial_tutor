@@ -38,7 +38,7 @@ public class PupilDetailsServiceImpl implements PupilDetailsService {
 
     public static PupilEntity build(PupilEntity pupil) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(pupil.getRole().name());
-        return new PupilEntity (pupil.getId(),
+        return new PupilEntity(pupil.getId(),
                 pupil.getEmail(),
                 pupil.getName(),
                 pupil.getSurname(),

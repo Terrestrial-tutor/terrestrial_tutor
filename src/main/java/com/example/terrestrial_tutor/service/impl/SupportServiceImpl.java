@@ -68,7 +68,7 @@ public class SupportServiceImpl implements SupportService {
         String username = principal.getName();
         try {
             return supportRepository.findSupportEntityByUsername(username);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new UserExistException("Login " + username + "not found");
         }
     }
@@ -85,5 +85,7 @@ public class SupportServiceImpl implements SupportService {
         return supportRepository.findAll();
     }
 
-    public SupportEntity findSupportById(Long id) { return supportRepository.findSupportEntityById(id); }
+    public SupportEntity findSupportById(Long id) {
+        return supportRepository.findSupportEntityById(id);
+    }
 }

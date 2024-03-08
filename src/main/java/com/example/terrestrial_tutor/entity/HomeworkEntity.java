@@ -37,6 +37,9 @@ public class HomeworkEntity {
     @JoinColumn(name = "pupil")
     PupilEntity pupil;
 
+//    todo
+//    Добавить теоритические материалы
+
     @ManyToOne()
     @JoinColumn(name = "tutor")
     TutorEntity tutor;

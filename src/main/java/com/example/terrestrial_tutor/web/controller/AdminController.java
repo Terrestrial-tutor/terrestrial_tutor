@@ -65,7 +65,7 @@ public class AdminController {
                     .stream()
                     .map(SubjectEntity::getName)
                     .toList();
-            if (!pupilSubjects.contains(subject)) {
+            if (!pupilSubjects.contains(subject) && pupil.getVerification()) {
                 resultPupils.add(pupilFacade.pupilToPupilDTO(pupil));
             }
         }

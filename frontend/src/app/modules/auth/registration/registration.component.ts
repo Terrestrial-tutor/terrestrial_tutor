@@ -8,7 +8,7 @@ import {RouterLink} from "@angular/router";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit{
+export class RegistrationComponent implements OnInit {
   // @ts-ignore
   public registrationForm: FormGroup;
 
@@ -29,7 +29,7 @@ export class RegistrationComponent implements OnInit{
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])],
       confirmPassword: ['', Validators.compose([Validators.required])],
-      role: [''],
+      role: ['Кто Вы?'],
     })
   }
 

@@ -43,7 +43,7 @@ public class SupportDetailsServiceImpl implements SupportDetailsService {
 
     public static SupportEntity build(SupportEntity support) {
         GrantedAuthority authorities = new SimpleGrantedAuthority(support.getRole().name());
-        return new SupportEntity (support.getId(),
+        return new SupportEntity(support.getId(),
                 support.getEmail(),
                 support.getName(),
                 support.getSurname(),

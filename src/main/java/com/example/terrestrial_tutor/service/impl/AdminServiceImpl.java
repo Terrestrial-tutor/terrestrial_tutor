@@ -50,5 +50,8 @@ public class AdminServiceImpl implements AdminService {
             throw new UserExistException("The Login " + admin.getUsername() + "already exist");
         }
     }
-    public AdminEntity findAdminById(Long id) { return adminRepository.findAdminEntityById(id); }
+
+    public AdminEntity findAdminById(Long id) {
+        return adminRepository.findAdminEntityById(id);
+    }
 }
