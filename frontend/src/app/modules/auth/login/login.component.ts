@@ -41,15 +41,7 @@ export class LoginComponent implements OnInit {
     }).subscribe(data => {
       this.tokenStorage.saveToken(data.token);
       this.tokenStorage.saveUser(data);
-      if (data.role == 'ADMIN') {
-        this.router.navigate(['/admin']);
-      }
-      if (data.role == 'PUPIL') {
-        this.router.navigate(['/pupil']);
-      }
-      //this.router.navigate(['/admin']);
-      // this.router.navigate(['/']);
-      // window.location.reload();
+      this.router.navigate([data.role.toLowerCase()]);
     }, error => {
       console.log(error);
     });

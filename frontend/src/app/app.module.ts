@@ -25,6 +25,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { SupportComponent } from './modules/support/support.component';
+import { TaskComponent } from './modules/task/task.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
     RegistrationComponent,
     PupilComponent,
     SubjectsComponent,
+    SupportComponent,
+    TaskComponent,
   ],
   imports: [
     BrowserModule,

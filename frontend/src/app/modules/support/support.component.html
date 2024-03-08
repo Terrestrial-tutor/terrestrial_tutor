@@ -1,0 +1,38 @@
+<button (click)="logoutPupil()">logout</button>
+<ul ngbNav #nav="ngbNav" class="nav-tabs">
+
+  <li ngbNavItem>
+    <a ngbNavLink>Задания</a>
+    <ng-template ngbNavContent>
+      <button class="btn btn-lg btn-outline-primary" (click)="addTask()">Добавить задание</button>
+      <table>
+        <thead>
+        <tr>
+          <th>Название</th>
+          <th>Предмет</th>
+          <th>Создатель</th>
+          <th>Уроень 1</th>
+          <th>Уровень 2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Графы</td>
+          <td>Информатика</td>
+          <td>support@support</td>
+          <td>Уроень 1</td>
+          <td>Уровень 2</td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </li>
+  <li ngbNavItem>
+    <a ngbNavLink>Задания</a>
+    <ng-template ngbNavContent>
+      sdff
+    </ng-template>
+  </li>
+
+</ul>
+<div [ngbNavOutlet]="nav"></div>
