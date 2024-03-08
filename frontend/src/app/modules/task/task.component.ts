@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Subject} from "../../models/Subject";
 import {SubjectsService} from "../subjects/services/subjects.service";
+import {TaskService} from "./services/task.service";
 
 @Component({
   selector: 'app-task',
@@ -28,7 +29,8 @@ export class TaskComponent implements OnInit {
       taskText: ['', Validators.compose([Validators.required])],
       taskAns: ['', Validators.compose([Validators.required])],
       selectedSubject: ['Выбирете предмет', Validators.compose([Validators.required])],
-
+      level1: ['', Validators.compose([Validators.required])],
+      level2: ['', Validators.compose([Validators.required])],
     })
   }
 
@@ -41,4 +43,9 @@ export class TaskComponent implements OnInit {
   check() {
     console.log(this.taskForm.value);
   }
+
+  invalid(controlName: string) {
+    return this.taskForm.controls[controlName].invalid && this.taskForm.controls[controlName].touched;
+  }
+
 }

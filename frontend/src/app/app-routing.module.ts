@@ -15,6 +15,7 @@ const routes: Routes = [
   {path: 'pupil', component: PupilComponent, canActivate: [AuthGuardService]},
   {path: 'support', component: SupportComponent, canActivate: [AuthGuardService]},
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
 ];
 
 @NgModule({

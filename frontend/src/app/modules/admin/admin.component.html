@@ -111,10 +111,10 @@
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="close(modal)" [disabled]="newPupils.length == 0">Добавить</button>
+          <button type="button" class="btn btn-primary" (click)="close(modal)" [disabled]="newPupils.length == 0">Добавить</button>
         </div>
       </ng-template>
-      <button class="btn btn-lg btn-outline-primary" (click)="open(content)" *ngIf="selectedTutor != undefined">Выбрать учеников</button>
+      <button class="btn btn-primary" (click)="open(content)" *ngIf="selectedTutor != undefined">Выбрать учеников</button>
     </ng-template>
   </li>
 </ul>

@@ -4,24 +4,23 @@
   <li ngbNavItem>
     <a ngbNavLink>Задания</a>
     <ng-template ngbNavContent>
-      <button class="btn btn-lg btn-outline-primary" (click)="addTask()">Добавить задание</button>
-      <table>
+      <button class="row col-2 p-1 btn btn-lg btn-outline-primary" (click)="addTask()">Добавить задание</button>
+      <div *ngIf="!tasksUpload" class="row spinner-border" role="status"></div>
+      <table *ngIf="tasksUpload">
         <thead>
         <tr>
           <th>Название</th>
           <th>Предмет</th>
-          <th>Создатель</th>
           <th>Уроень 1</th>
           <th>Уровень 2</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody *ngFor="let task of tasks">
         <tr>
-          <td>Графы</td>
-          <td>Информатика</td>
-          <td>support@support</td>
-          <td>Уроень 1</td>
-          <td>Уровень 2</td>
+          <td>{{ task.name }}</td>
+          <td>{{task.subject}}</td>
+          <td>{{task.level1}}</td>
+          <td>{{task.level2}}</td>
         </tr>
         </tbody>
       </table>

@@ -1,11 +1,9 @@
-<div>
+<div class="container">
   <h2 class="text-center">Создание задания</h2>
   <form [formGroup]="taskForm" class="mt-5">
     <div class="row mb-3 justify-content-center">
-      <div class="col-3 text-center">
-        <p class="mb-0 text-uppercase fw-bold">Название задания</p>
-        <input formControlName="taskName" placeholder="Введите название">
-      </div>
+      <p class="mb-0 text-uppercase fw-bold text-center">Название задания</p>
+      <input class="col-3" formControlName="taskName" placeholder="Введите название">
     </div>
 
     <div class="row mb-3 justify-content-center">
@@ -30,6 +28,24 @@
           <button ngbDropdownItem *ngFor="let subject of subjects" (click)="taskForm.value['selectedSubject']=subject.subjectName">{{ subject.subjectName }}</button>
         </div>
       </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+      <div class="col-3 text-center">
+        <p class="mb-0 text-uppercase fw-bold">Тема первого уровня</p>
+        <input formControlName="level1" placeholder="Введите тему">
+      </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+      <div class="col-3 text-center">
+        <p class="mb-0 text-uppercase fw-bold">Тема второго уровня</p>
+        <input formControlName="level2" placeholder="Введите тему">
+      </div>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+      <div class="alert alert-danger col-3 row mb-3 p-1" *ngIf="invalid('taskName')">Не должно быть пустым</div>
     </div>
 
 
