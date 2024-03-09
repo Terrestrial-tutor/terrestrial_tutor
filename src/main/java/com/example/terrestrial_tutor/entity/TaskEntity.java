@@ -66,6 +66,10 @@ public class TaskEntity {
     @JoinColumn(name = "homeworks")
     List<HomeworkEntity> homeworks = new ArrayList<>();
 
+    @ManyToOne()
+    @JoinColumn(name = "support")
+    SupportEntity support;
+
     //ban_commands
 
     //task_analysis
