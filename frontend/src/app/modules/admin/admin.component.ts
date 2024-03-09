@@ -7,11 +7,9 @@ import {SubjectsService} from "../subjects/services/subjects.service";
 import {PupilService} from "../pupil/services/pupil.service";
 import {TutorList} from "../../models/TutorList";
 import {Pupil} from "../../models/Pupil";
-import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PupilSelect} from "../../models/PupilSelect";
 import {FormControl} from "@angular/forms";
-import {map, Observable, OperatorFunction, pipe, startWith} from "rxjs";
 
 @Component({
   selector: 'app-admin',
@@ -40,7 +38,6 @@ export class AdminComponent implements OnInit {
               private tokenService: TokenStorageService,
               private subjectsService: SubjectsService,
               private pupilService: PupilService,
-              public dialog: MatDialog,
               private modalService: NgbModal) {
   }
 

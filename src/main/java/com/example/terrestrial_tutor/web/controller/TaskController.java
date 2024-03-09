@@ -1,13 +1,13 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
-import com.example.terrestrial_tutor.dto.CheckDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
+import com.example.terrestrial_tutor.dto.TaskDTO;
+import com.example.terrestrial_tutor.dto.facade.TaskFacade;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
-import com.example.terrestrial_tutor.service.impl.TaskServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,10 +32,17 @@ public class TaskController {
     @Autowired
     SubjectService subjectService;
 
+    @Autowired
+    TaskFacade taskFacade;
+
     @GetMapping("/tasks/all")
-    public ResponseEntity<List<TaskEntity>> getAllTasks() {
-        List<TaskEntity> listTasks = taskService.getAllTasks();
-        return new ResponseEntity<>(listTasks, HttpStatus.OK);
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        List<TaskEntity> tasksList = taskService.getAllTasks();
+        List<TaskDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : tasksList) {
+            tasksDTO.add(taskFacade.taskToTaskDTO(task));
+        }
+        return new ResponseEntity<>(tasksDTO, HttpStatus.OK);
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.example.terrestrial_tutor.dto;
 
-import com.example.terrestrial_tutor.entity.SubjectEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +9,10 @@ public class TaskDTO {
     String name;
     int checking;
     String answerType;
+    Long id;
     String taskText;
     String answer;
     String subject;
     String level1;
     String level2;
-
 }

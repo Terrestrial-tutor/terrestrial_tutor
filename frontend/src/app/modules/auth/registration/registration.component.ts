@@ -29,7 +29,7 @@ export class RegistrationComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])],
       confirmPassword: ['', Validators.compose([Validators.required])],
-      role: [''],
+      role: ['Кто Вы?'],
     })
   }
 
