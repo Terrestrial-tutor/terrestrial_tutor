@@ -25,7 +25,6 @@ public class TaskEntity {
     @Column(name = "name")
     String name;
 
-    /*
     @NonNull
     @Column(name = "checking")
     int checking;
@@ -34,6 +33,7 @@ public class TaskEntity {
     @Column(name = "answer_type")
     String answerType;
 
+    /*
     @Column(name = "files")
     String files;
 
@@ -44,13 +44,10 @@ public class TaskEntity {
     @Column(name = "task_text")
     String taskText;
 
-
-
     //task_images
 
     //task_tables_ids
 
-    @NonNull
     @Column(name = "answer")
     String answer;
 
@@ -68,6 +65,10 @@ public class TaskEntity {
     @ManyToMany()
     @JoinColumn(name = "homeworks")
     List<HomeworkEntity> homeworks = new ArrayList<>();
+
+    @ManyToOne()
+    @JoinColumn(name = "support")
+    SupportEntity support;
 
     //ban_commands
 

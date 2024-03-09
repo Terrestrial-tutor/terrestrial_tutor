@@ -55,6 +55,9 @@ public class SupportEntity implements UserDetails {
     @OneToMany(mappedBy = "support", fetch = FetchType.LAZY)
     List<PupilEntity> pupils;
 
+    @OneToMany(mappedBy = "support", fetch = FetchType.LAZY)
+    List<TaskEntity> tasks;
+
     @NonNull
     @Column(name = "telegram_tag")
     String telegramTag;

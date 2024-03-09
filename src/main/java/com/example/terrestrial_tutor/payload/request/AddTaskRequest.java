@@ -1,21 +1,17 @@
-package com.example.terrestrial_tutor.dto;
+package com.example.terrestrial_tutor.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class TaskDTO {
+public class AddTaskRequest {
     String name;
     int checking;
     String answerType;
-    Long id;
     String taskText;
     String answer;
     String subject;
     String level1;
     String level2;
-    List<String> homeworks;
 }
