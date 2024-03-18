@@ -68,11 +68,11 @@ public class TaskServiceImpl implements TaskService {
 
     public List<TaskEntity> getSelectionTask(Map<String, Integer> choices, SubjectEntity subject){
         List<TaskEntity> tasks = new ArrayList<>();
-        for(Map.Entry<String, Integer> pair : choices.entrySet()){
+        for(Map.Entry<String, Integer> pair : choices.entrySet()){ // идем по запросу
             List<TaskEntity> t1 ;
             List<TaskEntity> t2 ;
-            t1 = taskRepository.findTaskEntitiesBySubjectAndLevel1(subject, pair.getKey());
-            if(t1 != null && t1.size() < pair.getValue()){
+            t1 = taskRepository.findTaskEntitiesBySubjectAndLevel1(subject, pair.getKey()); // ищем в бд нужные задания
+            if(t1 != null && t1.size() < pair.getValue()){ // Если мы нашли задания по этой теме, но их не хватает
                 throw new CustomException("Not enough tasks");
             }
             else {

@@ -26,11 +26,11 @@ public class HomeworkAddRequest {
     Time soluteTime;
 
     @NonNull
-    PupilEntity pupil;
+    Long pupilId;
+
+    //    @NonNull
+    //    Long tutorId;
 
     @NonNull
-    TutorEntity tutor;
-
-    @NonNull
-    List<TaskEntity> tasks = new ArrayList<>();
+    List<Long> tasksId = new ArrayList<>();
 }
