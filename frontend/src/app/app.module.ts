@@ -27,6 +27,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { SupportComponent } from './modules/support/support.component';
 import { TaskComponent } from './modules/task/task.component';
+import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { TaskComponent } from './modules/task/task.component';
     MatInputModule,
     MatProgressSpinnerModule,
     NgbAlertModule,
-    NgbModule
+    NgbModule,
+    CodemirrorModule
   ],
   providers: [authInterceptorProviders, authErrorInterceptorProviders],
   bootstrap: [AppComponent]

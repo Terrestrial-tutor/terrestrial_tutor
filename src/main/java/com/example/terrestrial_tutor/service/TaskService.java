@@ -4,7 +4,6 @@ import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
-import com.example.terrestrial_tutor.payload.request.AddTaskRequest;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,11 @@ public interface TaskService {
 
     List<TaskEntity> getAllTasks();
 
+    TaskEntity getTaskById(Long id);
+
+    TaskEntity save(TaskEntity task);
+
     List<TaskEntity> getSelectionTask(Map<String, Integer> choices, SubjectEntity subject);
 
-    TaskEntity addNewTask(AddTaskRequest dto, SupportEntity support);
+    TaskEntity addNewTask(TaskDTO dto, SupportEntity support);
 }

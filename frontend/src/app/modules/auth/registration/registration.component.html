@@ -30,9 +30,9 @@
         <button type="button" class="drop-btn btn-primary drop-btn p-2 col-12" id="dropdownBasic1" ngbDropdownToggle>
           {{ registrationForm.controls['role'].value}}
         </button>
-        <div ngbDropdownMenu class="text-center" aria-labelledby="dropdownBasic1">
-          <button class="nav-btn" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('PUPIL')">PUPIL</button>
-          <button class="nav-btn" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('TUTOR')">TUTOR</button>
+        <div ngbDropdownMenu class="text-center col-12">
+          <button class="nav-btn col-12" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('PUPIL')">Ученик</button>
+          <button class="nav-btn col-12" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('TUTOR')">Репетитор</button>
         </div>
       </div>
     </div>
