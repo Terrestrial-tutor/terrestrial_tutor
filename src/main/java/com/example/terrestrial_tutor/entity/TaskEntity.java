@@ -33,10 +33,10 @@ public class TaskEntity {
     @Column(name = "answer_type")
     String answerType;
 
-    /*
+
     @Column(name = "files")
     String files;
-
+    /*
     @NonNull
     @Column(name = "complexity")
     String complexity;

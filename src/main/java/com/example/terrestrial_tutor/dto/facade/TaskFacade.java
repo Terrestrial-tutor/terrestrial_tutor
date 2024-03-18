@@ -14,18 +14,20 @@ public class TaskFacade {
     TaskService taskService;
 
     public TaskDTO taskToTaskDTO(TaskEntity task) {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setId(task.getId());
-        taskDTO.setName(task.getName());
-        taskDTO.setTaskText(task.getTaskText());
-        taskDTO.setAnswer(task.getAnswer());
-        task.setSubject(task.getSubject());
-        taskDTO.setLevel1(task.getLevel1());
-        taskDTO.setLevel2(task.getLevel2());
-        taskDTO.setHomeworks(task.getHomeworks()
-                .stream()
-                .map(HomeworkEntity::getName)
-                .toList());
+        TaskDTO taskDTO = new TaskDTO(
+                task.getName(),
+                task.getChecking(),
+                task.getAnswer(),
+                task.getTaskText(),
+                task.getAnswer(),
+                task.getSubject().getName(),
+                task.getLevel1(),
+                task.getLevel2(),
+                task.getFiles(),
+                task.getHomeworks()
+                        .stream()
+                        .map(HomeworkEntity::getName)
+                        .toList());
         return taskDTO;
     }
 }
