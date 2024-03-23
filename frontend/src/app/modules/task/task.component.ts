@@ -18,7 +18,7 @@ export class TaskComponent implements OnInit {
   // @ts-ignore
   taskForm: FormGroup;
   subjects: Subject[] | undefined;
-  checkingTypes = ['Автоматическая', 'Ручная', 'Код'];
+  checkingTypes = ['Варианты', 'Текст или значение', 'Код'];
   code = 'function hello() {\n' +
     '  console.log(\'Hello, world!\');\n' +
     '}';
