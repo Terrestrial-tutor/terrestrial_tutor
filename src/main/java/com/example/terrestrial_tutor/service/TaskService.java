@@ -4,6 +4,7 @@ import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
+import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +23,7 @@ public interface TaskService {
     List<TaskEntity> getSelectionTask(Map<String, Integer> choices, SubjectEntity subject);
 
     TaskEntity addNewTask(TaskDTO dto, SupportEntity support);
+
+    String toStringName(TaskCheckingType type);
+    TaskCheckingType toType(String type);
 }

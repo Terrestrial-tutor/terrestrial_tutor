@@ -73,15 +73,5 @@ public class TaskController {
         return new ResponseEntity<>(listTasks, HttpStatus.OK);
     }
 
-    /**
-     * Контроллер для отдачи случайной выборки заданий по заданным данным
-     * @param selectionDTO - входные данные, см. "SelectionDTO"
-     * @return лист выборки
-     */
-    @PostMapping("/tasks/selection")
-    public ResponseEntity<List<TaskEntity>> getTasksByLevel1AndLevel2(@RequestBody SelectionDTO selectionDTO) {
-        SubjectEntity currentSubject = subjectService.findSubjectByName(selectionDTO.getSubject());
-        List<TaskEntity> result = taskService.getSelectionTask(selectionDTO.getChoices(), currentSubject);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+
 }
