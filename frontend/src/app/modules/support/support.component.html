@@ -13,6 +13,7 @@
           <th>Предмет</th>
           <th>Уроень 1</th>
           <th>Уровень 2</th>
+          <th>Ответ</th>
         </tr>
         </thead>
         <tbody *ngFor="let task of tasks">
@@ -21,6 +22,7 @@
           <td>{{task.subject}}</td>
           <td>{{task.level1}}</td>
           <td>{{task.level2}}</td>
+          <td>{{task.answer}}</td>
         </tr>
         </tbody>
       </table>

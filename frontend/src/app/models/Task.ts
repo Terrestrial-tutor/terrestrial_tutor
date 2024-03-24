@@ -5,10 +5,8 @@ export interface Task {
   checking: number;
   answerType: string;
   taskText: string;
-  answer: string;
+  answer: string[];
   subject: string;
   level1: string;
   level2: string;
-  file: string;
-  homeworks: string[];
 }
