@@ -12,7 +12,11 @@ body {
 
 h2 {
   font-size: 2vw;
-  font-weight: normal;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.5vw;
 }
 
 input {
@@ -22,6 +26,12 @@ input {
   border: 1px solid #FFFFFF;
   background-color: #1E1E1E;
   padding: 1em;
+}
+
+.btn-primary:active,
+.btn:active {
+  color: #2c2c2c;
+  background-color: #FFE177;
 }
 
 .btn-primary {

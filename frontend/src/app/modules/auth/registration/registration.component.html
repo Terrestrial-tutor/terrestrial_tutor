@@ -1,6 +1,6 @@
-<div class="container">
+<div class="container text-center">
   <h2 class="text-center">Регистрация</h2>
-  <form [formGroup]="registrationForm">
+  <form [formGroup]="registrationForm" (ngSubmit)="submit()">
     <div class="justify-content-center row">
       <input placeholder="Фамилия" class="col-4" formControlName="surname">
     </div>
@@ -37,9 +37,7 @@
       </div>
     </div>
 
-    <div class="justify-content-center row mb-3">
-      <button class="btn btn-primary col-3" [disabled]="registrationForm.invalid" (click)="submit()">Зарегистрироваться</button>
-    </div>
+    <button class="btn btn-primary col-3 mb-4" type="submit" [disabled]="registrationForm.invalid">Зарегистрироваться</button>
 
     <div class="justify-content-center row">
       <p class="text-center">Уже есть аккаунт? <u><a routerLink="/login">Войти</a></u></p>

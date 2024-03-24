@@ -7,6 +7,8 @@ import {AdminComponent} from "./modules/admin/admin.component";
 import {PupilComponent} from "./modules/pupil/pupil.component";
 import {SupportComponent} from "./modules/support/support.component";
 import {TaskComponent} from "./modules/task/task.component";
+import {TutorComponent} from "./modules/tutor/tutor.component";
+import {HwConstructorComponent} from "./modules/hw-constructor/hw-constructor.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [AuthGuardService]},
@@ -15,6 +17,8 @@ const routes: Routes = [
   {path: 'pupil', component: PupilComponent, canActivate: [AuthGuardService]},
   {path: 'support', component: SupportComponent, canActivate: [AuthGuardService]},
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
+  {path: 'tutor', component: TutorComponent, canActivate: [AuthGuardService]},
+  {path: 'tutor/constructor', component: HwConstructorComponent, canActivate: [AuthGuardService]},
   {path: '', redirectTo: 'login', pathMatch: 'full'},
 ];
 

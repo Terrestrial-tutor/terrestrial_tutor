@@ -28,6 +28,8 @@ import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { SupportComponent } from './modules/support/support.component';
 import { TaskComponent } from './modules/task/task.component';
 import {CodemirrorModule} from "@ctrl/ngx-codemirror";
+import { TutorComponent } from './modules/tutor/tutor.component';
+import { HwConstructorComponent } from './modules/hw-constructor/hw-constructor.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import {CodemirrorModule} from "@ctrl/ngx-codemirror";
     SubjectsComponent,
     SupportComponent,
     TaskComponent,
+    TutorComponent,
+    HwConstructorComponent,
   ],
   imports: [
     BrowserModule,

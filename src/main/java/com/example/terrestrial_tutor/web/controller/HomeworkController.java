@@ -26,7 +26,7 @@ public class HomeworkController {
     @Autowired
     HomeworkService homeworkService;
     @PostMapping("/homework/add")
-    public ResponseEntity<HomeworkEntity> addHomework(Principal principal, @RequestBody HomeworkAddRequest request) {
+    public ResponseEntity<HomeworkEntity> addHomework(@RequestBody HomeworkAddRequest request) {
         HomeworkEntity newHomework = homeworkService.addHomework(request);
         return new ResponseEntity<>(newHomework, HttpStatus.OK);
     }
