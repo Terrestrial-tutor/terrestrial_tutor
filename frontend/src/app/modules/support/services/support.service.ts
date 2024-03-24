@@ -15,7 +15,7 @@ export class SupportService {
   private SUPPORT_API = this.apiService.apiUrl + 'support/';
   private UPLOAD_API = this.apiService.apiUrl + 'files/';
 
-  addTask(task: any, file: File): Observable<any> {
+  addTask(task: any, files: FileList): Observable<any> {
     const formData = new FormData();
     formData.append('name', task.name);
     formData.append('checking', task.checking);
@@ -25,8 +25,10 @@ export class SupportService {
     formData.append('subject', task.subject);
     formData.append('level1', task.level1);
     formData.append('level2', task.level2);
-    formData.append('files', file);
-    formData.append('homeworks', task.homeworks);
+    console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
     return this.http.post(this.SUPPORT_API + 'add/task', formData);
   }
 
