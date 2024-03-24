@@ -5,7 +5,7 @@ export interface Task {
   checking: number;
   answerType: string;
   taskText: string;
-  answer: string[];
+  answers: string[];
   subject: string;
   level1: string;
   level2: string;

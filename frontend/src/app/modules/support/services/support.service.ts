@@ -13,7 +13,6 @@ export class SupportService {
               private apiService: EnvironmentService) { }
 
   private SUPPORT_API = this.apiService.apiUrl + 'support/';
-  private UPLOAD_API = this.apiService.apiUrl + 'files/';
 
   addTask(task: any, files: FileList): Observable<any> {
     const formData = new FormData();
@@ -21,7 +20,7 @@ export class SupportService {
     formData.append('checking', task.checking);
     formData.append('taskText', task.taskText);
     formData.append('answerType', task.answerType);
-    formData.append('answer', task.answer);
+    formData.append('answer', task.answers);
     formData.append('subject', task.subject);
     formData.append('level1', task.level1);
     formData.append('level2', task.level2);

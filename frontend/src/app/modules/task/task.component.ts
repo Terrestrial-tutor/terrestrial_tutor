@@ -80,7 +80,7 @@ export class TaskComponent implements OnInit {
       name: this.taskForm.controls['taskName'].value,
       answerType: this.taskForm.controls['answerType'].value,
       taskText: this.taskForm.controls['taskText'].value,
-      answer: this.taskForm.controls['taskAns'].value,
+      answers: this.taskForm.controls['taskAns'].value,
       checking: 1,
       subject: this.taskForm.controls['selectedSubject'].value,
       level1: this.taskForm.controls['level1'].value,

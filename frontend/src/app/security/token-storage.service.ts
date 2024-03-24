@@ -26,7 +26,7 @@ export class TokenStorageService {
     window.localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
-  public getUser(): any {
+  public getUser(): any{
     // @ts-ignore
     return JSON.parse(localStorage.getItem(USER_KEY));
   }

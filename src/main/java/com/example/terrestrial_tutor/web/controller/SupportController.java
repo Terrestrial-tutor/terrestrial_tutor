@@ -40,9 +40,8 @@ public class SupportController {
                               @RequestParam String subject,
                               @RequestParam String level1,
                               @RequestParam String level2
-                              ) {
+                              ) throws Exception {
         try{
-
             TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2);
             if (files != null) {
                 taskDTO.setFiles(uploadFilesService.uploadFiles(files));
@@ -51,7 +50,7 @@ public class SupportController {
             taskService.addNewTask(taskDTO, support);
         }
         catch (Exception e){
-            return HttpStatus.UNPROCESSABLE_ENTITY;
+            throw new Exception(e);
         }
         return HttpStatus.OK;
     }

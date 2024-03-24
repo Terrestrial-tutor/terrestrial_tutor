@@ -2,9 +2,12 @@ package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.PupilDTO;
+import com.example.terrestrial_tutor.dto.SubjectDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
+import com.example.terrestrial_tutor.entity.SupportEntity;
+import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TutorService;
@@ -13,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +62,20 @@ public class TutorController {
             }
         }
         return new ResponseEntity<>(pupilsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/tutor/subjects")
+    public ResponseEntity<List<SubjectDTO>> getTutorPupilsBySubject() {
+        TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<SubjectEntity> subjects = tutorService.findTutorSubjectsByTutorId(tutor.getId());
+        List<SubjectDTO> subjectsDTO = new ArrayList<>();
+        for (SubjectEntity subject : subjects) {
+            SubjectDTO subjectDTO = new SubjectDTO();
+            subjectDTO.setId(subject.getId());
+            subjectDTO.setSubjectName(subject.getName());
+            subjectsDTO.add(subjectDTO);
+        }
+        return new ResponseEntity<>(subjectsDTO, HttpStatus.OK);
     }
 
 }

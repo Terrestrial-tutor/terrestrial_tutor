@@ -1,20 +1,20 @@
 <div class="container">
   <h2 class="text-center mb-4">Вход</h2>
-  <form [formGroup]="loginForm" class="mb-4">
+  <form [formGroup]="loginForm" class="mb-4" (ngSubmit)="submit()">
     <div class="justify-content-center row mb-4">
-      <input placeholder="E-mail" class="col-4" formControlName="username" (keyup.enter)="submit()">
+      <input placeholder="E-mail" class="col-4" formControlName="username">
     </div>
     <div class="justify-content-center row">
-      <input type="password" placeholder="Пароль" class="col-4" formControlName="password" (keyup.enter)="submit()">
+      <input type="password" placeholder="Пароль" class="col-4" formControlName="password">
+    </div>
+    <div class="justify-content-center row mt-3">
+      <button class="btn btn-primary col-3 mt-3 mb-3" [disabled]="loginForm.invalid" type="submit">
+        Войти
+      </button>
+    </div>
+    <div class="justify-content-center row">
+      <p class="text-center" routerLink="/registration">Нет аккаунта? <a><u>Зарегистрироваться</u></a></p>
     </div>
   </form>
-  <div class="justify-content-center row">
-    <button class="btn btn-primary col-3 mt-3 mb-3" [disabled]="loginForm.invalid" (click)="submit()">
-      Войти
-    </button>
-  </div>
-  <div class="justify-content-center row">
-    <p class="text-center" routerLink="/registration">Нет аккаунта? <a><u>Зарегистрироваться</u></a></p>
-  </div>
   <ngb-alert type="danger" *ngIf="unauthorized"></ngb-alert>
 </div>
