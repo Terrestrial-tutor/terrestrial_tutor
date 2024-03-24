@@ -4,6 +4,7 @@ import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
+import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import com.example.terrestrial_tutor.exceptions.CustomException;
 import com.example.terrestrial_tutor.repository.TaskRepository;
 import com.example.terrestrial_tutor.service.SubjectService;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.example.terrestrial_tutor.entity.enums.TaskCheckingType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -113,5 +116,22 @@ public class TaskServiceImpl implements TaskService {
         newTask.setSupport(support);
         newTask.setFiles(dto.getFiles());
         return taskRepository.save(newTask);
+    }
+
+    public String toStringName(TaskCheckingType type) {
+        return switch (type) {
+            case AUTO -> "авто";
+            case INSTANCE -> "моментальная";
+            case MANUALLY -> "ручная";
+        };
+    }
+
+    public TaskCheckingType toType(String type) {
+        return switch (type) {
+            case "авто" -> AUTO;
+            case "моментальная" -> INSTANCE;
+            case "ручная" -> MANUALLY;
+            default -> null;
+        };
     }
 }

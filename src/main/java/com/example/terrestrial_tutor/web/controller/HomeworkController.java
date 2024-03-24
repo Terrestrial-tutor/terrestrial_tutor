@@ -1,17 +1,14 @@
 package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
-import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
-import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
-import com.example.terrestrial_tutor.payload.request.HomeworkAddRequest;
+import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
-import com.example.terrestrial_tutor.service.impl.HomeworkServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,8 +31,10 @@ public class HomeworkController {
     @Autowired
     SubjectService subjectService;
 
+    //todo контроллер для обработки завершенной домашки
+
     @PostMapping("/homework/add")
-    public ResponseEntity<HomeworkEntity> addHomework(@RequestBody HomeworkAddRequest request) {
+    public ResponseEntity<HomeworkEntity> addHomework(@RequestBody HomeworkDTO request) {
         HomeworkEntity newHomework = homeworkService.addHomework(request);
         return new ResponseEntity<>(newHomework, HttpStatus.OK);
     }
