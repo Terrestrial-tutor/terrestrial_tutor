@@ -10,7 +10,6 @@ import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -104,7 +103,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskEntity addNewTask(TaskDTO dto, SupportEntity support) {
         TaskEntity newTask = new TaskEntity();
         newTask.setName(dto.getName());
-        newTask.setAnswer(dto.getAnswer());
+        newTask.setAnswer(dto.getAnswers());
         newTask.setLevel1(dto.getLevel1());
         newTask.setLevel2(dto.getLevel2());
         newTask.setSubject(subjectService.findSubjectByName(dto.getSubject()));
@@ -112,7 +111,7 @@ public class TaskServiceImpl implements TaskService {
         newTask.setAnswerType(dto.getAnswerType());
         newTask.setChecking(dto.getChecking());
         newTask.setSupport(support);
-        newTask.setFiles(dto.getFile());
+        newTask.setFiles(dto.getFiles());
         return taskRepository.save(newTask);
     }
 }

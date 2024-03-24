@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Controller
@@ -30,24 +31,24 @@ public class SupportController {
     UploadFilesService uploadFilesService;
 
     @PostMapping("/support/add/task")
-    public HttpStatus addTask(@RequestParam(required = false) MultipartFile files,
+    public HttpStatus addTask(@RequestParam(required = false) Set<MultipartFile> files,
                               @RequestParam String name,
                               @RequestParam int checking,
                               @RequestParam String answerType,
                               @RequestParam String taskText,
-                              @RequestParam String answer,
+                              @RequestParam List<String> answer,
                               @RequestParam String subject,
                               @RequestParam String level1,
-                              @RequestParam String level2,
-                              @RequestParam List<String> homeworks
+                              @RequestParam String level2
                               ) {
         try{
-            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2, "", homeworks);
+
+            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2);
             if (files != null) {
-                taskDTO.setFile(uploadFilesService.uploadFiles(files));
+                taskDTO.setFiles(uploadFilesService.uploadFiles(files));
             }
             SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            TaskEntity task = taskService.addNewTask(taskDTO, support);
+            taskService.addNewTask(taskDTO, support);
         }
         catch (Exception e){
             return HttpStatus.UNPROCESSABLE_ENTITY;
