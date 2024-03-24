@@ -58,10 +58,6 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  logOut(): void {
-    this.tokenService.logOut();
-  }
-
   getAllSubjects(): void {
     this.subjectsService.getAllSubjects().subscribe(data => {
       this.subjects = data;

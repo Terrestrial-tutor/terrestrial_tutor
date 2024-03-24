@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -33,10 +34,11 @@ public class TaskEntity {
     @Column(name = "answer_type")
     String answerType;
 
-    /*
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "task_files", joinColumns = @JoinColumn(name = "entity_id"))
     @Column(name = "files")
-    String files;
-
+    Set<String> files;
+    /*
     @NonNull
     @Column(name = "complexity")
     String complexity;
@@ -48,8 +50,10 @@ public class TaskEntity {
 
     //task_tables_ids
 
-    @Column(name = "answer")
-    String answer;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "answers_array", joinColumns = @JoinColumn(name = "entity_id"))
+    @Column(name = "answers")
+    List<String> answer;
 
     @ManyToOne()
     @JoinColumn(name = "subject")

@@ -25,10 +25,6 @@ export class SupportComponent implements OnInit {
     });
   }
 
-  logoutPupil(): void {
-    this.tokenService.logOut();
-  }
-
   addTask() {
     this.router.navigate(['support/task/add']);
   }

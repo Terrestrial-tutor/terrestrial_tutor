@@ -1,9 +1,11 @@
 package com.example.terrestrial_tutor.service.impl;
 
+import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
 import com.example.terrestrial_tutor.exceptions.UserExistException;
 import com.example.terrestrial_tutor.payload.request.RegistrationRequest;
 import com.example.terrestrial_tutor.repository.PupilRepository;
+import com.example.terrestrial_tutor.repository.SubjectRepository;
 import com.example.terrestrial_tutor.repository.TutorRepository;
 import com.example.terrestrial_tutor.security.JWTAuthenticationFilter;
 import com.example.terrestrial_tutor.service.TutorService;
@@ -14,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,9 @@ public class TutorServiceImpl implements TutorService {
     @Autowired
     @NonNull
     PupilRepository pupilRepository;
+    @Autowired
+    @NonNull
+    SubjectRepository subjectRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public TutorEntity addNewTutor(RegistrationRequest userIn) {
@@ -57,6 +65,13 @@ public class TutorServiceImpl implements TutorService {
         tutorRepository.deleteById(id);
     }
 
+    @Override
+    public List<SubjectEntity> findTutorSubjectsByTutorId(Long id) {
+        List<TutorEntity> tutor = new ArrayList<>();
+        tutor.add(tutorRepository.findTutorEntityById(id));
+        return subjectRepository.findSubjectEntitiesByTutorsIn(tutor);
+    }
+
     public TutorEntity verifyTutor(Long id) {
         TutorEntity tutor = tutorRepository.findTutorEntityById(id);
         tutor.setVerification(true);
@@ -65,6 +80,27 @@ public class TutorServiceImpl implements TutorService {
 
     public TutorEntity updateTutor(TutorEntity tutor) {
         return tutorRepository.save(tutor);
+    }
+
+    @Override
+    public TutorEntity addTutorSubject(TutorEntity tutor, SubjectEntity subject) {
+        try {
+            List<SubjectEntity> subjects = tutor.getSubjects();
+            List<TutorEntity> tutors = subject.getTutors();
+            if (subjects.contains(subject)) {
+                LOG.error("SUBJECT ALREADY EXISTS");
+                throw new RuntimeException("Subject already exists");
+            }
+            subjects.add(subject);
+            tutor.setSubjects(subjects);
+            tutors.add(tutor);
+            subject.setTutors(tutors);
+            subjectRepository.save(subject);
+            return tutorRepository.save(tutor);
+        } catch (Exception ex) {
+            LOG.error("ERROR DURING ADDING SUBJECT");
+            throw new RuntimeException("Error during adding subject");
+        }
     }
 
     public TutorEntity findTutorById(Long id) {

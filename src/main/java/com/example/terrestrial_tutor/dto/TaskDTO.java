@@ -1,21 +1,23 @@
 package com.example.terrestrial_tutor.dto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class TaskDTO {
-    String name;
-    int checking;
-    String answerType;
-    Long id;
-    String taskText;
-    String answer;
-    String subject;
-    String level1;
-    String level2;
-    List<String> homeworks;
+    final String name;
+    final int checking;
+    final String answerType;
+    final String taskText;
+    final List<String> answers;
+    final String subject;
+    final String level1;
+    final String level2;
+    Set<String> files;
 }

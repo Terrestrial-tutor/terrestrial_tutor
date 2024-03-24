@@ -1,4 +1,3 @@
-<button (click)="logoutPupil()">logout</button>
 <ul ngbNav #nav="ngbNav" class="nav-tabs">
 
   <li ngbNavItem>
@@ -13,6 +12,7 @@
           <th>Предмет</th>
           <th>Уроень 1</th>
           <th>Уровень 2</th>
+          <th>Ответ</th>
         </tr>
         </thead>
         <tbody *ngFor="let task of tasks">
@@ -21,6 +21,7 @@
           <td>{{task.subject}}</td>
           <td>{{task.level1}}</td>
           <td>{{task.level2}}</td>
+          <td>{{task.answers}}</td>
         </tr>
         </tbody>
       </table>

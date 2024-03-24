@@ -5,14 +5,11 @@ import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
 import com.example.terrestrial_tutor.exceptions.CustomException;
-import com.example.terrestrial_tutor.payload.request.AddTaskRequest;
-import com.example.terrestrial_tutor.repository.SubjectRepository;
 import com.example.terrestrial_tutor.repository.TaskRepository;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,6 +63,16 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findAll();
     }
 
+    @Override
+    public TaskEntity getTaskById(Long id) {
+        return taskRepository.findTaskEntityById(id);
+    }
+
+    @Override
+    public TaskEntity save(TaskEntity task) {
+        return taskRepository.save(task);
+    }
+
     public List<TaskEntity> getSelectionTask(Map<String, Integer> choices, SubjectEntity subject){
         List<TaskEntity> tasks = new ArrayList<>();
         for(Map.Entry<String, Integer> pair : choices.entrySet()){ // идем по запросу
@@ -93,10 +100,10 @@ public class TaskServiceImpl implements TaskService {
         return tasks;
     }
 
-    public TaskEntity addNewTask(AddTaskRequest dto, SupportEntity support) {
+    public TaskEntity addNewTask(TaskDTO dto, SupportEntity support) {
         TaskEntity newTask = new TaskEntity();
         newTask.setName(dto.getName());
-        newTask.setAnswer(dto.getAnswer());
+        newTask.setAnswer(dto.getAnswers());
         newTask.setLevel1(dto.getLevel1());
         newTask.setLevel2(dto.getLevel2());
         newTask.setSubject(subjectService.findSubjectByName(dto.getSubject()));
@@ -104,6 +111,7 @@ public class TaskServiceImpl implements TaskService {
         newTask.setAnswerType(dto.getAnswerType());
         newTask.setChecking(dto.getChecking());
         newTask.setSupport(support);
+        newTask.setFiles(dto.getFiles());
         return taskRepository.save(newTask);
     }
 }

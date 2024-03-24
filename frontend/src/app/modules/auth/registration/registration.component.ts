@@ -29,7 +29,13 @@ export class RegistrationComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])],
       confirmPassword: ['', Validators.compose([Validators.required])],
-      role: ['Кто Вы?'],
+      role: ['Кто Вы?', Validators.compose([(role) => {
+        if (role.value == 'Кто Вы?') {
+          return {roleSelected: false};
+        } else {
+          return null;
+        }
+      }])],
     })
   }
 
