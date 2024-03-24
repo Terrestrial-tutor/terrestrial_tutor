@@ -2,12 +2,14 @@ package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.PupilDTO;
+import com.example.terrestrial_tutor.dto.SubjectDTO;
 import com.example.terrestrial_tutor.dto.TutorListDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
 import com.example.terrestrial_tutor.dto.facade.TutorListFacade;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
+import com.example.terrestrial_tutor.repository.TutorRepository;
 import com.example.terrestrial_tutor.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,8 @@ public class AdminController {
     TutorListFacade tutorListFacade;
     @Autowired
     private PupilFacade pupilFacade;
+    @Autowired
+    private TutorRepository tutorRepository;
 
     @GetMapping("/admin/subject/{subject}/find/tutors")
     public ResponseEntity<List<TutorListDTO>> findTutorsBySubject(@PathVariable String subject) {
@@ -70,6 +74,18 @@ public class AdminController {
             }
         }
         return new ResponseEntity<>(resultPupils, HttpStatus.OK);
+    }
+
+    @PostMapping("/admin/tutor/add/subject/{tutorId}")
+    public HttpStatus addSubjectToTutor(@RequestBody String subjectName, @PathVariable Long tutorId) throws Exception {
+        SubjectEntity subject = subjectService.findSubjectByName(subjectName);
+        TutorEntity tutor = tutorService.findTutorById(tutorId);
+        try {
+            tutorService.addTutorSubject(tutor, subject);
+        }catch (Exception e) {
+            throw  new Exception(e);
+        }
+        return HttpStatus.OK;
     }
 
 }

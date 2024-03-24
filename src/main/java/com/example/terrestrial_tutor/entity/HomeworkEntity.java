@@ -1,12 +1,14 @@
 package com.example.terrestrial_tutor.entity;
 
+import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Getter
@@ -31,11 +33,13 @@ public class HomeworkEntity {
     //List<Integer> = new ArrayList<Integer>();
 
     @Column(name = "solute_time")
-    Time soluteTime;
+    Long soluteTime;
 
-    @ManyToOne()
+    Long targetTime;
+
+    @ManyToMany()
     @JoinColumn(name = "pupil")
-    PupilEntity pupil;
+    List<PupilEntity> pupils;
 
 //    todo
 //    Добавить теоритические материалы
@@ -46,4 +50,10 @@ public class HomeworkEntity {
 
     @ManyToMany(mappedBy = "homeworks", fetch = FetchType.LAZY)
     List<TaskEntity> tasks = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "checking_map")
+    @MapKeyColumn(name = "key_column")
+    Map<TaskEntity, TaskCheckingType> tasksCheckingTypes;
+    LocalDate deadLine;
 }

@@ -36,3 +36,4 @@ build/
 
 ### Front ###
 frontend/package.json
+public/*

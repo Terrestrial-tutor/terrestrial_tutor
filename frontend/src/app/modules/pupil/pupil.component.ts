@@ -26,8 +26,4 @@ export class PupilComponent {
     });
   }
 
-  logoutPupil(): void {
-    this.tokenService.logOut();
-  }
-
 }
