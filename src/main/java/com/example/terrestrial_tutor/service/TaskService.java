@@ -11,6 +11,8 @@ import java.util.Map;
 public interface TaskService {
     List<TaskEntity> getTasksBySubjectAndLevel1(SubjectEntity subject, String level1);
 
+    List<TaskEntity> getTasksBySubject(SubjectEntity subject);
+
     List<TaskEntity> getTasksBySubjectAndLevel2(SubjectEntity subject, String level1, String level2);
 
     List<TaskEntity> getAllTasks();

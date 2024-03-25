@@ -29,7 +29,8 @@ import { SupportComponent } from './modules/support/support.component';
 import { TaskComponent } from './modules/task/task.component';
 import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 import { TutorComponent } from './modules/tutor/tutor.component';
-import { HwConstructorComponent } from './modules/hw-constructor/hw-constructor.component';
+import { HwConstructorComponent } from './modules/tutor/hw-constructor/hw-constructor.component';
+import { TaskChoiseComponent } from './modules/tutor/task-choise/task-choise.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { HwConstructorComponent } from './modules/hw-constructor/hw-constructor.
     TaskComponent,
     TutorComponent,
     HwConstructorComponent,
+    TaskChoiseComponent,
   ],
   imports: [
     BrowserModule,
