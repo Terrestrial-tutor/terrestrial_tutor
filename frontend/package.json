@@ -20,9 +20,12 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.3.0",
     "@angular/router": "~13.3.0",
+    "@ctrl/ngx-codemirror": "^5.1.1",
     "@ng-bootstrap/ng-bootstrap": "^12.1.2",
     "@popperjs/core": "^2.11.8",
+    "@types/codemirror": "^5.60.15",
     "bootstrap": "^5.3.3",
+    "codemirror": "^5.65.16",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
