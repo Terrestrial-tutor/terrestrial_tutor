@@ -9,4 +9,5 @@ export interface Task {
   subject: string;
   level1: string;
   level2: string;
+  table: string;
 }

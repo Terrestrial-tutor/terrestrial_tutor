@@ -66,6 +66,10 @@ public class TaskEntity {
     @Column(name = "level2")
     String level2;
 
+    @NonNull
+    @Column(name = "tables")
+    String table;
+
     @ManyToMany()
     @JoinColumn(name = "homeworks")
     List<HomeworkEntity> homeworks = new ArrayList<>();

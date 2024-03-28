@@ -117,6 +117,7 @@ public class TaskServiceImpl implements TaskService {
         newTask.setChecking(dto.getChecking());
         newTask.setSupport(support);
         newTask.setFiles(dto.getFiles());
+        newTask.setTable(dto.getTable());
         return taskRepository.save(newTask);
     }
 }
