@@ -4,7 +4,7 @@
     <a ngbNavLink>Задания</a>
     <ng-template ngbNavContent>
       <button class="row col-2 p-1 btn btn-lg btn-outline-primary" (click)="addTask()">Добавить задание</button>
-      <div *ngIf="!tasksUpload" class="row spinner-border" role="status"></div>
+      <div *ngIf="!tasksUpload" class="row mb-1 spinner-border" role="status"></div>
       <table *ngIf="tasksUpload">
         <thead>
         <tr>
@@ -25,12 +25,6 @@
         </tr>
         </tbody>
       </table>
-    </ng-template>
-  </li>
-  <li ngbNavItem>
-    <a ngbNavLink>Задания</a>
-    <ng-template ngbNavContent>
-      sdff
     </ng-template>
   </li>
 

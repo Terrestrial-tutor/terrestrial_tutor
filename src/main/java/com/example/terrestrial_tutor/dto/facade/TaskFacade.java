@@ -21,7 +21,8 @@ public class TaskFacade {
                 task.getAnswer(),
                 task.getSubject().getName(),
                 task.getLevel1(),
-                task.getLevel2());
+                task.getLevel2(),
+                task.getTable());
         taskDTO.setFiles(task.getFiles());
         return taskDTO;
     }
