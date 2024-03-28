@@ -8,7 +8,7 @@ import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import java.util.List;
 
 public interface HomeworkService {
-    List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil);
+//    List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil);
 
     List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor);
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +37,11 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
     TaskService taskService;
 
-    public List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil) {
-        return homeworkRepository.findHomeworkEntitiesByPupil(pupil);
-    }
+//    public List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil) {
+//        List<PupilEntity> pupilEntities = new ArrayList<>();
+//        pupilEntities.add(pupil);
+//        return homeworkRepository.findHomeworkEntitiesByPupils(pupilEntities);
+//    }
 
     public List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor) {
         return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
