@@ -40,6 +40,11 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.findTaskEntitiesBySubjectAndLevel1(subject, level1);
     }
 
+    @Override
+    public List<TaskEntity> getTasksBySubject(SubjectEntity subject) {
+        return taskRepository.findTaskEntitiesBySubject(subject);
+    }
+
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 2 | null, если у предмета нет 2 уровня
      *
@@ -115,6 +120,7 @@ public class TaskServiceImpl implements TaskService {
         newTask.setChecking(dto.getChecking());
         newTask.setSupport(support);
         newTask.setFiles(dto.getFiles());
+        newTask.setTable(dto.getTable());
         return taskRepository.save(newTask);
     }
 

@@ -24,6 +24,7 @@ export class SupportService {
     formData.append('subject', task.subject);
     formData.append('level1', task.level1);
     formData.append('level2', task.level2);
+    formData.append('table', task.table);
     console.log(files);
     for (let i = 0; i < files.length; i++) {
       formData.append('files', files[i]);

@@ -18,4 +18,8 @@ export class TaskService {
     return this.http.get(this.TASK_API + 'all');
   }
 
+  getTasksBySubject(subject: any): Observable<any> {
+    return this.http.get(this.TASK_API + `${subject}`);
+  }
+
 }

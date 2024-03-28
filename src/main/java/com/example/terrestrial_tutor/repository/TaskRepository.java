@@ -10,6 +10,7 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     TaskEntity findTaskEntityById(Long id);
 
     List<TaskEntity> findTaskEntitiesBySubjectAndLevel1(SubjectEntity subject, String level1);
+    List<TaskEntity> findTaskEntitiesBySubject(SubjectEntity subject);
     List<TaskEntity> findTaskEntitiesBySubjectAndLevel2(SubjectEntity subject, String level2);
     List<TaskEntity> findTaskEntitiesBySubjectAndLevel1AndLevel2(SubjectEntity subject, String level1, String level2);
 }

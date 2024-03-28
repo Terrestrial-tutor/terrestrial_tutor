@@ -39,10 +39,11 @@ public class SupportController {
                               @RequestParam List<String> answer,
                               @RequestParam String subject,
                               @RequestParam String level1,
-                              @RequestParam String level2
+                              @RequestParam String level2,
+                              @RequestParam String table
                               ) throws Exception {
         try{
-            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2);
+            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2, table);
             if (files != null) {
                 taskDTO.setFiles(uploadFilesService.uploadFiles(files));
             }

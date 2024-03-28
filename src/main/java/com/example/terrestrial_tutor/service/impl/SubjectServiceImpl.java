@@ -26,6 +26,11 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectRepository.findSubjectEntityByName(name);
     }
 
+    @Override
+    public SubjectEntity findSubjectById(Long subjectId) {
+        return subjectRepository.findSubjectEntityById(subjectId);
+    }
+
     public SubjectEntity updateSubject(SubjectEntity subject) {
         return subjectRepository.save(subject);
     }
