@@ -31,6 +31,8 @@ services:
 
   backend:
     image: backend
+    volumes:
+      - ./public:/public
     build:
       context: .
       dockerfile: Dockerfile
