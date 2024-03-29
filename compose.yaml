@@ -31,6 +31,8 @@ services:
 
   backend:
     image: backend
+    volumes:
+      - ./public:/public
     build:
       context: .
       dockerfile: Dockerfile
@@ -43,7 +45,7 @@ services:
     environment:
       - SERVER_PORT=8181
       - SPRING_DATASOURCE_URL=jdbc:postgresql://87.249.49.62:5432/terrestrial_tutor
-      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_USERNAME=tutor
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
     networks:
       localnet:
@@ -60,13 +62,14 @@ services:
         ipv4_address: 10.0.0.5
 
 #Uncomment if it's server
-#  postgres:
-#    image: postgres:16.1
-#    environment:
-#        POSTGRES_DB: terrestrial_tutor
-#        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
-#        POSTGRES_USER: admin
-#    ports:
-#      - '5432:5432'
-#    volumes:
-#      - /shema.sql:/data/shema.sql
+  postgres:
+    image: postgres:16.1
+    environment:
+        POSTGRES_DB: terrestrial_tutor
+        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+        POSTGRES_USER: tutor
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data_base:/var/lib/postgresql/data
+      - ./db_snapshots/backup.sql:/docker-entrypoint-initdb.d/

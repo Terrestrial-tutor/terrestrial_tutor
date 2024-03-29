@@ -8,6 +8,7 @@ import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import java.util.List;
 
 public interface HomeworkService {
+
     HomeworkEntity addHomework(HomeworkDTO request);
 
     List<HomeworkEntity> getAllHomeworksPupil();
