@@ -60,13 +60,13 @@ services:
         ipv4_address: 10.0.0.5
 
 #Uncomment if it's server
-#  postgres:
-#    image: postgres:16.1
-#    environment:
-#        POSTGRES_DB: terrestrial_tutor
-#        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
-#        POSTGRES_USER: admin
-#    ports:
-#      - '5432:5432'
-#    volumes:
-#      - /shema.sql:/data/shema.sql
+  postgres:
+    image: postgres:16.1
+    environment:
+        POSTGRES_DB: terrestrial_tutor
+        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+        POSTGRES_USER: tutor
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data_base:/var/lib/postgresql/data
