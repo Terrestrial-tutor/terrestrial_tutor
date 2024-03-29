@@ -37,16 +37,6 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
     TaskService taskService;
 
-//    public List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil) {
-//        List<PupilEntity> pupilEntities = new ArrayList<>();
-//        pupilEntities.add(pupil);
-//        return homeworkRepository.findHomeworkEntitiesByPupils(pupilEntities);
-//    }
-
-    public List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor) {
-        return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
-    }
-
     public HomeworkEntity addHomework(HomeworkDTO request) {
         // todo получить авторизированного пользователя и установить в tutor
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -63,5 +53,16 @@ public class HomeworkServiceImpl implements HomeworkService {
         newHomework.setTasksCheckingTypes(newMap);
         return homeworkRepository.save(newHomework);
     }
+    public HomeworkEntity getHomeworkById(Long id){
+        return homeworkRepository.getById(id);
+    }
+    public List<HomeworkEntity> getAllHomeworksPupil(){
+        PupilEntity pupil = (PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return homeworkRepository.findHomeworkEntitiesByPupil(pupil);
+    }
 
+    public List<HomeworkEntity> getAllHomeworksTutor(){
+        TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
+    }
 }

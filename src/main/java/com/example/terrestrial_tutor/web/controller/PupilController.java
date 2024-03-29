@@ -3,9 +3,11 @@ package com.example.terrestrial_tutor.web.controller;
 import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
+import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.payload.request.AddSubjectRequest;
+import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TutorService;
@@ -33,6 +35,9 @@ public class PupilController {
     @Autowired
     @NonNull
     TutorService tutorService;
+    @Autowired
+    @NonNull
+    HomeworkService homeworkService;
     @Autowired
     private PupilFacade pupilFacade;
     @Autowired
@@ -74,6 +79,11 @@ public class PupilController {
         }
 
         return new ResponseEntity<>(pupilsDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/pupil/homework/all")
+    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
+        return new ResponseEntity<>(homeworkService.getAllHomeworksPupil(), HttpStatus.OK);
     }
 
 }
