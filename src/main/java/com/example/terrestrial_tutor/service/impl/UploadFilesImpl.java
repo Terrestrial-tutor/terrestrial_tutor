@@ -33,6 +33,7 @@ public class UploadFilesImpl implements UploadFilesService {
 
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
+                    System.out.println(uploadDir.exists());
                 }
 
                 String fileUuid = UUID.randomUUID().toString();
