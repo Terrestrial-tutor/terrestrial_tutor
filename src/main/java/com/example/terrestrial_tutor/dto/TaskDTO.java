@@ -19,5 +19,6 @@ public class TaskDTO {
     final String subject;
     final String level1;
     final String level2;
+    final String table;
     Set<String> files;
 }

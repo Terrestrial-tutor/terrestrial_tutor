@@ -19,9 +19,6 @@ export class TaskComponent implements OnInit {
   taskForm: FormGroup;
   subjects: Subject[] | undefined;
   answerTypes = ['Варианты', 'Текст или значение', 'Код'];
-  code = 'function hello() {\n' +
-    '  console.log(\'Hello, world!\');\n' +
-    '}';
   options = {
     lineNumbers: true,
     theme: 'material',
@@ -66,6 +63,11 @@ export class TaskComponent implements OnInit {
       level1: ['', Validators.compose([Validators.required])],
       level2: [''],
       files: [''],
+      tableRows: [''],
+      tableCols: [''],
+      table: [[
+        [this.fb.control(''), this.fb.control(''), this.fb.control('')],
+      ]]
     })
   }
 
@@ -84,9 +86,10 @@ export class TaskComponent implements OnInit {
       checking: 1,
       subject: this.taskForm.controls['selectedSubject'].value,
       level1: this.taskForm.controls['level1'].value,
-      level2: this.taskForm.controls['level2'].value
+      level2: this.taskForm.controls['level2'].value,
+      table: this.tableToJson(),
     };
-    console.log(this.taskForm.controls['files'].value)
+
     this.supportService.addTask(task, this.taskForm.controls['files'].value).subscribe(data => {
       this.router.navigate(['/support']);
       console.log('Task Added');
@@ -127,4 +130,39 @@ export class TaskComponent implements OnInit {
     ], Validators.compose([Validators.required])));
     this.taskForm.controls['answerType'].setValue(answerType);
   }
+
+  get table() {
+    return this.taskForm.get('table') as FormArray;
+  }
+
+  tableToJson() {
+    let tableArray: any[][] = [];
+    let table = this.taskForm.controls['table'].value;
+    for (let i = 0; i < table.length; i++) {
+      tableArray.push([])
+      for (let col of table[i]) {
+        tableArray[i].push(col.value);
+      }
+    }
+    return JSON.stringify(tableArray);
+  }
+
+  renderTable() {
+    let newTable: any[][] = [];
+    let rows = this.taskForm.controls['tableRows'].value;
+    let cols = this.taskForm.controls['tableCols'].value;
+    for (let i = 0; i < rows; i++) {
+      newTable.push([]);
+      for (let j = 0; j < cols; j++) {
+        newTable[i].push(this.fb.control(['']));
+      }
+    }
+    this.taskForm.controls['table'].setValue(newTable);
+  }
+
+  test(content: any) {
+    console.log(content);
+  }
+
+  protected readonly toString = toString;
 }

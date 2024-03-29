@@ -38,7 +38,7 @@ public class HomeworkEntity {
     Long targetTime;
 
     @ManyToMany()
-    @JoinColumn(name = "pupil")
+    @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
 //    todo

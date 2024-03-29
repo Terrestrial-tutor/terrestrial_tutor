@@ -30,8 +30,9 @@ public class PupilEntity implements UserDetails {
     @Column(name = "balance")
     Double balance;
 
-    @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    @ManyToMany()
     List<HomeworkEntity> homeworkList = new ArrayList<>();
+
     @Column(name = "price")
     int price;
 

@@ -58,6 +58,17 @@ public class TaskController {
         return new ResponseEntity<>(listTasks, HttpStatus.OK);
     }
 
+    @GetMapping("/tasks/{subject}")
+    public ResponseEntity<List<TaskDTO>> getTasksBySubject(@PathVariable String subject) {
+        SubjectEntity currentSubject = subjectService.findSubjectByName(subject);
+        List<TaskEntity> tasksList = taskService.getTasksBySubject(currentSubject);
+        List<TaskDTO> tasksDTO = new ArrayList<>();
+        for (TaskEntity task : tasksList) {
+            tasksDTO.add(taskFacade.taskToTaskDTO(task));
+        }
+        return new ResponseEntity<>(tasksDTO, HttpStatus.OK);
+    }
+
     /**
      * Контроллер для отдачи выборки заданий по предмету, верхней теме и подтеме
      * @param subject - предмет
