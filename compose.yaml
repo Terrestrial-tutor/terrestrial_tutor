@@ -70,3 +70,4 @@ services:
       - '5432:5432'
     volumes:
       - ./data_base:/var/lib/postgresql/data
+      - ./db_snapshots/backup.sql:/docker-entrypoint-initdb.d/
