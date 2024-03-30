@@ -4,6 +4,7 @@ import {EnvironmentService} from "../../../../environments/environment.service";
 import {Observable} from "rxjs";
 import {Homework} from "../../../models/Homework";
 import {RequestHomework} from "../../../models/RequestHomework";
+import {Subject} from "../../../models/Subject";
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,12 @@ export class TutorService {
     let homeworkRequest = new RequestHomework(homework);
     console.log(homeworkRequest);
     return this.http.post(this.HOMEWORK_API + 'add', homeworkRequest);
+  }
+
+  createHomework(subject: Subject): Observable<any> {
+    let homework = new Homework();
+    homework.subject = subject.subjectName;
+    return this.http.post(this.HOMEWORK_API + 'add', homework);
   }
 
   deleteHomeworkById(id: any): Observable<any> {

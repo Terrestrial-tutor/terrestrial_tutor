@@ -5,7 +5,7 @@ import {PupilSelect} from "../../../models/PupilSelect";
 import {dataService} from "../services/data.service";
 import {Homework} from "../../../models/Homework";
 import {Router} from "@angular/router";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-pupils-add-homework',
@@ -23,13 +23,12 @@ export class PupilsAddHomeworkComponent implements OnInit {
   homework: Homework | null = null;
   isNewPupilsLoaded = false;
   filteredPupils: PupilSelect[] = [];
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
 
   ngOnInit(): void {
     this.homework = this.dataService.getCurrentHomework();
     this.currentPupils = this.dataService.getCurrentPupils();
     this.pupilService.getAllPupils().subscribe(pupils => {
-      console.log(pupils);
       for (let i = 0; i < pupils.length; i++) {
         if (this.currentPupils &&
           this.currentPupils[i].id == pupils[i].id &&

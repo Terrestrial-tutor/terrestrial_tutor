@@ -15,6 +15,7 @@ import java.util.Map;
 @Getter
 @Setter
 public class HomeworkDTO {
+    Long id;
     String name;
     Long targetTime;
     List<Long> pupilIds = new ArrayList<>();
@@ -22,4 +23,5 @@ public class HomeworkDTO {
     LocalDate deadLine;
     @NonNull
     String subject;
+    List<TaskDTO> tasks = new ArrayList<>();
 }

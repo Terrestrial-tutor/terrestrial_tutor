@@ -3,10 +3,10 @@ package com.example.terrestrial_tutor.entity;
 import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class HomeworkEntity {
     String name;
 
     @NonNull
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "subject")
     SubjectEntity subject;
 
@@ -48,12 +48,9 @@ public class HomeworkEntity {
 //    todo
 //    Добавить теоритические материалы
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
-
-    @ManyToMany(mappedBy = "homeworks", fetch = FetchType.LAZY)
-    List<TaskEntity> tasks = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "checking_map")

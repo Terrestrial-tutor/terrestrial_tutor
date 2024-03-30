@@ -9,7 +9,7 @@ import {TutorList} from "../../models/TutorList";
 import {Pupil} from "../../models/Pupil";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PupilSelect} from "../../models/PupilSelect";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-admin',
@@ -34,7 +34,7 @@ export class AdminComponent implements OnInit {
   isNewPupilsLoaded: boolean = true;
   newPupils: PupilSelect[] = [];
   active = "requests";
-  filter = new FormControl('');
+  filter = new UntypedFormControl('');
   filteredPupils: PupilSelect[] = [];
 
   constructor(private adminService: AdminService,

@@ -45,9 +45,10 @@ public class HomeworkController {
     //todo контроллер для обработки завершенной домашки
 
     @PostMapping("/homework/add")
-    public ResponseEntity<Long> addHomework(@RequestBody HomeworkDTO homeworkDTO) {
+    public ResponseEntity<HomeworkDTO> addHomework(@RequestBody HomeworkDTO homeworkDTO) {
         HomeworkEntity newHomework = homeworkService.addHomework(homeworkDTO);
-        return new ResponseEntity<>(newHomework.getId(), HttpStatus.OK);
+        HomeworkDTO newHomeworkDTO = homeworkFacade.homeworkToHomeworkDTO(newHomework);
+        return new ResponseEntity<>(newHomeworkDTO, HttpStatus.OK);
     }
 
 //    @PostMapping("/homework/add/tasks/{HWId}")
