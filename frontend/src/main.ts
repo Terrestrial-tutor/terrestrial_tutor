@@ -1,6 +1,6 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import 'codemirror/mode/clike/clike.js';
+import 'codemirror/mode/python/python.js';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/edit/closebrackets';

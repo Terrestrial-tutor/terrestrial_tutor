@@ -37,9 +37,9 @@ public class SubjectEntity {
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     List<TaskEntity> tasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    List<HomeworkEntity> homeworkList;
 }

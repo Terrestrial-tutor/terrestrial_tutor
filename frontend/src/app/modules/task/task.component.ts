@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {Subject} from "../../models/Subject";
 import {SubjectsService} from "../subjects/services/subjects.service";
 import {SupportService} from "../support/services/support.service";
@@ -16,19 +16,19 @@ import * as CodeMirror from 'codemirror';
 export class TaskComponent implements OnInit {
 
   // @ts-ignore
-  taskForm: FormGroup;
+  taskForm: UntypedFormGroup;
   subjects: Subject[] | undefined;
   answerTypes = ['Варианты', 'Текст или значение', 'Код'];
   options = {
     lineNumbers: true,
     theme: 'material',
-    mode: 'text/x-c++src',
+    mode: 'python',
     matchBrackets: true,
     autoCloseBrackets: true,
     extraKeys: {'Ctrl-Space': 'autocomplete'}
   };
 
-  constructor(private fb: FormBuilder,
+  constructor(private fb: UntypedFormBuilder,
               private subjectsService: SubjectsService,
               private supportService: SupportService,
               private router: Router,) {
@@ -115,7 +115,7 @@ export class TaskComponent implements OnInit {
   }
 
   get taskAns() {
-    return this.taskForm.get('taskAns') as FormArray;
+    return this.taskForm.get('taskAns') as UntypedFormArray;
   }
 
   addAns() {
@@ -134,7 +134,7 @@ export class TaskComponent implements OnInit {
   }
 
   get table() {
-    return this.taskForm.get('table') as FormArray;
+    return this.taskForm.get('table') as UntypedFormArray;
   }
 
   tableToJson() {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import {PupilService} from "./services/pupil.service";
 import {Pupil} from "../../models/Pupil";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {TokenStorageService} from "../../security/token-storage.service";
 import {SubjectsService} from "../subjects/services/subjects.service";
 import {Subject} from "../../models/Subject";
