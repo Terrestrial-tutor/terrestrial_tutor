@@ -31,8 +31,8 @@
           {{ registrationForm.controls['role'].value}}
         </button>
         <div ngbDropdownMenu class="text-center col-12">
-          <button class="nav-btn col-12" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('PUPIL')">Ученик</button>
-          <button class="nav-btn col-12" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('TUTOR')">Репетитор</button>
+          <button class="nav-btn col-12" type="button" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('PUPIL')">Ученик</button>
+          <button class="nav-btn col-12" type="button" ngbDropdownItem (click)="registrationForm.controls['role'].setValue('TUTOR')">Репетитор</button>
         </div>
       </div>
     </div>

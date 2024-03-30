@@ -81,9 +81,9 @@ public class PupilController {
         return new ResponseEntity<>(pupilsDTO,HttpStatus.OK);
     }
 
-    @GetMapping("/pupil/homework/all")
-    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
-        return new ResponseEntity<>(homeworkService.getAllHomeworksPupil(), HttpStatus.OK);
-    }
+//    @GetMapping("/pupil/homework/all")
+//    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
+//        return new ResponseEntity<>(homeworkService.getAllHomeworksPupil(), HttpStatus.OK);
+//    }
 
 }

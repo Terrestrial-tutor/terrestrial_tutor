@@ -13,7 +13,7 @@
 
 
         <div ngbDropdown class="d-inline-block col-3">
-          <button type="button" class="drop-btn btn-primary drop-btn p-2 col-12"
+          <button type="button" class="drop-btn btn-primary p-2 col-12"
                   (focusout)="taskForm.controls['answerType'].markAsTouched()"
                   [ngClass]="{'is-invalid': invalid('answerType')}" ngbDropdownToggle>
             {{taskForm.controls['answerType'].value}}

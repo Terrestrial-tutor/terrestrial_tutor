@@ -1,10 +1,10 @@
 <!-- Создание вкладок -->
 
-<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+<ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs" (activeIdChange)="navChange()">
 
   <!-- Вкладка с заявками на регу -->
 
-  <li ngbNavItem>
+  <li ngbNavItem="requests">
     <a ngbNavLink>Заявки</a>
     <ng-template ngbNavContent>
       <div *ngIf="!isChecksPageLoaded" class="spinner-border" role="status"></div>
@@ -40,79 +40,100 @@
 
   <!-- Вкладка с добавлением учеников -->
 
-  <li ngbNavItem>
+  <li ngbNavItem="setTutors">
     <a ngbNavLink>Добавление учеников</a>
 
     <!-- Выбор предмета -->
 
-    <ng-template ngbNavContent>
-      <div ngbDropdown class="d-inline-block">
-        <button type="button" class="btn btn-outline-primary" ngbDropdownToggle>{{selectedSubject}}</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem *ngFor="let subject of subjects" (click)="selectedSubject=subject.subjectName;findTutorsBySubject()">{{ subject.subjectName }}</button>
+    <ng-template ngbNavContent class="col-12">
+      <div class="row mx-0 mt-3 mb-3 col-12 justify-content-center">
+        <div class="container-fluid mx-3 min-vh-100 col-5 border-opacity-25 rounded-4 border border-2">
+          <div ngbDropdown class="row col-5 m-3">
+            <button type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>{{pupilsSubject}}</button>
+            <div ngbDropdownMenu class="text-center">
+              <button ngbDropdownItem class="nav-btn" *ngFor="let subject of subjects" (click)="pupilsSubject=subject.subjectName;findTutorsForPupilsAdd()">{{ subject.subjectName }}</button>
+            </div>
+          </div>
+
+          <!-- Выбор препода -->
+
+          <div ngbDropdown class="row col-8 m-3" *ngIf="pupilsSubject != 'Выбирете предмет'">
+            <button *ngIf="selectedTutor != undefined" type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>{{selectedTutor.surname + ' ' + selectedTutor.name + ' ' + selectedTutor.patronymic}}</button>
+            <button *ngIf="selectedTutor == undefined" type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>Выбирите преподавателя</button>
+            <div ngbDropdownMenu class="text-center">
+              <button class="nav-btn" ngbDropdownItem *ngFor="let tutor of tutorsBySubjectsPupil" (click)="selectedTutor=tutor;getTutorPupilsBySubject()">{{ tutor.surname + ' ' + tutor.name + ' ' + tutor.patronymic }}</button>
+            </div>
+          </div>
+
+          <button class="row btn btn-primary mb-5 mx-3 p-2" (click)="open(content)" *ngIf="selectedTutor != undefined">Выбрать учеников</button>
+          <div class="row m-1"></div>
+          <div *ngIf="!isPupilsLoaded"  class="row mx-3 m-2 spinner-border" role="status"></div>
+
+          <!-- Вывод найденых учеников -->
+
+          <ol *ngIf="isPupilsLoaded">
+            <li class="p-2 border-opacity-25 rounded-4 border border-2 m-2" *ngFor="let pupil of pupils">{{ pupil.username }}</li>
+          </ol>
+        </div>
+
+        <div class="container-fluid mx-3 min-vh-100 col-5 border-opacity-25 rounded-4 border border-2">
+          <div ngbDropdown class="row col-5 m-3">
+            <button type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>{{tutorsSubject}}</button>
+            <div ngbDropdownMenu class="text-center">
+              <button ngbDropdownItem class="nav-btn" *ngFor="let subject of subjects" (click)="tutorsSubject=subject.subjectName;findTutorsForTutorsAdd()">{{ subject.subjectName }}</button>
+            </div>
+          </div>
+
+          <ol class="mt-5">
+            <li class="p-2 border-opacity-25 rounded-4 border border-2 m-2" *ngFor="let tutor of tutorsBySubjectsTutor">{{ tutor.username }}</li>
+          </ol>
         </div>
       </div>
-
-      <!-- Выбор препода -->
-
-      <div ngbDropdown class="d-inline-block" *ngIf="selectedSubject != 'Выбирете предмет'">
-        <button *ngIf="selectedTutor != undefined" type="button" class="btn btn-outline-primary" ngbDropdownToggle>{{selectedTutor.surname + ' ' + selectedTutor.name + selectedTutor.patronymic}}</button>
-        <button *ngIf="selectedTutor == undefined" type="button" class="btn btn-outline-primary" ngbDropdownToggle>Выбирите преподавателя</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <button ngbDropdownItem *ngFor="let tutor of tutorsBySubjects" (click)="selectedTutor=tutor;getTutorPupilsBySubject()">{{ tutor.surname + ' ' + tutor.name + tutor.patronymic }}</button>
-        </div>
-      </div>
-      <div *ngIf="!isPupilsLoaded" class="spinner-border" role="status"></div>
-
-      <!-- Вывод найденых учеников -->
-
-      <ol *ngIf="isPupilsLoaded">
-        <li *ngFor="let pupil of pupils">{{ pupil.username }}</li>
-      </ol>
 
       <!-- Создание далогового окна с таблицей учеников -->
 
       <ng-template #content let-modal>
-        <div class="modal-header">
-          <h4 class="modal-title">Выбор ученика</h4>
-          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3 row">
-              <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-              <div class="col-xs-3 col-sm-auto">
-                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Выбор ученика</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+          </div>
+          <div class="modal-body col-9">
+            <form>
+              <div class="mb-3 row">
+                <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Поиск:</label>
+                <div class="col-xs-3 col-sm-auto">
+                  <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+                </div>
               </div>
-            </div>
-          </form>
-          <div *ngIf="!isNewPupilsLoaded" class="spinner-border" role="status"></div>
-          <table class="table table-striped" *ngIf="isNewPupilsLoaded">
-            <thead>
-            <tr>
-              <th scope="col">Выбор</th>
-              <th scope="col">Фамилия</th>
-              <th scope="col">Имя</th>
-              <th scope="col">Отчество</th>
-              <th scope="col">Почта</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let pupil of filteredPupils">
-              <td><input type="checkbox" [(ngModel)]="pupil.isSelected" /></td>
-              <td><ngb-highlight [result]="pupil.pupil.surname" [term]="filter.value"></ngb-highlight></td>
-              <td><ngb-highlight [result]="pupil.pupil.name" [term]="filter.value"></ngb-highlight></td>
-              <td><ngb-highlight [result]="pupil.pupil.patronymic" [term]="filter.value"></ngb-highlight></td>
-              <td [ngClass]="{'highlighted': filter.value}"><ngb-highlight [result]="pupil.pupil.username" [term]="filter.value"></ngb-highlight></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="close(modal)" [disabled]="newPupils.length == 0">Добавить</button>
+            </form>
+            <div *ngIf="!isNewPupilsLoaded" class="spinner-border" role="status"></div>
+            <table class="table rounded table-striped" *ngIf="isNewPupilsLoaded">
+              <thead>
+              <tr>
+                <th scope="col">Выбор</th>
+                <th scope="col">Фамилия</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Отчество</th>
+                <th scope="col">Почта</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let pupil of filteredPupils">
+                <td><input type="checkbox" [(ngModel)]="pupil.isSelected" /></td>
+                <td><ngb-highlight [result]="pupil.pupil.surname" [term]="filter.value"></ngb-highlight></td>
+                <td><ngb-highlight [result]="pupil.pupil.name" [term]="filter.value"></ngb-highlight></td>
+                <td><ngb-highlight [result]="pupil.pupil.patronymic" [term]="filter.value"></ngb-highlight></td>
+                <td ><ngb-highlight [result]="pupil.pupil.username" [term]="filter.value"></ngb-highlight></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary p-2" (click)="close(modal)" [disabled]="newPupils.length == 0">Добавить</button>
+          </div>
         </div>
       </ng-template>
-      <button class="btn btn-primary" (click)="open(content)" *ngIf="selectedTutor != undefined">Выбрать учеников</button>
     </ng-template>
   </li>
 </ul>

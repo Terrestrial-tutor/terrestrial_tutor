@@ -10,4 +10,5 @@ export interface Task {
   level1: string;
   level2: string;
   table: string;
+  files: string[];
 }

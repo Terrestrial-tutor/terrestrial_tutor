@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {TransferService} from "../services/transfer.service";
 import {TaskService} from "../../task/services/task.service";
+import {Task} from "../../../models/Task";
 
 @Component({
   selector: 'app-task-choise',
@@ -13,7 +14,7 @@ export class TaskChoiseComponent implements OnInit {
               private taskService : TaskService,) { }
 
   //@ts-ignore
-  allTasks: any[];
+  allTasks: Task[];
   subject: any;
   tasksUpload: boolean = false;
   isCollapsed: boolean[] = [];
@@ -28,6 +29,10 @@ export class TaskChoiseComponent implements OnInit {
       this.transfer.setHwTasks(tasks);
       this.tasksUpload = true;
     });
+  }
+
+  checkImage(file: string): boolean {
+    return file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg');
   }
 
 }

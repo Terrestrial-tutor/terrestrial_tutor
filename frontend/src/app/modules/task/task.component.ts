@@ -88,9 +88,10 @@ export class TaskComponent implements OnInit {
       level1: this.taskForm.controls['level1'].value,
       level2: this.taskForm.controls['level2'].value,
       table: this.tableToJson(),
+      files: this.taskForm.controls['files'].value,
     };
 
-    this.supportService.addTask(task, this.taskForm.controls['files'].value).subscribe(data => {
+    this.supportService.addTask(task).subscribe(data => {
       this.router.navigate(['/support']);
       console.log('Task Added');
     })
