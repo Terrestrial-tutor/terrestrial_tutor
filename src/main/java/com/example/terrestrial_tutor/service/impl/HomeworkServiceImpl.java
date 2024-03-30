@@ -6,11 +6,7 @@ import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import com.example.terrestrial_tutor.repository.HomeworkRepository;
 import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.repository.TaskRepository;
-import com.example.terrestrial_tutor.service.HomeworkService;
-import com.example.terrestrial_tutor.service.PupilService;
-import com.example.terrestrial_tutor.service.SubjectService;
-import com.example.terrestrial_tutor.service.TaskService;
-import lombok.NonNull;
+import com.example.terrestrial_tutor.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +37,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     PupilService pupilService;
 
     @Autowired
+    TutorService tutorService;
+
+    @Autowired
     SubjectService subjectService;
 
     public HomeworkEntity addHomework(HomeworkDTO request) {
@@ -50,31 +49,29 @@ public class HomeworkServiceImpl implements HomeworkService {
         newHomework.setName(request.getName());
         newHomework.setTargetTime(request.getTargetTime());
         newHomework.setDeadLine(request.getDeadLine());
-        newHomework.setTutor(tutor);
         SubjectEntity subject = subjectService.findSubjectByName(request.getSubject());
         newHomework.setSubject(subject);
         List<HomeworkEntity> subjectHomeworks = subject.getHomeworkList();
         subjectHomeworks.add(newHomework);
         subject.setHomeworkList(subjectHomeworks);
-        subjectService.updateSubject(subject);
-        newHomework = homeworkRepository.save(newHomework);
+        newHomework.setTutor(tutor);
         newHomework.setPupils(request.getPupilIds().stream()
-                .map(id -> pupilService.findPupilById(id)).toList());
+                .map(id -> pupilService.findPupilById(id)).collect(Collectors.toList()));
         if (request.getTasksCheckingTypes() != null) {
-            HomeworkEntity finalNewHomework = newHomework;
-            Map<TaskEntity, TaskCheckingType> newMap = new HashMap<>();
+            Map<TaskEntity, TaskCheckingType> tasksCheckingTypes = new HashMap<>();
             request.getTasksCheckingTypes().forEach((key, value) ->
             {
                 TaskEntity task = taskService.getTaskById(key);
-                List<HomeworkEntity> taskHomeworks = task.getHomeworks();
-                taskHomeworks.add(finalNewHomework);
-                task.setHomeworks(taskHomeworks);
-                taskService.save(task);
-                newMap.put(taskRepository.getById(key), TaskCheckingType.valueOf(value));
+                tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
             });
-            newHomework.setTasksCheckingTypes(newMap);
+            newHomework.setTasksCheckingTypes(tasksCheckingTypes);
         }
-        return homeworkRepository.save(newHomework);
+        List<HomeworkEntity> currentTutorHomeworks = tutor.getHomeworkList();
+        currentTutorHomeworks.add(newHomework);
+        tutor.setHomeworkList(currentTutorHomeworks);
+        newHomework = homeworkRepository.save(newHomework);
+        tutorService.updateTutor(tutor);
+        return newHomework;
     }
     public HomeworkEntity getHomeworkById(Long id){
         return homeworkRepository.getById(id);

@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -69,10 +68,6 @@ public class TaskEntity {
     @NonNull
     @Column(name = "tables")
     String table;
-
-    @ManyToMany()
-    @JoinColumn(name = "homeworks")
-    List<HomeworkEntity> homeworks = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "support")

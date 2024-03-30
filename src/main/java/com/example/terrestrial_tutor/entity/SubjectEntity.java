@@ -40,6 +40,6 @@ public class SubjectEntity {
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
     List<TaskEntity> tasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
-    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    List<HomeworkEntity> homeworkList;
 }
