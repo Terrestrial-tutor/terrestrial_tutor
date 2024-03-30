@@ -4,10 +4,8 @@ import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.SubjectDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
-import com.example.terrestrial_tutor.entity.PupilEntity;
-import com.example.terrestrial_tutor.entity.SubjectEntity;
-import com.example.terrestrial_tutor.entity.SupportEntity;
-import com.example.terrestrial_tutor.entity.TutorEntity;
+import com.example.terrestrial_tutor.entity.*;
+import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.PupilService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TutorService;
@@ -33,6 +31,10 @@ public class TutorController {
     @Autowired
     @NonNull
     PupilService pupilService;
+
+    @Autowired
+    @NonNull
+    HomeworkService homeworkService;
     @Autowired
     @NonNull
     TutorService tutorService;
@@ -76,6 +78,11 @@ public class TutorController {
             subjectsDTO.add(subjectDTO);
         }
         return new ResponseEntity<>(subjectsDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/tutor/homework/all")
+    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
+        return new ResponseEntity<>(homeworkService.getAllHomeworksTutor(), HttpStatus.OK);
     }
 
 }
