@@ -21,9 +21,13 @@ public class HomeworkEntity {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @NonNull
     @Column(name = "name")
     String name;
+
+    @NonNull
+    @ManyToOne()
+    @JoinColumn(name = "subject")
+    SubjectEntity subject;
 
     //tasks
 

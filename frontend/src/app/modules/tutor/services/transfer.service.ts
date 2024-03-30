@@ -5,44 +5,23 @@ import { Injectable } from '@angular/core';
 })
 export class TransferService {
 
-  private subject: any;
-  //@ts-ignore
-  private hwTasks: any[];
-
   getSubjectName(){
     return localStorage.getItem('subject');
   }
 
-  setSubjectName(value: any){
-    localStorage.setItem('subject', value);
+  setHWId(id: any){
+     localStorage.setItem('HWId', id);
   }
 
-  deleteSubjectName(){
-    localStorage.removeItem('subject');
+  getHWId(){
+    return localStorage.getItem('HWId');
   }
 
-  getHwTasks(){
-    // @ts-ignore
-    return JSON.parse(localStorage.getItem('hwTasks'));
+  deleteHWId(){
+    localStorage.removeItem('HWId');
   }
 
   setHwTasks(hwTasks: any[]){
     localStorage.setItem("hwTasks", JSON.stringify(hwTasks));
-  }
-
-  addHwTask(task: any[]){
-    let tasks = this.getHwTasks();
-    tasks.push(task);
-    this.setHwTasks(tasks);
-  }
-
-  deleteHwTasks(){
-    localStorage.removeItem('hwTasks');
-  }
-
-  deleteHwTask(task: any){
-    let tasks = this.getHwTasks();
-    tasks.removeItem(task);
-    this.setHwTasks(tasks);
   }
 }

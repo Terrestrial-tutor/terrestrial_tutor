@@ -1,0 +1,8 @@
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(50%); /* Изменение цвета значка календаря */
+}
+
+/* Изменение цвета значка календаря в Firefox */
+input[type="date"]::-moz-calendar-box {
+  filter: invert(50%); /* Изменение цвета значка календаря */
+}

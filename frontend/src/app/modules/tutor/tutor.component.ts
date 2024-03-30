@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TutorService} from "./services/tutor.service";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
@@ -20,16 +20,22 @@ export class TutorComponent implements OnInit {
   ngOnInit(): void {
     this.tutorService.getTutorSubjects().subscribe(subjects =>
       this.currentSubjects = subjects);
+    if (this.transferService.getHWId()) {
+      let id= localStorage.getItem('HWId');
+      this.tutorService.isHomeworkEmpty(id).subscribe(isHomeworkEmpty => {
+        if (isHomeworkEmpty) {
+          this.tutorService.deleteHomeworkById(id).subscribe();
+          this.transferService.deleteHWId()
+        }
+      })
+    }
   }
 
   addHW(subject: any) {
-    if (subject.subjectName != this.transferService.getSubjectName()) {
-      this.transferService.deleteSubjectName();
-      this.transferService.deleteHwTasks();
-      this.transferService.setSubjectName(subject.subjectName);
-    }
-
-    this.router.navigate(['/tutor/constructor']);
+    this.tutorService.addEmptyHomework(subject.subjectName).subscribe(HWid => {
+      this.transferService.setHWId(HWid);
+      this.router.navigate(['/tutor/constructor']);
+    });
   }
 
 }

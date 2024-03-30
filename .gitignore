@@ -37,3 +37,4 @@ build/
 ### Front ###
 frontend/package.json
 public/*
+frontend/src/assets

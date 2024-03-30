@@ -1,18 +1,17 @@
 package com.example.terrestrial_tutor.service;
 
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
-import com.example.terrestrial_tutor.entity.PupilEntity;
-import com.example.terrestrial_tutor.entity.TaskEntity;
-import com.example.terrestrial_tutor.entity.TutorEntity;
-import com.example.terrestrial_tutor.payload.request.HomeworkAddRequest;
+import com.example.terrestrial_tutor.dto.HomeworkDTO;
 
 import java.util.List;
 
 public interface HomeworkService {
-    List<HomeworkEntity> getHomeworksByPupil(PupilEntity pupil);
 
-    List<HomeworkEntity> getHomeworksByTutor(TutorEntity tutor);
+    HomeworkEntity addHomework(HomeworkDTO request);
 
-    HomeworkEntity addHomework(HomeworkAddRequest request);
-
+//    List<HomeworkEntity> getAllHomeworksPupil();
+    List<HomeworkEntity> getAllHomeworksTutor();
+    HomeworkEntity getHomeworkById(Long id);
+    void deleteHomeworkById(Long id);
+    boolean isHomeworkEmpty(Long id);
 }
