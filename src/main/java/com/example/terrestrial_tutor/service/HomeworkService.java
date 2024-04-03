@@ -13,5 +13,5 @@ public interface HomeworkService {
     List<HomeworkEntity> getAllHomeworksTutor();
     HomeworkEntity getHomeworkById(Long id);
     void deleteHomeworkById(Long id);
-    boolean isHomeworkEmpty(Long id);
+    HomeworkEntity save(HomeworkEntity homework);
 }

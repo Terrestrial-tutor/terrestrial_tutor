@@ -2,7 +2,13 @@
   <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
     <h1 class="mx-3 mb-5">Конструктор доманего задания</h1>
 
-    <button class="m-3 col-2 btn btn-primary" (click)="addTasks()">Добавить задания</button>
+    <button class="m-3 col-2 btn btn-primary" (click)="addTasks()">Выбрать задания</button>
+
+    <button class="m-3 col-2 btn btn-primary" (click)="clear()">Составить заново</button>
+
+    <button class="m-3 col-2 btn btn-primary" (click)="submit()">Создать домашку</button>
+
+    <button class="m-3 col-2 btn btn-primary" (click)="addPupils()">Добавить учеников</button>
 
     <form [formGroup]="hwForm">
 
@@ -28,6 +34,82 @@
         </div>
       </div>
 
+      <div class="container col-12 mx-3 mt-4">
+        <div *ngFor="let task of currentTasks let i = index">
+          <div class="row col-12 m-3">
+            <div ngbDropdown class="col-3">
+              <button type="button" class="drop-btn btn-primary drop-btn p-2 col-12" ngbDropdownToggle>
+                {{ getChecking(task.id) }}
+              </button>
+              <div ngbDropdownMenu class="text-center col-12">
+                <button class="nav-btn col-12" type="button" ngbDropdownItem (click)="setChecking(task.id, 'AUTO')">Авто</button>
+                <button class="nav-btn col-12" type="button" ngbDropdownItem (click)="setChecking(task.id, 'INSTANCE')">Репетитор</button>
+                <button class="nav-btn col-12" type="button" ngbDropdownItem (click)="setChecking(task.id, 'MANUALLY')">Ручная</button>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary col-8"
+              style="text-align: start"
+              (click)="collapse.toggle(); codemirrorInit();"
+              [attr.aria-expanded]="!isCollapsed[i]"
+              aria-controls="collapseExample"
+            >
+              {{ task.name }}
+            </button>
+
+            <div class="col-8 m-2" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed[i]">
+              <div class="card">
+                <div class="card-body"><b>Название: </b>{{ task.name }}</div>
+                <div class="card-body"><b>Текст: </b>{{ task.taskText }}</div>
+                <div class="card-body"><b>Тип ответа: </b>{{ task.answerType }}</div>
+                <div class="card-body">
+                  <b>Ответы: </b>
+                  <ngx-codemirror class="col-5 m-2" #codemirrorComponent *ngIf="task.answerType == 'Код'"
+                                  [options]="{
+                            lineNumbers: true,
+                            theme: 'material',
+                            mode: 'text/x-c++src',
+                            matchBrackets: true,
+                            readOnly: true
+                            }"
+                                  [(ngModel)]="task.answers[0]"
+                  ></ngx-codemirror>
+                  <div *ngIf="task.answerType != 'Код'">{{ task.answers }}</div>
+                </div>
+                <div class="card-body"><b>Тема 1: </b>{{ task.level1 }}</div>
+                <div class="card-body"><b>Тема 2: </b>{{ task.level2 }}</div>
+                <div class="card-body">
+                  <b class="row m-0">Картинки: </b>
+                  <div class="d-inline-block" *ngFor="let image of task.files">
+                    <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
+                         [src]="image" width="200px" height="auto" alt="">
+                    <div *ngIf="checkImage(image)" class="row mx-2 text-center" style="
+                background-color: white;
+                width: 200px;
+                word-wrap: break-word">{{image.substring(image.indexOf('.') + 1)}}</div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <b class="row m-0">Файлы: </b>
+                  <div class="d-inline-block mt-3" *ngFor="let file of task.files">
+                    <a class="mx-3" *ngIf="!checkImage(file)" href="{{file}}" download><img src="assets/document.png" width="60px"></a>
+                    <div *ngIf="!checkImage(file)" class="row mx-2 text-center" style="
+                  background-color: white;
+                  width: 60px;
+                  word-wrap: break-word">{{file.substring(file.indexOf('.') + 1)}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </form>
   </div>
 </div>
+
+<!--<ngb-toast *ngIf="update" header="Notification header">-->
+<!--  Content of the notification-->
+<!--</ngb-toast>-->

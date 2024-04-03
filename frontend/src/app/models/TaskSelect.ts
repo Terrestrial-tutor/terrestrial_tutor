@@ -1,11 +1,11 @@
-import {Pupil} from "./Pupil";
+import {Task} from "./Task";
 
-export class PupilSelect{
-  isSelected:boolean;
-  pupil:Pupil;
+export class TaskSelect{
+  isSelected: boolean;
+  task:Task;
 
-  constructor(pupil:Pupil, isSelected:boolean){
+  constructor(task: Task, isSelected: boolean = false){
+    this.task = task;
     this.isSelected = isSelected;
-    this.pupil = pupil;
   }
 }

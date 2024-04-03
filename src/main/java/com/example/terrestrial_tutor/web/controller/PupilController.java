@@ -59,6 +59,16 @@ public class PupilController {
         return new ResponseEntity<PupilDTO>(pupil, HttpStatus.OK);
     }
 
+    @GetMapping("/pupil/all")
+    public ResponseEntity<List<PupilDTO>> getAllPupils() {
+        List<PupilEntity> pupils = pupilService.findAllPupils();
+        List<PupilDTO> pupilsDTO = new ArrayList<>();
+        for (PupilEntity pupil : pupils) {
+            pupilsDTO.add(pupilFacade.pupilToPupilDTO(pupil));
+        }
+        return new ResponseEntity<>(pupilsDTO, HttpStatus.OK);
+    }
+
     @PostMapping("/pupil/add/subjects")
     public ResponseEntity<List<PupilDTO>> addSubjects(@RequestBody AddSubjectRequest addSubjectRequest) {
         String subject = addSubjectRequest.getSubject();

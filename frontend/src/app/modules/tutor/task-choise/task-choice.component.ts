@@ -10,10 +10,10 @@ import {Homework} from "../../../models/Homework";
 
 @Component({
   selector: 'app-task-choise',
-  templateUrl: './task-choise.component.html',
-  styleUrls: ['./task-choise.component.css']
+  templateUrl: './task-choice.component.html',
+  styleUrls: ['./task-choice.component.css']
 })
-export class TaskChoiseComponent implements OnInit {
+export class TaskChoiceComponent implements OnInit {
 
   @ViewChild('codemirrorComponent') codemirror: CodemirrorComponent | undefined;
 
@@ -33,9 +33,7 @@ export class TaskChoiseComponent implements OnInit {
     this.subject = this.dataService.getCurrentHomework()?.subject;
     this.taskService.getTasksBySubject(this.subject).subscribe(tasks => {
         for (let i = 0; i < tasks.length; i++) {
-          if (this.homework != null &&
-            this.homework.tasks != undefined &&
-            this.homework.tasks.some((task: Task) => task.id == tasks[i].id)) {
+          if (this.homework != null && this.homework.tasksCheckingTypes.has(tasks[i].id)) {
             this.allTasks.push(new TaskSelect(tasks[i], true));
           } else {
             this.allTasks.push(new TaskSelect(tasks[i]));
@@ -57,21 +55,24 @@ export class TaskChoiseComponent implements OnInit {
   }
 
   getSelectedTasks() {
-    let selectedTasks = [];
+    let selectedTasksIds = [];
     for (let task of this.allTasks) {
       if (task.isSelected) {
-        selectedTasks.push(task.task);
+        selectedTasksIds.push(task.task);
       }
     }
-    return selectedTasks;
+    return selectedTasksIds;
   }
 
   submit() {
     if (this.homework != null) {
-      this.homework.tasks = this.getSelectedTasks();
-      for (let task of this.homework.tasks) {
-        this.homework.tasksCheckingTypes?.set(task.id, 'AUTO');
+      let currentTasks = this.getSelectedTasks();
+      let newTasksList = new Map<number, string>();
+      for (let i = 0; i < currentTasks.length; i++) {
+        newTasksList.set(currentTasks[i].id, 'AUTO')
       }
+      this.homework.tasksCheckingTypes = newTasksList;
+      this.dataService.setCurrentTasks(currentTasks);
       this.dataService.setCurrentHomework(this.homework);
     }
     this.router.navigate(['/tutor/constructor']);

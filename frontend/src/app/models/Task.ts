@@ -1,6 +1,7 @@
 import {Subject} from "./Subject";
 
 export interface Task {
+  id: number
   name: string;
   checking: number;
   answerType: string;

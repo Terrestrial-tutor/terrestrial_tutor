@@ -1,39 +1,69 @@
 import { Injectable } from '@angular/core';
 import {Homework} from "../../../models/Homework";
 import {Observable} from "rxjs";
+import {Task} from "../../../models/Task";
+import {Pupil} from "../../../models/Pupil";
 
 @Injectable({
   providedIn: 'root'
 })
-export class  {
+export class dataService {
 
-  private currentHomework: Homework | undefined;
+  private homework: Homework | null = null;
+  private tasks: Task[] | null = null;
+  private currentPupils: Pupil[] | null = null;
 
-  setCurrentHomework(currentHomework: Homework) {
-    this.currentHomework = currentHomework;
+  setCurrentHomework(currentHomework: any) {
+    this.homework = currentHomework;
   }
 
-  getCurrentHomework(): Homework {
-    // @ts-ignore
-    return this.currentHomework;
+  getCurrentHomework(): Homework | null {
+    return this.homework;
+  }
+
+  setCurrentPupils(currentPupils: any) {
+    this.currentPupils = currentPupils;
+  }
+
+  getCurrentPupils(): Pupil[] | null {
+    return this.currentPupils;
+  }
+
+  setCurrentTasks(tasks: any) {
+    this.tasks = tasks;
+  }
+
+  getCurrentTasks(): Task[] | null {
+    return this.tasks;
   }
 
   getSubjectName(){
-    return localStorage.getItem('subject');
+    if (this.homework) {
+      return this.homework.subject;
+    }
+    return null;
   }
+
   setSubjectName(subjectName: string){
-    return localStorage.setItem('subject', subjectName);
+    if (this.homework) {
+      this.homework.subject = subjectName;
+    }
   }
 
   setHWId(id: any){
-     localStorage.setItem('HWId', id);
+    if (this.homework) {
+      this.homework.id = id;
+    }
   }
 
   getHWId(){
-    return localStorage.getItem('HWId');
+    if (this.homework) {
+      return this.homework.id
+    }
+    return null;
   }
 
-  deleteHWId(){
-    localStorage.removeItem('HWId');
+  deleteHW(){
+    this.homework = new Homework();
   }
 }

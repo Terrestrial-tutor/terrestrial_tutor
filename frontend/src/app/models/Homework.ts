@@ -1,9 +1,11 @@
-export interface Homework {
-  name: string;
-  targetTime: number;
-  pupilIds: number[];
-  tasksCheckingTypes: {[key: number]: string};
-  deadLine: Date;
-  subject: string;
-  tasksIds: number[];
+import {Task} from "./Task";
+
+export class Homework {
+  id?: number
+  name?: string;
+  targetTime?: number;
+  pupilIds?: number[];
+  deadLine?: Date;
+  subject: string = '';
+  tasksCheckingTypes: Map<number, string> = new Map<number, string>();
 }

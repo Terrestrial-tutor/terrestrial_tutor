@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpRequest} from "@angular/common/http";
 import {EnvironmentService} from "../../../../environments/environment.service";
 import {Observable} from "rxjs";
+import {Homework} from "../../../models/Homework";
+import {RequestHomework} from "../../../models/RequestHomework";
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +20,10 @@ export class TutorService {
     return this.http.get(this.TUTOR_API + 'subjects');
   }
 
-  addEmptyHomework(subject: any): Observable<any> {
-    return this.http.post(this.HOMEWORK_API + 'add', subject);
+  addHomework(homework: Homework): Observable<any> {
+    let homeworkRequest = new RequestHomework(homework);
+    console.log(homeworkRequest);
+    return this.http.post(this.HOMEWORK_API + 'add', homeworkRequest);
   }
 
   deleteHomeworkById(id: any): Observable<any> {
@@ -32,6 +36,10 @@ export class TutorService {
 
   getHomework(id: any): Observable<any> {
     return this.http.get(this.HOMEWORK_API + id);
+  }
+
+  addHomeworkTasks(taskIds: number[], HWId: any): Observable<any> {
+    return this.http.post(this.HOMEWORK_API + 'add/tasks/' + HWId, taskIds);
   }
 
 }

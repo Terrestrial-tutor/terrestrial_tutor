@@ -2,7 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TutorService} from "./services/tutor.service";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
-import {TransferService} from "./services/transfer.service";
+import {dataService} from "./services/data.service";
+import {Homework} from "../../models/Homework";
 
 @Component({
   selector: 'app-tutor',
@@ -13,29 +14,22 @@ export class TutorComponent implements OnInit {
 
   constructor(private tutorService: TutorService,
               private router: Router,
-              private transferService: TransferService,) { }
+              private dataService: dataService,) { }
 
   currentSubjects: any;
 
   ngOnInit(): void {
     this.tutorService.getTutorSubjects().subscribe(subjects =>
       this.currentSubjects = subjects);
-    if (this.transferService.getHWId()) {
-      let id= localStorage.getItem('HWId');
-      this.tutorService.isHomeworkEmpty(id).subscribe(isHomeworkEmpty => {
-        if (isHomeworkEmpty) {
-          this.tutorService.deleteHomeworkById(id).subscribe();
-          this.transferService.deleteHWId()
-        }
-      })
-    }
   }
 
   addHW(subject: any) {
-    this.tutorService.addEmptyHomework(subject.subjectName).subscribe(HWid => {
-      this.transferService.setHWId(HWid);
-      this.router.navigate(['/tutor/constructor']);
-    });
+    if (!this.dataService.getCurrentHomework() ||
+      this.dataService.getCurrentHomework() == null ||
+      this.dataService.getCurrentHomework()!.tasksCheckingTypes.size == null) {
+      let newHomework: Homework = {pupilIds: [], subject: subject.subjectName, tasksCheckingTypes: new Map<number, string>()};
+      this.dataService.setCurrentHomework(newHomework);
+    }
+    this.router.navigate(['/tutor/constructor']);
   }
-
 }

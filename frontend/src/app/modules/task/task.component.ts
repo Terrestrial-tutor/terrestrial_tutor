@@ -79,6 +79,7 @@ export class TaskComponent implements OnInit {
 
   submit() {
     let task: Task = {
+      id: 0,
       name: this.taskForm.controls['taskName'].value,
       answerType: this.taskForm.controls['answerType'].value,
       taskText: this.taskForm.controls['taskText'].value,
