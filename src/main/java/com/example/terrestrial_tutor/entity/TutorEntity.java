@@ -28,16 +28,16 @@ public class TutorEntity implements UserDetails {
 
     @Column(name = "subjects")
     @ManyToMany(mappedBy = "tutors", fetch = FetchType.LAZY)
-    List<SubjectEntity> subjects = new ArrayList<>();
+    List<SubjectEntity> subjects;
 
     @ManyToMany()
     @JoinColumn(name = "pupils")
-    List<PupilEntity> pupils = new ArrayList<>();
+    List<PupilEntity> pupils;
 
     @Column(name = "payment_data")
     String paymentData;
 
-    @OneToMany(mappedBy = "tutor", fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     List<HomeworkEntity> homeworkList = new ArrayList<>();
 
     @NonNull

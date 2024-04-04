@@ -22,6 +22,8 @@ export class PupilService {
     return this.http.post(this.PUPIL_API + `add/subjects/`, {subject, ids});
   }
 
-
+  getAllPupils(): Observable<any> {
+    return this.http.get(this.PUPIL_API + 'all');
+  }
 
 }

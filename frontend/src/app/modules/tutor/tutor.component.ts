@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TutorService} from "./services/tutor.service";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
-import {TransferService} from "./services/transfer.service";
+import {dataService} from "./services/data.service";
+import {Homework} from "../../models/Homework";
 
 @Component({
   selector: 'app-tutor',
@@ -13,7 +14,7 @@ export class TutorComponent implements OnInit {
 
   constructor(private tutorService: TutorService,
               private router: Router,
-              private transferService: TransferService,) { }
+              private dataService: dataService,) { }
 
   currentSubjects: any;
 
@@ -23,13 +24,12 @@ export class TutorComponent implements OnInit {
   }
 
   addHW(subject: any) {
-    if (subject.subjectName != this.transferService.getSubjectName()) {
-      this.transferService.deleteSubjectName();
-      this.transferService.deleteHwTasks();
-      this.transferService.setSubjectName(subject.subjectName);
+    if (!this.dataService.getCurrentHomework() ||
+      this.dataService.getCurrentHomework() == null ||
+      this.dataService.getCurrentHomework()!.tasksCheckingTypes.size == null) {
+      let newHomework: Homework = {pupilIds: [], subject: subject.subjectName, tasksCheckingTypes: new Map<number, string>()};
+      this.dataService.setCurrentHomework(newHomework);
     }
-
     this.router.navigate(['/tutor/constructor']);
   }
-
 }

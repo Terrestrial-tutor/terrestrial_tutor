@@ -19,18 +19,21 @@ import {FormControl} from "@angular/forms";
 export class AdminComponent implements OnInit {
 
   checks: Check[] = []
-  selectedSubject: string | undefined;
+  pupilsSubject = "Выбирете предмет";
+  tutorsSubject = "Выбирете предмет";
   subjects: Subject[] | undefined;
-  tutorsBySubjects: TutorList[] = [];
+  tutorsBySubjectsPupil: TutorList[] = [];
+  tutorsBySubjectsTutor: TutorList[] = [];
   // @ts-ignore
   selectedTutor: TutorList;
   pupils: Pupil[] = [];
+  filteredTutorsPupils: TutorList[] = [];
   filteredTutors: TutorList[] = [];
   isChecksPageLoaded: boolean = false;
   isPupilsLoaded: boolean = true;
   isNewPupilsLoaded: boolean = true;
   newPupils: PupilSelect[] = [];
-  active: any;
+  active = "requests";
   filter = new FormControl('');
   filteredPupils: PupilSelect[] = [];
 
@@ -42,13 +45,11 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selectedSubject = "Выбирете предмет";
     this.adminService.getAllChecks()
       .subscribe(checks => {
         this.checks = checks;
         this.isChecksPageLoaded = true;
       });
-    this.getAllSubjects();
   }
 
   deleteCheck(id: number) {
@@ -64,22 +65,30 @@ export class AdminComponent implements OnInit {
     })
   }
 
-  findTutorsBySubject() {
-    this.adminService.findTutorsBySubject(this.selectedSubject).subscribe(tutors => {
-      this.tutorsBySubjects = tutors;
-      this.filteredTutors = this.tutorsBySubjects;
+  findTutorsForPupilsAdd() {
+    this.adminService.findTutorsBySubject(this.pupilsSubject).subscribe(tutors => {
+      this.tutorsBySubjectsPupil = tutors;
+      this.filteredTutorsPupils = this.tutorsBySubjectsPupil;
+    })
+  }
+
+  findTutorsForTutorsAdd() {
+    this.adminService.findTutorsBySubject(this.tutorsSubject).subscribe(tutors => {
+      this.tutorsBySubjectsTutor = tutors;
+      this.filteredTutors = this.tutorsBySubjectsTutor;
     })
   }
 
   getTutorPupilsBySubject() {
     this.isPupilsLoaded = false;
-    this.adminService.getTutorPupilsBySubject(this.selectedSubject, this.selectedTutor.id).subscribe(data => {
+    this.adminService.getTutorPupilsBySubject(this.pupilsSubject, this.selectedTutor.id).subscribe(data => {
       this.pupils = data;
       this.isPupilsLoaded = true;
     })
   }
 
   search(text: any) {
+    text = text.toLowerCase();
     this.filteredPupils = this.newPupils.filter(pupil => {
       return pupil.pupil.username.toLowerCase().includes(text) ||
         pupil.pupil.name.toLowerCase().includes(text) ||
@@ -90,7 +99,7 @@ export class AdminComponent implements OnInit {
 
   open(content: any) {
     this.newPupils = [];
-    this.adminService.findPupilsWithoutSubject(this.selectedSubject).subscribe(pupils => {
+    this.adminService.findPupilsWithoutSubject(this.pupilsSubject).subscribe(pupils => {
       this.newPupils = pupils.map((pupil: any) => {
         return new PupilSelect(pupil, false);
       });
@@ -100,11 +109,11 @@ export class AdminComponent implements OnInit {
     this.filter.valueChanges.subscribe((text) => {
       this.search(text);
     });
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(selectedPupils => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then(selectedPupils => {
       let newPupilsIds = selectedPupils.map((pupil: Pupil) => {
         return pupil.id;
       })
-      this.pupilService.addSubjects(this.selectedSubject, newPupilsIds).subscribe();
+      this.pupilService.addSubjects(this.pupilsSubject, newPupilsIds).subscribe();
       this.adminService.addPupilsForTutor(newPupilsIds, this.selectedTutor.id).subscribe(pupils => {
         this.pupils = pupils;
       });
@@ -116,4 +125,9 @@ export class AdminComponent implements OnInit {
     modal.close(this.newPupils.filter(pupil => pupil.isSelected).map(pupil => pupil.pupil));
   }
 
+  navChange() {
+    if (this.active == "setTutors") {
+      this.getAllSubjects();
+    }
+  }
 }

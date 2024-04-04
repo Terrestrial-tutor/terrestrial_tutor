@@ -39,7 +39,7 @@ public class UploadFilesImpl implements UploadFilesService {
                 String fileName = uploadDir + "/" + fileUuid + "." + file.getOriginalFilename();
 
                 file.transferTo(new File(fileName).toPath());
-                filesList.add(fileName);
+                filesList.add(fileName.substring(fileName.lastIndexOf("assets")));
             }
         }
         return filesList;
