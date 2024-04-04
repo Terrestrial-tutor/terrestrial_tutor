@@ -32,7 +32,7 @@ services:
   backend:
     image: backend
     volumes:
-      - ./public:/public
+      - ./frontend/src/assets:/assets
     build:
       context: .
       dockerfile: Dockerfile
@@ -61,15 +61,33 @@ services:
       localnet:
         ipv4_address: 10.0.0.5
 
-#Uncomment if it's server
+  #Uncomment if it's server
   postgres:
     image: postgres:16.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: postgres
     environment:
-        POSTGRES_DB: terrestrial_tutor
-        POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
-        POSTGRES_USER: tutor
+      POSTGRES_DB: terrestrial_tutor
+      POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+      POSTGRES_USER: tutor
+    #    command:
+    #      - /bin/sh -c apt update && apt install cron
     ports:
       - '5432:5432'
     volumes:
-      - ./data_base:/var/lib/postgresql/data
-      - ./db_snapshots/backup.sql:/docker-entrypoint-initdb.d/
+      - ./db_snapshots/:/dumps
+      - ./db_snapshots/init:/docker-entrypoint-initdb.d/
+
+  postgres_dev:
+    image: postgres
+    environment:
+      POSTGRES_DB: terrestrial_tutor
+      POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
+      POSTGRES_USER: tutor
+    ports:
+      - '5433:5432'
+    volumes:
+      - ./db_snapshots/:/dumps
+      - ./db_snapshots/init/:/docker-entrypoint-initdb.d/

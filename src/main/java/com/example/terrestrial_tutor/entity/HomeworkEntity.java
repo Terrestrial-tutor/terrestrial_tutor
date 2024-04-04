@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,9 +22,13 @@ public class HomeworkEntity {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @NonNull
     @Column(name = "name")
     String name;
+
+    @NonNull
+    @ManyToOne()
+    @JoinColumn(name = "subject")
+    SubjectEntity subject;
 
     //tasks
 
@@ -44,12 +47,9 @@ public class HomeworkEntity {
 //    todo
 //    Добавить теоритические материалы
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
-
-    @ManyToMany(mappedBy = "homeworks", fetch = FetchType.LAZY)
-    List<TaskEntity> tasks = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "checking_map")

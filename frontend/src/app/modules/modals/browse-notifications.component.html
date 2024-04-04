@@ -1,0 +1,12 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Закрытие</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body">
+    <h1>При обновлении или уходе со страницы, форма будет сброшена, продолжить?</h1>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="close(modal)">Да</button>
+  </div>
+</ng-template>
