@@ -31,7 +31,7 @@ public class PupilEntity implements UserDetails {
     Double balance;
 
     @ManyToMany()
-    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    List<HomeworkEntity> homeworkList;
 
     @Column(name = "price")
     int price;

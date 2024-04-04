@@ -30,7 +30,9 @@ import { TaskComponent } from './modules/task/task.component';
 import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 import { TutorComponent } from './modules/tutor/tutor.component';
 import { HwConstructorComponent } from './modules/tutor/hw-constructor/hw-constructor.component';
-import { TaskChoiseComponent } from './modules/tutor/task-choise/task-choise.component';
+import { TaskChoiceComponent } from './modules/tutor/task-choise/task-choice.component';
+import { BrowseNotificationsComponent } from './modules/modals/browse-notifications.component';
+import { PupilsAddHomeworkComponent } from './modules/tutor/pupils-add-homework/pupils-add-homework.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { TaskChoiseComponent } from './modules/tutor/task-choise/task-choise.com
     TaskComponent,
     TutorComponent,
     HwConstructorComponent,
-    TaskChoiseComponent,
+    TaskChoiceComponent,
+    BrowseNotificationsComponent,
+    PupilsAddHomeworkComponent,
   ],
   imports: [
     BrowserModule,

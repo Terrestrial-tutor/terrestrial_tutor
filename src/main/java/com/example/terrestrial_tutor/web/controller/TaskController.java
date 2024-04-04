@@ -59,7 +59,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{subject}")
-    public ResponseEntity<List<TaskDTO>> getTasksBySubject(@PathVariable String subject) {
+    public ResponseEntity<List<TaskDTO>> getTasksBySubjectAndHW(@PathVariable String subject) {
         SubjectEntity currentSubject = subjectService.findSubjectByName(subject);
         List<TaskEntity> tasksList = taskService.getTasksBySubject(currentSubject);
         List<TaskDTO> tasksDTO = new ArrayList<>();

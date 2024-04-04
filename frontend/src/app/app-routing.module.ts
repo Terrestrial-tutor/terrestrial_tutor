@@ -9,7 +9,8 @@ import {SupportComponent} from "./modules/support/support.component";
 import {TaskComponent} from "./modules/task/task.component";
 import {TutorComponent} from "./modules/tutor/tutor.component";
 import {HwConstructorComponent} from "./modules/tutor/hw-constructor/hw-constructor.component";
-import {TaskChoiseComponent} from "./modules/tutor/task-choise/task-choise.component";
+import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
+import {PupilsAddHomeworkComponent} from "./modules/tutor/pupils-add-homework/pupils-add-homework.component";
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [AuthGuardService]},
@@ -20,7 +21,8 @@ const routes: Routes = [
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
   {path: 'tutor', component: TutorComponent, canActivate: [AuthGuardService]},
   {path: 'tutor/constructor', component: HwConstructorComponent, canActivate: [AuthGuardService]},
-  {path: 'tutor/constructor/hw/add/task', component: TaskChoiseComponent, canActivate: [AuthGuardService]},
+  {path: 'tutor/constructor/hw/add/task', component: TaskChoiceComponent, canActivate: [AuthGuardService]},
+  {path: 'tutor/constructor/add/pup', component: PupilsAddHomeworkComponent, canActivate: [AuthGuardService]},
   {path: '', redirectTo: 'login', pathMatch: 'full'},
 ];
 

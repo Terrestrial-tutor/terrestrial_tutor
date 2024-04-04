@@ -1,0 +1,33 @@
+<button class="m-3 col-2 btn btn-primary" (click)="submit()">Сохранить</button>
+
+<div class="modal-body col-9">
+  <form>
+    <div class="mb-3 row">
+      <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Поиск:</label>
+      <div class="col-xs-3 col-sm-auto">
+        <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+      </div>
+    </div>
+  </form>
+  <div *ngIf="!isNewPupilsLoaded" class="spinner-border" role="status"></div>
+  <table class="table rounded table-striped" *ngIf="isNewPupilsLoaded">
+    <thead>
+    <tr>
+      <th scope="col">Выбор</th>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Отчество</th>
+      <th scope="col">Почта</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let pupil of filteredPupils">
+      <td><input type="checkbox" [(ngModel)]="pupil.isSelected" /></td>
+      <td><ngb-highlight [result]="pupil.pupil.surname" [term]="filter.value"></ngb-highlight></td>
+      <td><ngb-highlight [result]="pupil.pupil.name" [term]="filter.value"></ngb-highlight></td>
+      <td><ngb-highlight [result]="pupil.pupil.patronymic" [term]="filter.value"></ngb-highlight></td>
+      <td ><ngb-highlight [result]="pupil.pupil.username" [term]="filter.value"></ngb-highlight></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
