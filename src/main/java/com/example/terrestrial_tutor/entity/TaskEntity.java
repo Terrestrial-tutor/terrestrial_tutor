@@ -73,6 +73,9 @@ public class TaskEntity {
     @JoinColumn(name = "support")
     SupportEntity support;
 
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    List<CompletedTaskEntity> completedTaskEntities;
+
     //ban_commands
 
     //task_analysis

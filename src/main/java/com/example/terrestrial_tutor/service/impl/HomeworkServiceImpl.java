@@ -3,6 +3,7 @@ package com.example.terrestrial_tutor.service.impl;
 import com.example.terrestrial_tutor.entity.*;
 import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
+import com.example.terrestrial_tutor.repository.CompletedTaskRepository;
 import com.example.terrestrial_tutor.repository.HomeworkRepository;
 import com.example.terrestrial_tutor.repository.PupilRepository;
 import com.example.terrestrial_tutor.repository.TaskRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,9 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
     SubjectService subjectService;
 
+    @Autowired
+    CompletedTaskServiceImpl completedTaskService;
+
     public HomeworkEntity addHomework(HomeworkDTO request) {
         // todo получить авторизированного пользователя и установить в tutor
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -64,7 +69,11 @@ public class HomeworkServiceImpl implements HomeworkService {
                 TaskEntity task = taskService.getTaskById(key);
                 tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
             });
-            newHomework.setTasksCheckingTypes(tasksCheckingTypes);
+            //todo добавить новую логику с CompletedTaskEntity (сделано, надо протестить)
+            List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
+            tasksCheckingTypes.forEach((task, check) -> completedTaskEntities.add(completedTaskService.save(new CompletedTaskEntity(task, check))));
+            newHomework.setCompletedTaskEntities(completedTaskEntities);
+            //newHomework.setTasksCheckingTypes(tasksCheckingTypes);
         }
         List<HomeworkEntity> currentTutorHomeworks = tutor.getHomeworkList();
         currentTutorHomeworks.add(newHomework);

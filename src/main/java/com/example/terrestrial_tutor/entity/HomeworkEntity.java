@@ -52,9 +52,16 @@ public class HomeworkEntity {
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
+    @OneToMany(mappedBy = "homework", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    List<CompletedTaskEntity> completedTaskEntities;
+
+
+    /*
     @ElementCollection
     @CollectionTable(name = "checking_map")
     @MapKeyColumn(name = "key_column")
     Map<TaskEntity, TaskCheckingType> tasksCheckingTypes;
+
+     */
     LocalDate deadLine;
 }

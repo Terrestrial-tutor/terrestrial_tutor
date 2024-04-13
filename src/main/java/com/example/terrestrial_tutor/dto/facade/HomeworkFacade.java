@@ -17,6 +17,7 @@ public class HomeworkFacade {
     @Autowired
     TaskFacade taskFacade;
 
+    //todo поправить логику с новой сущностью CompletedTaskEntity (сделано)
     public HomeworkDTO homeworkToHomeworkDTO(HomeworkEntity homework) {
         HomeworkDTO homeworkDTO = new HomeworkDTO();
         homeworkDTO.setId(homework.getId());
@@ -29,10 +30,12 @@ public class HomeworkFacade {
                 toList());
         homeworkDTO.setTargetTime(homework.getTargetTime());
         Map<Long, String> dtoTasksCheckingTypes = new HashMap<>();
-        homework.getTasksCheckingTypes().forEach((task, type) -> dtoTasksCheckingTypes.put(task.getId(), type.name()));
+        homework.getCompletedTaskEntities().forEach(task -> dtoTasksCheckingTypes.put(task.getTask().getId(), task.getTaskCheckingType().name()));
+        //homework.getTasksCheckingTypes().forEach((task, type) -> dtoTasksCheckingTypes.put(task.getId(), type.name()));
         homeworkDTO.setTasksCheckingTypes(dtoTasksCheckingTypes);
         List<TaskDTO> tasks = new ArrayList<>();
-        homework.getTasksCheckingTypes().forEach((task, taskCheckingType) -> tasks.add(taskFacade.taskToTaskDTO(task)));
+        homework.getCompletedTaskEntities().forEach(task -> tasks.add(taskFacade.taskToTaskDTO(task.getTask())));
+        //homework.getTasksCheckingTypes().forEach((task, taskCheckingType) -> tasks.add(taskFacade.taskToTaskDTO(task)));
         homeworkDTO.setTasks(tasks);
         return homeworkDTO;
     }
