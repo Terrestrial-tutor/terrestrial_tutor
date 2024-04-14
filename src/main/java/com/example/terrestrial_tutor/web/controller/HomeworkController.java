@@ -8,7 +8,6 @@ import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
 import com.example.terrestrial_tutor.dto.HomeworkDTO;
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
@@ -21,10 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -44,10 +40,12 @@ public class HomeworkController {
 
     //todo контроллер для обработки завершенной домашки
 
-    @PostMapping("/homework/add")
-    public ResponseEntity<HomeworkDTO> addHomework(@RequestBody HomeworkDTO homeworkDTO) {
-        HomeworkEntity newHomework = homeworkService.addHomework(homeworkDTO);
+    @PostMapping("/homework/save")
+    public ResponseEntity<HomeworkDTO> saveHomework(@RequestBody HomeworkDTO homeworkDTO) {
+        HomeworkEntity newHomework = homeworkService.saveHomework(homeworkFacade.homeworkDTOToHomework(homeworkDTO));
         HomeworkDTO newHomeworkDTO = homeworkFacade.homeworkToHomeworkDTO(newHomework);
+        SubjectEntity subject = newHomework.getSubject();
+        HomeworkEntity test = homeworkService.getHomeworkById(newHomework.getId());
         return new ResponseEntity<>(newHomeworkDTO, HttpStatus.OK);
     }
 

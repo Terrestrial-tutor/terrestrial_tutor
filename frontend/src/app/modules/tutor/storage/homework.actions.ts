@@ -2,18 +2,18 @@ import {createAction, createActionGroup, props} from '@ngrx/store';
 import {Subject} from "../../../models/Subject";
 import {Homework} from "../../../models/Homework";
 
-export const createHomework = createAction(
-  '[Homework] Create homework',
+export const saveHomework = createAction(
+  '[Homework] Saving homework',
   props<{ subject: Subject }>()
 )
 
-export const createHomeworkSuccess = createAction(
-  '[Homework] Create homework is success',
+export const saveHomeworkSuccess = createAction(
+  '[Homework] Saving homework is success',
   props<{ homework: Homework }>()
 )
 
-export const createHomeworkFailed = createAction(
-  '[Homework] Create homework is failed',
+export const saveHomeworkFailed = createAction(
+  '[Homework] Saving homework is failed',
   props<{ error: Error }>()
 )
 

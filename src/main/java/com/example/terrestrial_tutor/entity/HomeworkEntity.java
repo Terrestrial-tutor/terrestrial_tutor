@@ -27,7 +27,7 @@ public class HomeworkEntity {
     String name;
 
     @NonNull
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "subject")
     SubjectEntity subject;
 
@@ -41,18 +41,18 @@ public class HomeworkEntity {
 
     Long targetTime;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
 //    todo
 //    Добавить теоритические материалы
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
-    @OneToMany(mappedBy = "homework", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<CompletedTaskEntity> completedTaskEntities;
 
 

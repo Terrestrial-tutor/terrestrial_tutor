@@ -19,11 +19,11 @@ export const homeworkFeature = createFeature({
   name: HOMEWORK_FEATURE_KEY,
   reducer: createReducer(
     initialState,
-    on(HomeworkActions.createHomeworkSuccess, (state, {homework}) => ({...state,
+    on(HomeworkActions.saveHomeworkSuccess, (state, {homework}) => ({...state,
       homework: homework,
-      state: "created"
+      state: "saved"
     })),
-    on(HomeworkActions.createHomeworkFailed, (state, {error}) => ({...state,
+    on(HomeworkActions.saveHomeworkFailed, (state, {error}) => ({...state,
       homework: null,
       state: error.message
     })),

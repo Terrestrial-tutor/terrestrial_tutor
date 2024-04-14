@@ -11,13 +11,13 @@ export const homeworkCreateEffect = createEffect(
     const actions = inject(Actions);
     let apiService = inject(TutorService);
     return actions.pipe(
-      ofType(HomeworkActions.createHomework),
+      ofType(HomeworkActions.saveHomework),
       switchMap(
         ({subject}) => apiService.createHomework(subject).pipe(
-          map((homework: Homework) => HomeworkActions.createHomeworkSuccess({homework})),
+          map((homework: Homework) => HomeworkActions.saveHomeworkSuccess({homework})),
           catchError((error) => {
             console.log(error);
-            return of(HomeworkActions.createHomeworkFailed({error}));
+            return of(HomeworkActions.saveHomeworkFailed({error}));
           })
         )
       )

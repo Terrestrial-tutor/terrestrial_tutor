@@ -19,7 +19,6 @@ import { TaskComponent } from './modules/task/task.component';
 import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 import { TutorComponent } from './modules/tutor/tutor.component';
 import { HwConstructorComponent } from './modules/tutor/hw-constructor/hw-constructor.component';
-// import { TaskChoiceComponent } from './modules/tutor/task-choise/task-choice.component';
 import { BrowseNotificationsComponent } from './modules/modals/browse-notifications.component';
 import { PupilsAddHomeworkComponent } from './modules/tutor/pupils-add-homework/pupils-add-homework.component';
 import {provideStore} from "@ngrx/store";
@@ -27,6 +26,7 @@ import {homeworkFeature} from "./modules/tutor/storage/homework.reducer";
 import {provideStoreDevtools} from "@ngrx/store-devtools";
 import {provideEffects} from "@ngrx/effects";
 import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
+import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
     TaskComponent,
     TutorComponent,
     HwConstructorComponent,
-    // TaskChoiceComponent,
+    TaskChoiceComponent,
     BrowseNotificationsComponent,
     PupilsAddHomeworkComponent,
   ],

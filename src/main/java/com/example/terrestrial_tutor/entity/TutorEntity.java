@@ -27,17 +27,17 @@ public class TutorEntity implements UserDetails {
     private Long id;
 
     @Column(name = "subjects")
-    @ManyToMany(mappedBy = "tutors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tutors", fetch = FetchType.EAGER)
     List<SubjectEntity> subjects;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
     @Column(name = "payment_data")
     String paymentData;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     List<HomeworkEntity> homeworkList = new ArrayList<>();
 
     @NonNull

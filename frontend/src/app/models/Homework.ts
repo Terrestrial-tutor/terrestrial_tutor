@@ -7,6 +7,6 @@ export class Homework {
   pupilIds: number[] = [];
   deadLine?: Date;
   subject: string = '';
-  tasksCheckingTypes: { [key: number]: string } = {};
+  public tasksCheckingTypes: { [key: number]: string } = {};
   tasks: Task[] = [];
 }

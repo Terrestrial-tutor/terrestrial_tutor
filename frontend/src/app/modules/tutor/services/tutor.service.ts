@@ -21,16 +21,14 @@ export class TutorService {
     return this.http.get(this.TUTOR_API + 'subjects');
   }
 
-  addHomework(homework: Homework): Observable<any> {
-    let homeworkRequest = new RequestHomework(homework);
-    console.log(homeworkRequest);
-    return this.http.post(this.HOMEWORK_API + 'add', homeworkRequest);
+  saveHomework(homework: Homework | null): Observable<any> {
+    return this.http.post(this.HOMEWORK_API + 'save', homework);
   }
 
   createHomework(subject: Subject): Observable<any> {
     let homework = new Homework();
     homework.subject = subject.subjectName;
-    return this.http.post(this.HOMEWORK_API + 'add', homework);
+    return this.http.post(this.HOMEWORK_API + 'save', homework);
   }
 
   deleteHomeworkById(id: any): Observable<any> {

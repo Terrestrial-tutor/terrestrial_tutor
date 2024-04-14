@@ -26,7 +26,7 @@ public class CompletedTaskEntity {
     @JoinColumn(name = "task")
     TaskEntity task;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "homework")
     HomeworkEntity homework;
 

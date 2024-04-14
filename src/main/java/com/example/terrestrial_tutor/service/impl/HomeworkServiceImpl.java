@@ -47,50 +47,38 @@ public class HomeworkServiceImpl implements HomeworkService {
     @Autowired
     CompletedTaskServiceImpl completedTaskService;
 
-    public HomeworkEntity addHomework(HomeworkDTO request) {
-        // todo получить авторизированного пользователя и установить в tutor
-        TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        HomeworkEntity newHomework = new HomeworkEntity();
-        newHomework.setName(request.getName());
-        newHomework.setTargetTime(request.getTargetTime());
-        newHomework.setDeadLine(request.getDeadLine());
-        SubjectEntity subject = subjectService.findSubjectByName(request.getSubject());
-        newHomework.setSubject(subject);
-        List<HomeworkEntity> subjectHomeworks = subject.getHomeworkList();
-        subjectHomeworks.add(newHomework);
-        subject.setHomeworkList(subjectHomeworks);
-        newHomework.setTutor(tutor);
-        newHomework.setPupils(request.getPupilIds().stream()
-                .map(id -> pupilService.findPupilById(id)).collect(Collectors.toList()));
-        if (request.getTasksCheckingTypes() != null) {
-            Map<TaskEntity, TaskCheckingType> tasksCheckingTypes = new HashMap<>();
-            request.getTasksCheckingTypes().forEach((key, value) ->
-            {
-                TaskEntity task = taskService.getTaskById(key);
-                tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
-            });
-            //todo добавить новую логику с CompletedTaskEntity (сделано, надо протестить)
-            List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
-            tasksCheckingTypes.forEach((task, check) -> completedTaskEntities.add(completedTaskService.save(new CompletedTaskEntity(task, check))));
-            newHomework.setCompletedTaskEntities(completedTaskEntities);
-            //newHomework.setTasksCheckingTypes(tasksCheckingTypes);
+    public HomeworkEntity saveHomework(HomeworkEntity homework) {
+        if (!homework.getTutor().getHomeworkList().contains(homework)) {
+            List<HomeworkEntity> currentTutorHomeworks = homework.getTutor().getHomeworkList();
+            currentTutorHomeworks.add(homework);
+            homework.getTutor().setHomeworkList(currentTutorHomeworks);
         }
-        List<HomeworkEntity> currentTutorHomeworks = tutor.getHomeworkList();
-        currentTutorHomeworks.add(newHomework);
-        tutor.setHomeworkList(currentTutorHomeworks);
-        newHomework = homeworkRepository.save(newHomework);
-        tutorService.updateTutor(tutor);
-        return newHomework;
+        HomeworkEntity finalHomework = homework;
+        homework.setCompletedTaskEntities(homework.getCompletedTaskEntities().stream().peek(task -> {
+            task.setHomework(finalHomework);
+        }).collect(Collectors.toList()));
+        homework = homeworkRepository.save(homework);
+        tutorService.updateTutor(homework.getTutor());
+
+        return homework;
     }
     public HomeworkEntity getHomeworkById(Long id){
         return homeworkRepository.getById(id);
     }
 
     public void deleteHomeworkById(Long id) {
+        HomeworkEntity homework = getHomeworkById(id);
+        TutorEntity tutor = homework.getTutor();
+        List<HomeworkEntity> currentTutorHomeworks = homework.getTutor().getHomeworkList();
+        currentTutorHomeworks.remove(homework);
+        tutor.setHomeworkList(currentTutorHomeworks);
+        tutorService.updateTutor(tutor);
+        homework.setTutor(null);
         homeworkRepository.delete(homeworkRepository.findHomeworkEntityById(id));
     }
 
     public HomeworkEntity save(HomeworkEntity homework) {
+
         return homeworkRepository.save(homework);
     }
 //    public List<HomeworkEntity> getAllHomeworksPupil(){

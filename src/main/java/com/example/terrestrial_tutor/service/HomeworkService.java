@@ -1,13 +1,12 @@
 package com.example.terrestrial_tutor.service;
 
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
-import com.example.terrestrial_tutor.dto.HomeworkDTO;
 
 import java.util.List;
 
 public interface HomeworkService {
 
-    HomeworkEntity addHomework(HomeworkDTO request);
+    HomeworkEntity saveHomework(HomeworkEntity homework);
 
 //    List<HomeworkEntity> getAllHomeworksPupil();
     List<HomeworkEntity> getAllHomeworksTutor();
