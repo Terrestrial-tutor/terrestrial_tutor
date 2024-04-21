@@ -8,49 +8,44 @@ import {Store} from "@ngrx/store";
 import {clearHomeworkState, saveHomework} from "./storage/homework.actions";
 import * as HomeworkSelectors from "./storage/homework.selectors"
 import * as HomeworkActions from "./storage/homework.actions"
+import {TutorDataService} from "./storage/tutor.data.service";
 
 @Component({
   selector: 'app-tutor',
   templateUrl: './tutor.component.html',
   styleUrls: ['./tutor.component.css']
 })
-export class TutorComponent implements OnInit, OnDestroy {
+export class TutorComponent implements OnInit {
 
   constructor(private tutorService: TutorService,
               private router: Router,
               private dataService: dataService,
-              private store: Store) { }
+              private tutorDataService: TutorDataService,) { }
 
   currentSubjects: any;
   subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    this.tutorService.getTutorSubjects().subscribe(subjects =>
-      this.currentSubjects = subjects);
-    this.subscriptions.push(this.store.select(HomeworkSelectors.getHomework).subscribe(homework => {
-      if (homework.state != 'published') {
-        let storageHomeworkId = sessionStorage.getItem('homeworkId');
-        if (storageHomeworkId) {
-          let id = parseInt(storageHomeworkId);
-          this.store.dispatch(HomeworkActions.deleteHomework({id}));
-        }
-      }
-      sessionStorage.removeItem('homeworkId');
-    }));
-    this.store.dispatch(clearHomeworkState());
+    let homeworkId = Number(sessionStorage.getItem("homeworkId"));
+    if (homeworkId) {
+      this.tutorService.deleteHomeworkById(homeworkId).subscribe(() => {
+        sessionStorage.removeItem("homeworkId");
+        this.tutorService.getTutorSubjects().subscribe(subjects =>
+          this.currentSubjects = subjects);
+      });
+    } else {
+      this.tutorService.getTutorSubjects().subscribe(subjects =>
+        this.currentSubjects = subjects);
+    }
   }
 
   addHW(subject: any) {
-    this.store.dispatch(saveHomework({subject}));
-    this.store.select(HomeworkSelectors.getHomework).subscribe(homework => {
-      if (homework.state == 'saved') {
-        sessionStorage.setItem('homeworkId', JSON.stringify(homework.homework?.id));
+    this.tutorService.createHomework(subject).subscribe(homework => {
+      if (homework && homework.id) {
+        this.tutorDataService.setHomework(homework);
+        sessionStorage.setItem('homeworkId', JSON.stringify(homework.id));
         this.router.navigate(['/tutor/constructor']);
       }
     });
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

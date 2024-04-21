@@ -4,18 +4,12 @@ import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.*;
 import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
-import com.example.terrestrial_tutor.service.CompletedTaskService;
-import com.example.terrestrial_tutor.service.PupilService;
-import com.example.terrestrial_tutor.service.SubjectService;
-import com.example.terrestrial_tutor.service.TaskService;
+import com.example.terrestrial_tutor.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,6 +19,8 @@ public class HomeworkFacade {
     TaskFacade taskFacade;
     @Autowired
     SubjectService subjectService;
+    @Autowired
+    HomeworkService homeworkService;
     @Autowired
     PupilService pupilService;
     @Autowired
@@ -46,7 +42,7 @@ public class HomeworkFacade {
         Map<Long, String> dtoTasksCheckingTypes = new HashMap<>();
         homework.getCompletedTaskEntities().forEach(task -> dtoTasksCheckingTypes.put(task.getTask().getId(), task.getTaskCheckingType().name()));
         homeworkDTO.setTasksCheckingTypes(dtoTasksCheckingTypes);
-        List<TaskDTO> tasks = new ArrayList<>();
+        Set<TaskDTO> tasks = new HashSet<>();
         homework.getCompletedTaskEntities().forEach(task -> tasks.add(taskFacade.taskToTaskDTO(task.getTask())));
         homeworkDTO.setTasks(tasks);
         return homeworkDTO;
@@ -61,7 +57,7 @@ public class HomeworkFacade {
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         homework.setTutor(tutor);
         homework.setPupils(homeworkDTO.getPupilIds().stream()
-                .map(id -> pupilService.findPupilById(id)).collect(Collectors.toList()));
+                .map(id -> pupilService.findPupilById(id)).collect(Collectors.toSet()));
 
         if (homeworkDTO.getTasksCheckingTypes() != null) {
             Map<TaskEntity, TaskCheckingType> tasksCheckingTypes = new HashMap<>();
@@ -70,8 +66,14 @@ public class HomeworkFacade {
                 TaskEntity task = taskService.getTaskById(key);
                 tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
             });
-            List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
-            tasksCheckingTypes.forEach((task, check) -> completedTaskEntities.add(new CompletedTaskEntity(task, check)));
+            Set<CompletedTaskEntity> completedTaskEntities = new HashSet<>();
+            tasksCheckingTypes.forEach((task, check) -> {
+                if (completedTaskService.getByTask(task.getId()) != null) {
+                    completedTaskEntities.add(completedTaskService.getByTask(task.getId()));
+                } else {
+                    completedTaskEntities.add(new CompletedTaskEntity(task, check));
+                }
+            });
             homework.setCompletedTaskEntities(completedTaskEntities);
         }
 

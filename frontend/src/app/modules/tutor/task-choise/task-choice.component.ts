@@ -11,13 +11,14 @@ import * as HomeworkActions from "../storage/homework.actions";
 import {Store} from "@ngrx/store";
 import * as HomeworkSelectors from "../storage/homework.selectors";
 import {map, Subscription} from "rxjs";
+import {TutorDataService} from "../storage/tutor.data.service";
 
 @Component({
   selector: 'app-task-choise',
   templateUrl: './task-choice.component.html',
   styleUrls: ['./task-choice.component.css']
 })
-export class TaskChoiceComponent implements OnInit, OnDestroy {
+export class TaskChoiceComponent implements OnInit {
 
   @ViewChild('codemirrorComponent') codemirror: CodemirrorComponent | undefined;
 
@@ -25,40 +26,44 @@ export class TaskChoiceComponent implements OnInit, OnDestroy {
               private taskService : TaskService,
               private tutorService : TutorService,
               private router: Router,
-              private store: Store,) { }
+              private store: Store,
+              private tutorDataService: TutorDataService,) { }
 
   allTasks: TaskSelect[] = [];
   subject: any;
   tasksUpload: boolean = false;
+  homeworkLoaded: boolean = false;
   isCollapsed: boolean[] = [];
   homework: Homework | null = null;
   subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
-    this.ngOnDestroy();
-    let storageHomeworkId = sessionStorage.getItem('homeworkId');
-    if (storageHomeworkId) {
-      let id = parseInt(storageHomeworkId);
-      this.store.dispatch(HomeworkActions.getHomeworkFromApi({id}))
-    }
-    this.subscriptions$.push(this.store.select(HomeworkSelectors.getHomework).pipe(map(homework =>
-      homework)).subscribe(
-      homework => {
-        this.homework = structuredClone(homework.homework);
+    if (this.tutorDataService.getHomework()) {
+      this.homework = this.tutorDataService.getHomework();
+      this.subject = this.homework?.subject;
+      this.setTasks();
+    } else {
+      let homework: number = Number(sessionStorage.getItem("homeworkId"));
+      this.tutorService.getHomework(homework).subscribe(homework => {
+        this.homework = homework;
         this.subject = this.homework?.subject;
-        this.subscriptions$.push(this.taskService.getTasksBySubject(this.subject).pipe(map(tasks => tasks)).subscribe(tasks => {
-          for (let i = 0; i < tasks.length; i++) {
-            if (this.homework != null && this.homework.tasks.some(task => task.id == tasks[i].id)) {
-              this.allTasks.push(new TaskSelect(tasks[i], true));
-            } else {
-              this.allTasks.push(new TaskSelect(tasks[i]));
-            }
-            this.isCollapsed.push(true);
-          }
-          this.tasksUpload = true;
-        }));
+        this.setTasks();
+      });
+    }
+  }
+
+  setTasks() {
+    this.taskService.getTasksBySubject(this.subject).pipe(map(tasks => tasks)).subscribe(tasks => {
+      for (let i = 0; i < tasks.length; i++) {
+        if (this.homework != null && this.homework.tasks.some(task => task.id == tasks[i].id)) {
+          this.allTasks.push(new TaskSelect(tasks[i], true));
+        } else {
+          this.allTasks.push(new TaskSelect(tasks[i]));
+        }
+        this.isCollapsed.push(true);
       }
-    ));
+      this.tasksUpload = true;
+    });
   }
 
   checkImage(file: string): boolean {
@@ -82,22 +87,24 @@ export class TaskChoiceComponent implements OnInit, OnDestroy {
   }
 
   submit() {
-    this.ngOnDestroy();
     if (this.homework != null) {
       let currentTasks = this.getSelectedTasks();
       let newTasksList: { [key: number]: string; } = {};
+      let tasks = []
       for (let i = 0; i < currentTasks.length; i++) {
-        newTasksList[currentTasks[i].id] = 'AUTO';
+        tasks.push(currentTasks[i]);
+        if (!this.homework.tasksCheckingTypes[currentTasks[i].id]) {
+          newTasksList[currentTasks[i].id] = 'AUTO';
+        } else {
+          newTasksList[currentTasks[i].id] = this.homework.tasksCheckingTypes[currentTasks[i].id];
+        }
       }
       this.homework.tasksCheckingTypes = newTasksList;
-      this.subscriptions$.push(this.tutorService.saveHomework(this.homework).subscribe(homework => {
+      this.homework.tasks = tasks;
+      this.tutorDataService.setHomework(this.homework);
+      this.tutorService.saveHomework(this.homework).subscribe(homework => {
         this.router.navigate(['/tutor/constructor']);
-      }));
+      });
     }
   }
-
-  ngOnDestroy() {
-    this.subscriptions$.forEach(subscription => subscription.unsubscribe());
-  }
-
 }

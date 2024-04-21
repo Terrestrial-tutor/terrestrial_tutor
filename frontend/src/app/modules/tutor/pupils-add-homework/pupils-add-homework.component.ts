@@ -6,6 +6,8 @@ import {dataService} from "../services/data.service";
 import {Homework} from "../../../models/Homework";
 import {Router} from "@angular/router";
 import {UntypedFormControl} from "@angular/forms";
+import {TutorDataService} from "../storage/tutor.data.service";
+import {TutorService} from "../services/tutor.service";
 
 @Component({
   selector: 'app-pupils-add-homework',
@@ -15,33 +17,46 @@ import {UntypedFormControl} from "@angular/forms";
 export class PupilsAddHomeworkComponent implements OnInit {
 
   constructor(private pupilService: PupilService,
-              private dataService: dataService,
-              private router: Router,) { }
+              private tutorDataService: TutorDataService,
+              private router: Router,
+              private tutorService: TutorService,) { }
 
   allPupils: PupilSelect[] = [];
-  currentPupils: Pupil[] | null = [];
+  currentPupils: number[] | undefined = [];
   homework: Homework | null = null;
   isNewPupilsLoaded = false;
   filteredPupils: PupilSelect[] = [];
   filter = new UntypedFormControl('');
 
   ngOnInit(): void {
-    this.homework = this.dataService.getCurrentHomework();
-    this.currentPupils = this.dataService.getCurrentPupils();
+    this.homework = this.tutorDataService.getHomework();
+    this.currentPupils = this.homework?.pupilIds;
     this.pupilService.getAllPupils().subscribe(pupils => {
-      for (let i = 0; i < pupils.length; i++) {
-        if (this.currentPupils &&
-          this.currentPupils[i].id == pupils[i].id &&
-          this.homework &&
-          pupils[i].subject == this.homework.subject) {
-          this.allPupils.push(new PupilSelect(pupils[i], true));
-        } else {
-          this.allPupils.push(new PupilSelect(pupils[i], false));
-        }
-        this.filteredPupils = this.allPupils;
+      if (this.homework == undefined) {
+        this.tutorService.getHomework(sessionStorage.getItem("homeworkId")).subscribe(homework => {
+          this.homework = homework;
+          this.currentPupils = this.homework?.pupilIds;
+          this.fillPupils(pupils);
+        });
+      } else {
+        this.fillPupils(pupils);
       }
-      this.isNewPupilsLoaded = true;
     })
+  }
+
+  fillPupils(pupils: Pupil[]) {
+    for (let i = 0; i < pupils.length; i++) {
+      if (this.currentPupils && this.currentPupils.includes(pupils[i].id) &&
+        this.homework &&
+        pupils[i].subjects.includes(this.homework.subject)) {
+        this.allPupils.push(new PupilSelect(pupils[i], true));
+      } else if (this.homework &&
+        pupils[i].subjects.includes(this.homework.subject)) {
+        this.allPupils.push(new PupilSelect(pupils[i], false));
+      }
+      this.filteredPupils = this.allPupils;
+    }
+    this.isNewPupilsLoaded = true;
   }
 
   getSelectedPupilsIds() {
@@ -53,7 +68,6 @@ export class PupilsAddHomeworkComponent implements OnInit {
         selectedPupils.push(pupil.pupil);
       }
     }
-    this.currentPupils = selectedPupils;
     return selectedPupilsIds;
   }
 
@@ -70,8 +84,10 @@ export class PupilsAddHomeworkComponent implements OnInit {
   submit() {
     if (this.homework) {
       this.homework.pupilIds = this.getSelectedPupilsIds();
-      this.dataService.setCurrentPupils(this.currentPupils);
-      this.router.navigate(['tutor/constructor']);
+      this.tutorDataService.setHomework(this.homework);
+      this.tutorService.saveHomework(this.homework).subscribe(() => {
+        this.router.navigate(['tutor/constructor']);
+      });
     }
   }
 

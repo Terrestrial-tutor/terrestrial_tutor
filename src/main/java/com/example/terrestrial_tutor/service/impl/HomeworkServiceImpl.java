@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,31 +46,28 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     public HomeworkEntity saveHomework(HomeworkEntity homework) {
         if (!homework.getTutor().getHomeworkList().contains(homework)) {
-            List<HomeworkEntity> currentTutorHomeworks = homework.getTutor().getHomeworkList();
+            Set<HomeworkEntity> currentTutorHomeworks = homework.getTutor().getHomeworkList();
             currentTutorHomeworks.add(homework);
             homework.getTutor().setHomeworkList(currentTutorHomeworks);
         }
         HomeworkEntity finalHomework = homework;
         homework.setCompletedTaskEntities(homework.getCompletedTaskEntities().stream().peek(task -> {
             task.setHomework(finalHomework);
-        }).collect(Collectors.toList()));
+        }).collect(Collectors.toSet()));
         homework = homeworkRepository.save(homework);
         tutorService.updateTutor(homework.getTutor());
-
         return homework;
     }
     public HomeworkEntity getHomeworkById(Long id){
-        return homeworkRepository.getById(id);
+        return homeworkRepository.findHomeworkEntityById(id);
     }
 
     public void deleteHomeworkById(Long id) {
         HomeworkEntity homework = getHomeworkById(id);
         TutorEntity tutor = homework.getTutor();
-        List<HomeworkEntity> currentTutorHomeworks = homework.getTutor().getHomeworkList();
-        currentTutorHomeworks.remove(homework);
-        tutor.setHomeworkList(currentTutorHomeworks);
+        tutor.getHomeworkList().remove(homework);
         tutorService.updateTutor(tutor);
-        homework.setTutor(null);
+//        homework.setTutor(null);
         homeworkRepository.delete(homeworkRepository.findHomeworkEntityById(id));
     }
 

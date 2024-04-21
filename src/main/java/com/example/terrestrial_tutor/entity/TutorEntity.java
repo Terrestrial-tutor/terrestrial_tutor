@@ -8,9 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -38,7 +36,7 @@ public class TutorEntity implements UserDetails {
     String paymentData;
 
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
-    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    Set<HomeworkEntity> homeworkList = new HashSet<>();
 
     @NonNull
     @Column(name = "username")

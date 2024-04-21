@@ -18,4 +18,8 @@ public class CompletedTaskServiceImpl implements CompletedTaskService {
     public CompletedTaskEntity save(CompletedTaskEntity completedTaskEntity) {
         return completedTaskRepository.save(completedTaskEntity);
     }
+
+    public CompletedTaskEntity getByTask(Long id) {
+        return completedTaskRepository.findByTaskId(id);
+    }
 }

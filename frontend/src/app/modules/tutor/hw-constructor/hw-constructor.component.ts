@@ -3,28 +3,25 @@ import {dataService} from "../services/data.service";
 import {Router} from "@angular/router";
 import {TutorService} from "../services/tutor.service";
 import {Homework} from "../../../models/Homework";
-import {FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {Task} from "../../../models/Task";
 import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
-import {select, Store} from "@ngrx/store";
-import * as HomeworkSelectors from "../storage/homework.selectors"
-import * as HomeworkActions from "../storage/homework.actions"
-import {map, Observable, Subject, Subscription, takeUntil} from "rxjs";
-import {saveHomework} from "../storage/homework.actions";
+import {Subscription} from "rxjs";
+import {TutorDataService} from "../storage/tutor.data.service";
 
 @Component({
   selector: 'app-hw-constructor',
   templateUrl: './hw-constructor.component.html',
   styleUrls: ['./hw-constructor.component.css']
 })
-export class HwConstructorComponent implements OnInit, OnDestroy {
+export class HwConstructorComponent implements OnInit {
   @ViewChild('codemirrorComponent') codemirror: CodemirrorComponent | undefined;
 
   constructor(private tutorService: TutorService,
               private dataService: dataService,
               private router: Router,
               private fb: UntypedFormBuilder,
-              private store: Store,) { }
+              private tutorDataService: TutorDataService,) { }
 
   homework: Homework | null = null;
   //@ts-ignore
@@ -36,26 +33,21 @@ export class HwConstructorComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    this.subscriptions.push(this.store.select(HomeworkSelectors.getHomework).subscribe(homework1 => {
-      if (homework1.state == 'init' && sessionStorage.getItem('homeworkId')) {
-        let storageHomeworkId = sessionStorage.getItem('homeworkId');
-        if (storageHomeworkId) {
-          let id = parseInt(storageHomeworkId);
-          this.store.dispatch(HomeworkActions.getHomeworkFromApi({id}))
-        }
-      }
-      this.subscriptions.push(this.store.select(HomeworkSelectors.getHomework).subscribe(
-        homework => {
-          console.log(homework);
-          this.initFields(homework.homework);
-          this.initForm();
-        }
-      ));
-    }));
+    if (this.tutorDataService.getHomework()) {
+      this.homework = this.tutorDataService.getHomework();
+      this.initFields();
+      this.initForm();
+    } else {
+      let homework: number = Number(sessionStorage.getItem("homeworkId"));
+      this.tutorService.getHomework(homework).subscribe(homework => {
+        this.homework = homework;
+        this.initFields();
+        this.initForm();
+      })
+    }
   }
 
-  initFields(homework: Homework | null) {
-    this.homework = structuredClone(homework);
+  initFields() {
     if (this.homework) {
       this.currentTasks = this.homework.tasks;
       this.isCollapsed = [];
@@ -78,23 +70,24 @@ export class HwConstructorComponent implements OnInit, OnDestroy {
   }
 
   addTasks(): void {
-    // this.saveHomework();
-    this.subscriptions.push(this.tutorService.saveHomework(this.homework).subscribe(homework => {
+    this.saveHomework();
+    this.tutorService.saveHomework(this.homework).subscribe(data => {
       this.router.navigate(['/tutor/constructor/hw/add/task'])
-    }));
+    })
   }
 
   saveHomework() {
-    // this.homework!.name = this.hwForm.controls['name'].value;
+    this.homework!.name = this.hwForm.controls['name'].value;
     this.homework!.deadLine = this.hwForm.controls['deadLine'].value;
-    // this.homework!.targetTime = this.hwForm.controls['targetTime'].value;
+    this.homework!.targetTime = this.hwForm.controls['targetTime'].value;
+    this.tutorDataService.setHomework(this.homework);
   }
 
   submit() {
     if (this.homework) {
       this.tutorService.saveHomework(this.homework).subscribe(id => {
-        this.dataService.setCurrentHomework(null);
-        this.dataService.setCurrentTasks(null);
+        this.tutorDataService.setHomework(null);
+        sessionStorage.removeItem("homeworkId");
         this.router.navigate(['/tutor']);
       });
     }
@@ -110,13 +103,6 @@ export class HwConstructorComponent implements OnInit, OnDestroy {
     }
   }
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // unloadHandler(event: Event) {
-  //   console.log('test');
-  // }
-
-
-
   setChecking(index: number, type: string) {
     this.homework!.tasksCheckingTypes[index] = type;
   }
@@ -126,10 +112,9 @@ export class HwConstructorComponent implements OnInit, OnDestroy {
   }
 
   addPupils() {
-    this.router.navigate(['tutor/constructor/add/pup']);
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.saveHomework();
+    this.tutorService.saveHomework(this.homework).subscribe(data => {
+      this.router.navigate(['tutor/constructor/add/pup']);
+    })
   }
 }

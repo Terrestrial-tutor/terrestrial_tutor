@@ -34,7 +34,7 @@ public class PupilEntity implements UserDetails {
     List<HomeworkEntity> homeworkList;
 
     @Column(name = "price")
-    int price;
+    Integer price;
 
     @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<SubjectEntity> subjects = new ArrayList<>();

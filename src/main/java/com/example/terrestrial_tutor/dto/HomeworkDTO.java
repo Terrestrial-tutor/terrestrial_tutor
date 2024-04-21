@@ -8,9 +8,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -23,5 +21,5 @@ public class HomeworkDTO {
     LocalDate deadLine;
     @NonNull
     String subject;
-    List<TaskDTO> tasks = new ArrayList<>();
+    Set<TaskDTO> tasks = new HashSet<>();
 }

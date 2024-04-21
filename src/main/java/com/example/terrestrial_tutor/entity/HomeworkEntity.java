@@ -7,8 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -43,7 +42,7 @@ public class HomeworkEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
-    List<PupilEntity> pupils;
+    Set<PupilEntity> pupils;
 
 //    todo
 //    Добавить теоритические материалы
@@ -52,8 +51,8 @@ public class HomeworkEntity {
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
-    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<CompletedTaskEntity> completedTaskEntities;
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<CompletedTaskEntity> completedTaskEntities;
 
 
     /*

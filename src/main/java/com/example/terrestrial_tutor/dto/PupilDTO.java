@@ -11,7 +11,7 @@ public class PupilDTO {
     Long id;
     Double balance;
     List<String> homeworks;
-    int price;
+    Integer price;
     List<String> subjects;
     List<String> tutors;
     String username;
