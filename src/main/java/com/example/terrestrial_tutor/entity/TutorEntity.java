@@ -8,9 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -27,18 +25,18 @@ public class TutorEntity implements UserDetails {
     private Long id;
 
     @Column(name = "subjects")
-    @ManyToMany(mappedBy = "tutors", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "tutors", fetch = FetchType.EAGER)
     List<SubjectEntity> subjects;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
     @Column(name = "payment_data")
     String paymentData;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    List<HomeworkEntity> homeworkList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
+    Set<HomeworkEntity> homeworkList = new HashSet<>();
 
     @NonNull
     @Column(name = "username")

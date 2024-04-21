@@ -49,7 +49,7 @@ public class TaskEntity {
 
     //task_tables_ids
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "answers_array", joinColumns = @JoinColumn(name = "entity_id"))
     @Column(name = "answers")
     List<String> answer;
@@ -72,6 +72,9 @@ public class TaskEntity {
     @ManyToOne()
     @JoinColumn(name = "support")
     SupportEntity support;
+
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    List<CompletedTaskEntity> completedTaskEntities;
 
     //ban_commands
 

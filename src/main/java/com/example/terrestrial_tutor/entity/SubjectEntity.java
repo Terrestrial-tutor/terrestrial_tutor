@@ -29,17 +29,17 @@ public class SubjectEntity {
     @Column(name = "count_level")
     int countLevel;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "tutors")
     List<TutorEntity> tutors;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
     List<PupilEntity> pupils;
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     List<TaskEntity> tasks = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     List<HomeworkEntity> homeworkList;
 }
