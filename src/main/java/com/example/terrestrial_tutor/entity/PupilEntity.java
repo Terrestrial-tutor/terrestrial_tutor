@@ -34,16 +34,16 @@ public class PupilEntity implements UserDetails {
     List<HomeworkEntity> homeworkList;
 
     @Column(name = "price")
-    int price;
+    Integer price;
 
-    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "support")
     SupportEntity support;
 
-    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<TutorEntity> tutors = new ArrayList<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)

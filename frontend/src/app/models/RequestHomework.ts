@@ -16,9 +16,9 @@ export class RequestHomework {
     this.deadLine = homework.deadLine;
     this.subject = homework.subject;
     let json: { [key: number]: string } = {};
-    homework.tasksCheckingTypes.forEach((value, key) => {
-      json[key] = value;
-    });
+    // homework.tasksCheckingTypes.forEach((value, key) => {
+    //   json[key] = value;
+    // });
     this.tasksCheckingTypes = json;
   }
 }

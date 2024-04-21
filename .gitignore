@@ -11,5 +11,4 @@ terrestrial_tutor.iml
 /frontend/src/assets
 
 ### DB ###
-src/main/resources/
 /db_snapshots

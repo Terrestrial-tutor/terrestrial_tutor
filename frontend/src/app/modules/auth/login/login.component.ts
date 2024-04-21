@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../security/auth.service";
 import {TokenStorageService} from "../../../security/token-storage.service";
 import {Router, RouterLink} from "@angular/router";
@@ -13,14 +13,14 @@ import {Observable, throwError} from "rxjs";
 })
 export class LoginComponent implements OnInit {
   // @ts-ignore
-  public loginForm: FormGroup;
+  public loginForm: UntypedFormGroup;
   unauthorized:boolean = false;
 
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private elementRef: ElementRef) {
     // if (this.tokenStorage.getUser()) {
     //   this.router.navigate(['main']);
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.createLoginForm();
   }
 
-  createLoginForm(): FormGroup {
+  createLoginForm(): UntypedFormGroup {
     return this.fb.group({
       username: ['', Validators.compose([Validators.required, Validators.email])],
       password: ['', Validators.compose([Validators.required])],

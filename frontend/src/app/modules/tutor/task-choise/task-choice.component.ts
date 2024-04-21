@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {dataService} from "../services/data.service";
 import {TaskService} from "../../task/services/task.service";
 import {Task} from "../../../models/Task";
@@ -7,6 +7,11 @@ import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
 import {TutorService} from "../services/tutor.service";
 import {Router} from "@angular/router";
 import {Homework} from "../../../models/Homework";
+import * as HomeworkActions from "../storage/homework.actions";
+import {Store} from "@ngrx/store";
+import * as HomeworkSelectors from "../storage/homework.selectors";
+import {map, Subscription} from "rxjs";
+import {TutorDataService} from "../storage/tutor.data.service";
 
 @Component({
   selector: 'app-task-choise',
@@ -20,27 +25,44 @@ export class TaskChoiceComponent implements OnInit {
   constructor(private dataService : dataService,
               private taskService : TaskService,
               private tutorService : TutorService,
-              private router: Router,) { }
+              private router: Router,
+              private store: Store,
+              private tutorDataService: TutorDataService,) { }
 
   allTasks: TaskSelect[] = [];
   subject: any;
   tasksUpload: boolean = false;
+  homeworkLoaded: boolean = false;
   isCollapsed: boolean[] = [];
   homework: Homework | null = null;
+  subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
-    this.homework = this.dataService.getCurrentHomework();
-    this.subject = this.dataService.getCurrentHomework()?.subject;
-    this.taskService.getTasksBySubject(this.subject).subscribe(tasks => {
-        for (let i = 0; i < tasks.length; i++) {
-          if (this.homework != null && this.homework.tasksCheckingTypes.has(tasks[i].id)) {
-            this.allTasks.push(new TaskSelect(tasks[i], true));
-          } else {
-            this.allTasks.push(new TaskSelect(tasks[i]));
-          }
-          this.isCollapsed.push(true);
+    if (this.tutorDataService.getHomework()) {
+      this.homework = this.tutorDataService.getHomework();
+      this.subject = this.homework?.subject;
+      this.setTasks();
+    } else {
+      let homework: number = Number(sessionStorage.getItem("homeworkId"));
+      this.tutorService.getHomework(homework).subscribe(homework => {
+        this.homework = homework;
+        this.subject = this.homework?.subject;
+        this.setTasks();
+      });
+    }
+  }
+
+  setTasks() {
+    this.taskService.getTasksBySubject(this.subject).pipe(map(tasks => tasks)).subscribe(tasks => {
+      for (let i = 0; i < tasks.length; i++) {
+        if (this.homework != null && this.homework.tasks.some(task => task.id == tasks[i].id)) {
+          this.allTasks.push(new TaskSelect(tasks[i], true));
+        } else {
+          this.allTasks.push(new TaskSelect(tasks[i]));
         }
-        this.tasksUpload = true;
+        this.isCollapsed.push(true);
+      }
+      this.tasksUpload = true;
     });
   }
 
@@ -67,15 +89,22 @@ export class TaskChoiceComponent implements OnInit {
   submit() {
     if (this.homework != null) {
       let currentTasks = this.getSelectedTasks();
-      let newTasksList = new Map<number, string>();
+      let newTasksList: { [key: number]: string; } = {};
+      let tasks = []
       for (let i = 0; i < currentTasks.length; i++) {
-        newTasksList.set(currentTasks[i].id, 'AUTO')
+        tasks.push(currentTasks[i]);
+        if (!this.homework.tasksCheckingTypes[currentTasks[i].id]) {
+          newTasksList[currentTasks[i].id] = 'AUTO';
+        } else {
+          newTasksList[currentTasks[i].id] = this.homework.tasksCheckingTypes[currentTasks[i].id];
+        }
       }
       this.homework.tasksCheckingTypes = newTasksList;
-      this.dataService.setCurrentTasks(currentTasks);
-      this.dataService.setCurrentHomework(this.homework);
+      this.homework.tasks = tasks;
+      this.tutorDataService.setHomework(this.homework);
+      this.tutorService.saveHomework(this.homework).subscribe(homework => {
+        this.router.navigate(['/tutor/constructor']);
+      });
     }
-    this.router.navigate(['/tutor/constructor']);
   }
-
 }

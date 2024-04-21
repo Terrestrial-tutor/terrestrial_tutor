@@ -3,11 +3,11 @@ package com.example.terrestrial_tutor.entity;
 import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,7 +26,7 @@ public class HomeworkEntity {
     String name;
 
     @NonNull
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "subject")
     SubjectEntity subject;
 
@@ -40,9 +40,9 @@ public class HomeworkEntity {
 
     Long targetTime;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
-    List<PupilEntity> pupils;
+    Set<PupilEntity> pupils;
 
 //    todo
 //    Добавить теоритические материалы
@@ -51,9 +51,16 @@ public class HomeworkEntity {
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<CompletedTaskEntity> completedTaskEntities;
+
+
+    /*
     @ElementCollection
     @CollectionTable(name = "checking_map")
     @MapKeyColumn(name = "key_column")
     Map<TaskEntity, TaskCheckingType> tasksCheckingTypes;
+
+     */
     LocalDate deadLine;
 }
