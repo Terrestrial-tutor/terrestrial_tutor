@@ -31,7 +31,7 @@ export class TaskChoiceComponent implements OnInit {
 
   allTasks: TaskSelect[] = [];
   subject: any;
-  tasksUpload: boolean = false;
+  pageLoaded: boolean = false;
   homeworkLoaded: boolean = false;
   isCollapsed: boolean[] = [];
   homework: Homework | null = null;
@@ -62,7 +62,7 @@ export class TaskChoiceComponent implements OnInit {
         }
         this.isCollapsed.push(true);
       }
-      this.tasksUpload = true;
+      this.pageLoaded = true;
     });
   }
 
@@ -102,7 +102,9 @@ export class TaskChoiceComponent implements OnInit {
       this.homework.tasksCheckingTypes = newTasksList;
       this.homework.tasks = tasks;
       this.tutorDataService.setHomework(this.homework);
+      this.pageLoaded = false;
       this.tutorService.saveHomework(this.homework).subscribe(homework => {
+        this.pageLoaded = true;
         this.router.navigate(['/tutor/constructor']);
       });
     }

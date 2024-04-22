@@ -1,7 +1,7 @@
-<div class="container">
+<div *ngIf="!pageLoaded" class="row m-3 col-12 spinner-border" role="status"></div>
+<div *ngIf="pageLoaded" class="container">
   <button class="row m-3 col-2 btn btn-primary" (click)="submit()">Сохранить</button>
   <div class="row m-1"></div>
-  <div *ngIf="!tasksUpload" class="row m-3 col-12 spinner-border" role="status"></div>
   <div *ngFor="let task of allTasks let i = index">
     <input class="m-2" style="transform:scale(2);" type="checkbox" [(ngModel)]="task.isSelected" />
     <button

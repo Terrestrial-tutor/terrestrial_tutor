@@ -82,8 +82,10 @@ export class HwConstructorComponent implements OnInit {
   }
 
   submit() {
+    this.pageLoaded = false;
     if (this.homework) {
       this.tutorService.saveHomework(this.homework).subscribe(id => {
+        this.pageLoaded = true;
         this.tutorDataService.setHomework(null);
         sessionStorage.removeItem("homeworkId");
         this.router.navigate(['/tutor']);
