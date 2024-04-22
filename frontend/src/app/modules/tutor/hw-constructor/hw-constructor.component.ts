@@ -71,9 +71,7 @@ export class HwConstructorComponent implements OnInit {
 
   addTasks(): void {
     this.saveHomework();
-    this.tutorService.saveHomework(this.homework).subscribe(data => {
-      this.router.navigate(['/tutor/constructor/hw/add/task'])
-    })
+    this.router.navigate(['/tutor/constructor/hw/add/task'])
   }
 
   saveHomework() {
@@ -113,8 +111,6 @@ export class HwConstructorComponent implements OnInit {
 
   addPupils() {
     this.saveHomework();
-    this.tutorService.saveHomework(this.homework).subscribe(data => {
-      this.router.navigate(['tutor/constructor/add/pup']);
-    })
+    this.router.navigate(['tutor/constructor/add/pup']);
   }
 }

@@ -30,7 +30,7 @@ public class PupilEntity implements UserDetails {
     @Column(name = "balance")
     Double balance;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<HomeworkEntity> homeworkList;
 
     @Column(name = "price")

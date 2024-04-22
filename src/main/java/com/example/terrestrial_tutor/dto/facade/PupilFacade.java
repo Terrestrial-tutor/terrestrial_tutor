@@ -16,6 +16,8 @@ public class PupilFacade {
 
     @Autowired
     PupilService pupilService;
+    @Autowired
+    HomeworkFacade homeworkFacade;
 
     public PupilDTO pupilToPupilDTO(PupilEntity pupil) {
         PupilDTO pupilDTO = new PupilDTO();
@@ -23,7 +25,7 @@ public class PupilFacade {
         pupilDTO.setBalance(pupil.getBalance());
         pupilDTO.setHomeworks((pupil.getHomeworkList()
                 .stream()
-                .map(HomeworkEntity::getName)
+                .map(homework -> homeworkFacade.homeworkToHomeworkDTO(homework))
                 .toList()));
         pupilDTO.setPrice(pupil.getPrice());
         pupilDTO.setSubjects((pupil.getSubjects()

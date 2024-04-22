@@ -10,7 +10,7 @@ import java.util.List;
 public class PupilDTO {
     Long id;
     Double balance;
-    List<String> homeworks;
+    List<HomeworkDTO> homeworks;
     Integer price;
     List<String> subjects;
     List<String> tutors;
