@@ -1,7 +1,9 @@
+import { Homework } from "./Homework";
+
 export interface Pupil {
   id: number;
   balance: number;
-  homeworks: string[];
+  homeworks: Homework[];
   price: number;
   subjects: string[];
   tutors: string[];

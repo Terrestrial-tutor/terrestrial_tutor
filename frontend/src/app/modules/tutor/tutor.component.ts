@@ -24,6 +24,7 @@ export class TutorComponent implements OnInit {
 
   currentSubjects: any;
   subscriptions: Subscription[] = [];
+  pageLoaded: boolean =  true;
 
   ngOnInit(): void {
     let homeworkId = Number(sessionStorage.getItem("homeworkId"));
@@ -40,8 +41,10 @@ export class TutorComponent implements OnInit {
   }
 
   addHW(subject: any) {
+    this.pageLoaded = false;
     this.tutorService.createHomework(subject).subscribe(homework => {
       if (homework && homework.id) {
+        this.pageLoaded = true;
         this.tutorDataService.setHomework(homework);
         sessionStorage.setItem('homeworkId', JSON.stringify(homework.id));
         this.router.navigate(['/tutor/constructor']);

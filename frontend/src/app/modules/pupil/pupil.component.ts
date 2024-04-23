@@ -4,6 +4,8 @@ import {Pupil} from "../../models/Pupil";
 import {TokenStorageService} from "../../security/token-storage.service";
 import {SubjectsService} from "../subjects/services/subjects.service";
 import {Subject} from "../../models/Subject";
+import { Router } from '@angular/router';
+import { PupilDataService } from './services/pupil.data.service';
 
 @Component({
   selector: 'app-pupil',
@@ -12,17 +14,19 @@ import {Subject} from "../../models/Subject";
 })
 export class PupilComponent {
 
-  pupil: Pupil | undefined;
+  pupil: Pupil | null = null;
+  currentSubjects: Subject[] | null = null;
 
-  constructor(private pupilService: PupilService,
-              private tokenService: TokenStorageService,
-              private subjectsService: SubjectsService) {}
+  constructor(private router: Router,
+    private pupilDataService: PupilDataService,
+    private pupilService: PupilService,) { }
 
   ngOnInit(): void {
-    // @ts-ignore
-    this.pupilService.getCurrentUser().subscribe(data => {
-      this.pupil = data;
-    });
+    this.pupilService.getCurrentUser().subscribe(pupil => {
+      this.pupil = pupil;
+      this.currentSubjects = pupil.subjects;
+      this.pupilDataService.setSubjects(this.currentSubjects);
+    })
   }
 
 }

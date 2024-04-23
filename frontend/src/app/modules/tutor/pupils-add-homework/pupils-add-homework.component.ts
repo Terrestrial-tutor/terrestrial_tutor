@@ -24,7 +24,7 @@ export class PupilsAddHomeworkComponent implements OnInit {
   allPupils: PupilSelect[] = [];
   currentPupils: number[] | undefined = [];
   homework: Homework | null = null;
-  isNewPupilsLoaded = false;
+  pageLoaded = false;
   filteredPupils: PupilSelect[] = [];
   filter = new UntypedFormControl('');
 
@@ -56,7 +56,7 @@ export class PupilsAddHomeworkComponent implements OnInit {
       }
       this.filteredPupils = this.allPupils;
     }
-    this.isNewPupilsLoaded = true;
+    this.pageLoaded = true;
   }
 
   getSelectedPupilsIds() {
@@ -82,10 +82,12 @@ export class PupilsAddHomeworkComponent implements OnInit {
   }
 
   submit() {
+    this.pageLoaded = false
     if (this.homework) {
       this.homework.pupilIds = this.getSelectedPupilsIds();
       this.tutorDataService.setHomework(this.homework);
       this.tutorService.saveHomework(this.homework).subscribe(() => {
+        this.pageLoaded = true;
         this.router.navigate(['tutor/constructor']);
       });
     }
