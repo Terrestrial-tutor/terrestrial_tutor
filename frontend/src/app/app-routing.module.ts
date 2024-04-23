@@ -11,12 +11,14 @@ import {TutorComponent} from "./modules/tutor/tutor.component";
 import {HwConstructorComponent} from "./modules/tutor/hw-constructor/hw-constructor.component";
 import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
 import {PupilsAddHomeworkComponent} from "./modules/tutor/pupils-add-homework/pupils-add-homework.component";
+import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [AuthGuardService]},
   {path: 'registration', component: RegistrationComponent, canActivate: [AuthGuardService]},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuardService]},
   {path: 'pupil', component: PupilComponent, canActivate: [AuthGuardService]},
+  {path: 'pupil/homeworks', component: HomeworksListComponent, canActivate: [AuthGuardService]},
   {path: 'support', component: SupportComponent, canActivate: [AuthGuardService]},
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
   {path: 'tutor', component: TutorComponent, canActivate: [AuthGuardService]},

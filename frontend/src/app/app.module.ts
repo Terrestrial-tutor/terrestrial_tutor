@@ -27,6 +27,7 @@ import {provideStoreDevtools} from "@ngrx/store-devtools";
 import {provideEffects} from "@ngrx/effects";
 import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
 import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
+import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.compo
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
+    HomeworksListComponent,
     SubjectsComponent,
     SupportComponent,
     TaskComponent,

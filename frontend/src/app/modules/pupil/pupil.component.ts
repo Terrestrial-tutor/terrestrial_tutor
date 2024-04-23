@@ -24,9 +24,15 @@ export class PupilComponent {
   ngOnInit(): void {
     this.pupilService.getCurrentUser().subscribe(pupil => {
       this.pupil = pupil;
+      this.pupilDataService.setPupil(pupil);
       this.currentSubjects = pupil.subjects;
       this.pupilDataService.setSubjects(this.currentSubjects);
     })
+  }
+
+  submit(subject: Subject) {
+    this.pupilDataService.setCurrentSubject(subject);
+    this.router.navigate(['/pupil/homeworks']);
   }
 
 }
