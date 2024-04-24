@@ -5,8 +5,24 @@
       <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
         <h2>{{ task?.name }}</h2>
         <h3>{{ task.taskText }}</h3>
-        <h3 *ngFor="let answer of task.answers">{{ answer }}</h3>
+        <div *ngFor="let answer of task.answers">
+          <div class="form-check form-check-inline align-content-center align-items-center">
+            <input class="form-check-input m-0 align-middle" type="radio" name="{{task.name}}" id="{{answer}}">
+            <label class="form-check-label px-2 align-middle fs-4" for="{{answer}}">{{answer}}</label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+</div>
+
+<div class="form-check form-check-inline justify-content-center">
+  <input type="radio" class="form-check-input align-middle" id="test1">
+  <label class="form-check-label align-items-center mt-2" for="test1">Test1</label>
+</div>
+<div class="d-flex justify-content-center">
+<div class="form-check align-content-center">
+  <input type="radio" class="form-check-input m-0" id="test2">
+  <label class="form-check-label" for="test2">Test2</label>
+</div>
 </div>
