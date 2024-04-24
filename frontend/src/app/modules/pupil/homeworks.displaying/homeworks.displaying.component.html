@@ -1,0 +1,12 @@
+<div class="container-fluid px-3 pb-3">
+  <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+    <h2 class="mx-3 mb-5">Ваши домашиние задания</h2>
+    <div class="d-inline" *ngFor="let task of homework?.tasks">
+      <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+        <h2>{{ task?.name }}</h2>
+        <h3>{{ task.taskText }}</h3>
+        <h3 *ngFor="let answer of task.answers">{{ answer }}</h3>
+      </div>
+    </div>
+  </div>
+</div>

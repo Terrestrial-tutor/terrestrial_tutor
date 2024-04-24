@@ -15,23 +15,31 @@ import { PupilDataService } from './services/pupil.data.service';
 export class PupilComponent {
 
   pupil: Pupil | null = null;
-  currentSubjects: Subject[] | null = null;
+  currentSubjects: string[] | null = null;
 
   constructor(private router: Router,
     private pupilDataService: PupilDataService,
     private pupilService: PupilService,) { }
 
   ngOnInit(): void {
-    this.pupilService.getCurrentUser().subscribe(pupil => {
-      this.pupil = pupil;
-      this.pupilDataService.setPupil(pupil);
-      this.currentSubjects = pupil.subjects;
-      this.pupilDataService.setSubjects(this.currentSubjects);
-    })
+    if (!this.pupilDataService.getPupil()) {
+      this.pupilService.getCurrentUser().subscribe(pupil => {
+        this.pupil = pupil;
+        this.pupilDataService.setPupil(pupil);
+        this.currentSubjects = pupil.subjects;
+      })
+    } else {
+        this.pupil = this.pupilDataService.getPupil();
+        if (this.pupil?.subjects) {
+          this.currentSubjects = this.pupil?.subjects;
+        }
+    }
+    
   }
 
-  submit(subject: Subject) {
+  submit(subject: string) {
     this.pupilDataService.setCurrentSubject(subject);
+    sessionStorage.setItem('currentSubject', JSON.stringify(subject));
     this.router.navigate(['/pupil/homeworks']);
   }
 

@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {EnvironmentService} from "../../../../environments/environment.service";
 import { Subject } from 'src/app/models/Subject';
 import { Pupil } from 'src/app/models/Pupil';
+import { Homework } from 'src/app/models/Homework';
 
 
 @Injectable({
@@ -11,17 +9,9 @@ import { Pupil } from 'src/app/models/Pupil';
 })
 export class PupilDataService {
 
-  private subjects: Subject[] | null = null;
   private pupil: Pupil | null = null;
-  private currentSubject: Subject | null = null;
-
-  public getSubjects(): Subject[]|null {
-    return this.subjects;
-  }
-
-  public setSubjects(subjects: Subject[]|null) {
-    this.subjects = subjects;
-  }
+  private currentSubject: string | null = null;
+  private currentHomework: Homework | null = null;
 
   public getPupil(): Pupil|null {
     return this.pupil;
@@ -31,12 +21,20 @@ export class PupilDataService {
     this.pupil = pupil;
   }
 
-  public getCurrentSubject(): Subject|null {
+  public getCurrentSubject(): string|null {
     return this.currentSubject;
   }
 
-  public setCurrentSubject(currentSubject: Subject|null) {
+  public setCurrentSubject(currentSubject: string|null) {
     this.currentSubject = currentSubject;
+  }
+
+  public getCurrentHomework(): Homework|null {
+    return this.currentHomework;
+  }
+
+  public setCurrentHomework(currentHomework: Homework|null) {
+    this.currentHomework = currentHomework;
   }
 
 }

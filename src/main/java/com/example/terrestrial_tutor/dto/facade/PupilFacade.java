@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,15 +34,12 @@ public class PupilFacade {
                 .stream()
                 .map(homework -> {
                     HomeworkDTO clearedHomework = homeworkFacade.homeworkToHomeworkDTO(homework);
-                    List<TaskDTO> clearedTasks = new ArrayList<>();
+                    List<TaskDTO> tasks = new ArrayList<>();
                     clearedHomework.getTasks().forEach(taskDTO -> {
-                        clearedTasks.add(new TaskDTO(taskDTO.getName(), taskDTO.getChecking(), taskDTO.getAnswerType(),
-                                taskDTO.getTaskText(), null, taskDTO.getSubject(), taskDTO.getLevel1(),
-                                taskDTO.getLevel2(), taskDTO.getTable()));
-                        clearedTasks.get(clearedTasks.size() - 1).setFiles(taskDTO.getFiles());
-
+                        Collections.shuffle(taskDTO.getAnswers());
+                        tasks.add(taskDTO);
                     });
-                    clearedHomework.setTasks(new HashSet<>(clearedTasks));
+                    clearedHomework.setTasks(new HashSet<>(tasks));
                     return clearedHomework;
                 })
                 .toList()));

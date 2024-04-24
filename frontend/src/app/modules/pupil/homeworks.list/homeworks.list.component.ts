@@ -15,7 +15,7 @@ export class HomeworksListComponent {
 
   pupil: Pupil|null = null;
   homeworks: Homework[]|null = null;
-  subject: Subject|null = null;
+  subject: string|null = null;
 
   constructor(private pupilDataService: PupilDataService,
     private pupilService: PupilService,
@@ -24,29 +24,38 @@ export class HomeworksListComponent {
 
   ngOnInit(): void {
     if (!this.pupilDataService.getCurrentSubject()) {
-      this.router.navigate(['/pupil']);
-    } else {
-      this.subject = this.pupilDataService.getCurrentSubject();
-      if (this.pupilDataService.getPupil()) {
-        this.pupil = this.pupilDataService.getPupil();
-        if (this.pupil?.homeworks) {
-          this.homeworks = this.pupil?.homeworks.filter((homework) => {
-            if (homework.subject == this.subject?.subjectName) {
-              return null;
-            }
-            return homework;
-          });
-        }
-      } else {
-        this.pupilService.getCurrentUser().subscribe(pupil => {
-          this.pupil = pupil;
-          this.pupilDataService.setPupil(pupil)
-          if (this.pupil?.homeworks) {
-            this.homeworks = this.pupil?.homeworks;
-          }
-        })
+      let subject = sessionStorage.getItem('currentSubject');
+      if (subject) {
+        this.pupilDataService.setCurrentSubject(JSON.parse(subject));
       }
     }
-    
+    this.subject = this.pupilDataService.getCurrentSubject();
+    if (this.pupilDataService.getPupil()) {
+      this.pupil = this.pupilDataService.getPupil();
+      if (this.pupil?.homeworks) {
+        this.homeworks = this.pupil?.homeworks.filter((homework) => {
+          if (homework.subject == this.subject) {
+            return homework;
+          }
+          return null;
+        });
+      }
+    } else {
+      this.pupilService.getCurrentUser().subscribe(pupil => {
+        this.pupil = pupil;
+        this.pupilDataService.setPupil(pupil)
+        if (this.pupil?.homeworks) {
+          this.homeworks = this.pupil?.homeworks;
+        }
+      })
+    }
+  }
+
+  submit(homework: Homework) {
+    if (homework.id) {
+      sessionStorage.setItem('currentHomework', JSON.stringify(homework.id));
+    }
+    this.pupilDataService.setCurrentHomework(homework);
+    this.router.navigate(['pupil/homework']);
   }
 }
