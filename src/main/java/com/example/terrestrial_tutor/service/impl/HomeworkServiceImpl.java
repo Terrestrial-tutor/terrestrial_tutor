@@ -19,6 +19,8 @@ import javax.persistence.Tuple;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.example.terrestrial_tutor.entity.enums.TaskCheckingType.*;
+
 @Service
 @RequiredArgsConstructor
 public class HomeworkServiceImpl implements HomeworkService {
@@ -64,7 +66,8 @@ public class HomeworkServiceImpl implements HomeworkService {
         tutorService.updateTutor(homework.getTutor());
         return homework;
     }
-    public HomeworkEntity getHomeworkById(Long id){
+
+    public HomeworkEntity getHomeworkById(Long id) {
         return homeworkRepository.findHomeworkEntityById(id);
     }
 
@@ -86,40 +89,42 @@ public class HomeworkServiceImpl implements HomeworkService {
         HomeworkEntity homework = getHomeworkById(idHomework);
         Set<CompletedTaskEntity> completedTaskEntities = homework.getCompletedTaskEntities();
         Map<Long, Boolean> checkingAnswers = new HashMap<>();
-        for (Map.Entry<Long, String> entry : answers.entrySet()){
+        for (Map.Entry<Long, String> entry : answers.entrySet()) {
             CompletedTaskEntity completedTaskEntity = null;
-            for(CompletedTaskEntity completedTaskEntity1 : completedTaskEntities){
-                if(completedTaskEntity1.getTask().getId().equals(entry.getKey())){
+            for (CompletedTaskEntity completedTaskEntity1 : completedTaskEntities) {
+                if (completedTaskEntity1.getTask().getId().equals(entry.getKey())) {
                     completedTaskEntity = completedTaskEntity1;
                     break;
                 }
             }
-            if(completedTaskEntity == null){
+            if (completedTaskEntity == null) {
                 throw new CustomException("There is no such task in homework");
             }
-            switch (completedTaskEntity.getTaskCheckingType()){
-                case AUTO:
-                    switch (taskService.getTaskById(entry.getKey()).getAnswerType()){
-                        case "test":
+            TaskCheckingType check = completedTaskEntity.getTaskCheckingType();
+            switch (check.name()) {
+                case "AUTO":
+                    TaskEntity task = taskService.getTaskById(entry.getKey());
+                    switch (task.getAnswerType()) {
+                        case "Варианты", "Текст или значение", "Код":
                             AnswerEntity answerEntity = new AnswerEntity();
                             answerEntity.setAnswer(entry.getValue());
                             answerEntity.setHomework(homework);
+                            answerEntity.setTask(task);
                             answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                             answerService.addNewAnswer(answerEntity);
-                            if(entry.getValue().equals(taskService.getTaskById(entry.getKey()).getAnswer().get(0))){
+                            if (entry.getValue().equals(taskService.getTaskById(entry.getKey()).getAnswer().get(0))) {
                                 checkingAnswers.put(entry.getKey(), true);
-                            }
-                            else{
+                            } else {
                                 checkingAnswers.put(entry.getKey(), false);
                             }
-                        case "":
-                            //todo сделать другие типы ответов
+                            break;
                         default:
                             throw new CustomException("Task does not have a answer type");
                     }
-                case INSTANCE:
+                    break;
+                case "INSTANCE":
                     //todo сделать другие типы проверок
-                case MANUALLY:
+                case "MANUALLY":
                 default:
                     throw new CustomException("Task does not have a review type");
             }
@@ -133,7 +138,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 //        return homeworkRepository.findHomeworkEntitiesByPupils(new PupilEntity[]{pupil});
 //    }
 
-    public List<HomeworkEntity> getAllHomeworksTutor(){
+    public List<HomeworkEntity> getAllHomeworksTutor() {
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
     }

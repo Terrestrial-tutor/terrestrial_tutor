@@ -5,6 +5,9 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
+/** Сущность ответа ученика на задание
+ */
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +27,10 @@ public class AnswerEntity {
     @ManyToOne()
     @JoinColumn(name = "homework")
     HomeworkEntity homework;
+
+    @ManyToOne
+    @JoinColumn(name ="task")
+    TaskEntity task;
 
     @ManyToOne()
     @JoinColumn(name = "pupil")
