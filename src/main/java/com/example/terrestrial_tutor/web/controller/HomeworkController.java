@@ -2,6 +2,7 @@ package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.TerrestrialTutorApplication;
 import com.example.terrestrial_tutor.annotations.Api;
+import com.example.terrestrial_tutor.dto.HomeworkAnswerDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
 import com.example.terrestrial_tutor.dto.facade.HomeworkFacade;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -87,6 +89,13 @@ public class HomeworkController {
         SubjectEntity currentSubject = subjectService.findSubjectByName(selectionDTO.getSubject());
         List<TaskEntity> result = taskService.getSelectionTask(selectionDTO.getChoices(), currentSubject);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/pupil/homework/{id}")
+    public ResponseEntity<HomeworkAnswerDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
+                                                                @PathVariable Long id) {
+        HomeworkAnswerDTO homeworkAnswerDTO = homeworkService.checkingAnswers(answers, id);
+        return new ResponseEntity<>(homeworkAnswerDTO, HttpStatus.OK);
     }
 
     @GetMapping("/homework/{id}")

@@ -53,7 +53,7 @@ public class TaskEntity {
     @CollectionTable(name = "answers_array", joinColumns = @JoinColumn(name = "entity_id"))
     @Column(name = "answers")
     List<String> answer;
-
+    //todo проверить инициализацию
     @ManyToOne()
     @JoinColumn(name = "subject")
     SubjectEntity subject;

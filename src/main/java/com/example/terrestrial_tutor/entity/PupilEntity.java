@@ -49,6 +49,9 @@ public class PupilEntity implements UserDetails {
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
     List<PaymentEntity> payments= new ArrayList<>();
 
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    List<AnswerEntity> answers = new ArrayList<>();
+
     @NonNull
     @Column(name = "username")
     String username;

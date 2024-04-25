@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -54,6 +55,8 @@ public class HomeworkEntity {
     @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     Set<CompletedTaskEntity> completedTaskEntities;
 
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<AnswerEntity> answerEntities;
 
     /*
     @ElementCollection
