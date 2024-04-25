@@ -31,7 +31,16 @@ export class HomeworksDisplayingComponent {
     this.pupil = this.pupilDataService.getPupil();
     if (this.pupil) {
       this.homework = this.pupilDataService.getCurrentHomework();
-      this.pageLoaded = true;
+      if (this.homework) {
+        for (let task of this.homework?.tasks) {
+          let key = task.id.toString();
+          this.tasksAnswers?.addControl(
+            key,
+            this.fb.control('', [])
+          );
+        }
+        this.pageLoaded = true;
+      }
     } else {
       this.pupilService.getCurrentUser().subscribe(pupil => {
         this.pupil = pupil;
