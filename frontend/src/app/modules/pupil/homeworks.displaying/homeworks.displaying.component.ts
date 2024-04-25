@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PupilDataService } from '../services/pupil.data.service';
 import { Router } from '@angular/router';
 import { PupilService } from '../services/pupil.service';
 import { Pupil } from 'src/app/models/Pupil';
 import { Homework } from 'src/app/models/Homework';
 import { TutorService } from '../../tutor/services/tutor.service';
+import {FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
     selector: 'app-homeworks.displaying',
@@ -16,17 +16,22 @@ export class HomeworksDisplayingComponent {
 
   pupil: Pupil | null = null;
   homework: Homework | null = null;
+  // @ts-ignore
+  tasksAnswers: FormGroup = this.fb.group({});
+  pageLoaded = false;
 
   constructor(private pupilDataService: PupilDataService,
       private pupilService: PupilService,
       private homeworkService: TutorService,
       private router: Router,
+      private fb: FormBuilder
     ) {}
 
   ngOnInit(): void {
     this.pupil = this.pupilDataService.getPupil();
     if (this.pupil) {
       this.homework = this.pupilDataService.getCurrentHomework();
+      this.pageLoaded = true;
     } else {
       this.pupilService.getCurrentUser().subscribe(pupil => {
         this.pupil = pupil;
@@ -34,13 +39,20 @@ export class HomeworksDisplayingComponent {
         let homework = this.pupil?.homeworks.find(homework => {
           return homework.id == Number(sessionStorage.getItem('currentHomework'));
         });
-        
+
         if (homework) {
           this.pupilDataService.setCurrentHomework(homework);
           this.homework = homework;
+          for (let task of this.homework?.tasks) {
+            let key = task.id.toString();
+            this.tasksAnswers?.addControl(
+              key,
+              this.fb.control('', [])
+            );
+          }
+          this.pageLoaded = true;
         }
       });
     }
   }
-
 }

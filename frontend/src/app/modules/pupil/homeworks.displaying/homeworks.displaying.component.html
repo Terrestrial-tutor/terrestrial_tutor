@@ -1,5 +1,5 @@
 <div class="container-fluid px-3 pb-3">
-  <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+  <div *ngIf="pageLoaded" [formGroup]="tasksAnswers" class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
     <h2 class="mx-3 mb-5">Ваши домашиние задания</h2>
     <div class="d-inline" *ngFor="let task of homework?.tasks">
       <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
@@ -7,22 +7,11 @@
         <h3>{{ task.taskText }}</h3>
         <div *ngFor="let answer of task.answers">
           <div class="form-check form-check-inline align-content-center align-items-center">
-            <input class="form-check-input m-0 align-middle" type="radio" name="{{task.name}}" id="{{answer}}">
+            <input class="form-check-input m-0 align-middle" type="radio" name="{{task.id.toString()}}"  value="{{answer}}" formControlName = "{{task.id.toString()}}" id="{{answer}}">
             <label class="form-check-label px-2 align-middle fs-4" for="{{answer}}">{{answer}}</label>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="form-check form-check-inline justify-content-center">
-  <input type="radio" class="form-check-input align-middle" id="test1">
-  <label class="form-check-label align-items-center mt-2" for="test1">Test1</label>
-</div>
-<div class="d-flex justify-content-center">
-<div class="form-check align-content-center">
-  <input type="radio" class="form-check-input m-0" id="test2">
-  <label class="form-check-label" for="test2">Test2</label>
-</div>
 </div>
