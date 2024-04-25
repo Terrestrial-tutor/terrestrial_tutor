@@ -55,4 +55,18 @@ export class HomeworksDisplayingComponent {
       });
     }
   }
+
+  createCheckRequest() {
+    let answers: {[key: number]: string} = {};
+    for(let control in this.tasksAnswers.controls) {
+      answers[parseInt(control)] = this.tasksAnswers.controls[control].value;
+    }
+    return answers;
+  }
+
+  submit() {
+    if (this.homework?.id) {
+     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe();
+    }
+  }
 }

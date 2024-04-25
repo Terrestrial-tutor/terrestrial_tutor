@@ -26,4 +26,8 @@ export class PupilService {
     return this.http.get(this.PUPIL_API + 'all');
   }
 
+  sendAnswers(answers: {[key: number]: string}, homeworkId: number) {
+    return this.http.post(this.PUPIL_API + `homework/${homeworkId}`, answers);
+  }
+
 }
