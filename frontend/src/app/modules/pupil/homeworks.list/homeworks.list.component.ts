@@ -4,7 +4,6 @@ import { Pupil } from 'src/app/models/Pupil';
 import { PupilService } from '../services/pupil.service';
 import { Homework } from 'src/app/models/Homework';
 import { Router } from '@angular/router';
-import { Subject } from 'src/app/models/Subject';
 
 @Component({
   selector: 'app-homeworks.list',
@@ -23,6 +22,8 @@ export class HomeworksListComponent {
   ) {}
 
   ngOnInit(): void {
+    sessionStorage.removeItem('currentHomework');
+    this.pupilDataService.setCurrentHomework(null);
     if (!this.pupilDataService.getCurrentSubject()) {
       let subject = sessionStorage.getItem('currentSubject');
       if (subject) {
