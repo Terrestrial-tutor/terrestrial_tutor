@@ -4,16 +4,11 @@ import {Router} from "@angular/router";
 import {PupilDataService} from "../services/pupil.data.service";
 import {Pupil} from "../../../models/Pupil";
 import {HomeworkAnswers} from "../../../models/HomeworkAnswers";
+import {Task} from "../../../models/Task";
 import {JsonPipe, KeyValuePipe, NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-pupil.homework.statistic',
-  standalone: true,
-  imports: [
-    NgForOf,
-    KeyValuePipe,
-    JsonPipe
-  ],
   templateUrl: './pupil.homework.statistic.component.html',
   styleUrl: './pupil.homework.statistic.component.css'
 })
@@ -21,8 +16,8 @@ export class PupilHomeworkStatisticComponent {
 
   currentHomework: number | null = null;
   pupil: Pupil | null = null;
-  // @ts-ignore
-  homeworkAnswers: HomeworkAnswers;
+  homeworkAnswers: HomeworkAnswers | null = null;
+  tasks: Task[] | null = null;
 
   constructor(private pupilService: PupilService,
               private router: Router,
@@ -56,10 +51,27 @@ export class PupilHomeworkStatisticComponent {
     if (this.pupil) {
       let pupilId = this.pupil.id;
       if (this.currentHomework && pupilId) {
+        this.pupil.homeworks.forEach(homework => {
+          if (homework.id == this.currentHomework) {
+            this.tasks = homework.tasks;
+          }
+        })
         this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId).subscribe(answers =>
           this.homeworkAnswers = answers);
       }
     }
+  }
+
+  getTaskForPrint(id: string) {
+    let taskId = parseInt(id);
+    if (this.tasks) {
+      for (let task of this.tasks) {
+        if (task.id == taskId) {
+          return task;
+        }
+      }
+    }
+    return null;
   }
 
 }

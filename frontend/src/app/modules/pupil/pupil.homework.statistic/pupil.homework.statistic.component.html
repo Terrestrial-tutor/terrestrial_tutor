@@ -1,9 +1,12 @@
 <div class="container-fluid px-3 pb-3">
   <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
     <h2 class="mx-3 mb-5">Ваши домашиние задания</h2>
-    <div class="d-inline" *ngFor="let task of homeworkAnswers | json">
+    <div class="d-inline m-3" *ngFor="let task of homeworkAnswers | keyvalue">
       {{
-        task['22']
+        task.key
+      }}
+      {{
+        task.value['check']
       }}
     </div>
   </div>

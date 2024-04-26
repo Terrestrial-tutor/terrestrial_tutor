@@ -29,6 +29,7 @@ import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
 import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
 import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
 import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displaying/homeworks.displaying.component';
+import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.statistic/pupil.homework.statistic.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displayi
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
+    PupilHomeworkStatisticComponent,
     HomeworksListComponent,
     HomeworksDisplayingComponent,
     SubjectsComponent,
