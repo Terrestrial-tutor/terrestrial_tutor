@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import {PupilService} from "./services/pupil.service";
 import {Pupil} from "../../models/Pupil";
-import {TokenStorageService} from "../../security/token-storage.service";
-import {SubjectsService} from "../subjects/services/subjects.service";
-import {Subject} from "../../models/Subject";
 import { Router } from '@angular/router';
 import { PupilDataService } from './services/pupil.data.service';
 
@@ -22,6 +19,8 @@ export class PupilComponent {
     private pupilService: PupilService,) { }
 
   ngOnInit(): void {
+    sessionStorage.removeItem('currentSubject');
+    this.pupilDataService.setCurrentSubject(null);
     if (!this.pupilDataService.getPupil()) {
       this.pupilService.getCurrentUser().subscribe(pupil => {
         this.pupil = pupil;
@@ -34,7 +33,7 @@ export class PupilComponent {
           this.currentSubjects = this.pupil?.subjects;
         }
     }
-    
+
   }
 
   submit(subject: string) {

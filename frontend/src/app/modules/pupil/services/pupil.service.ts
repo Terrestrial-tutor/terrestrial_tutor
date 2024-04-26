@@ -30,4 +30,12 @@ export class PupilService {
     return this.http.post(this.PUPIL_API + `homework/${homeworkId}`, answers);
   }
 
+  getPupilById(id: string | null): Observable<any> {
+    return this.http.get(this.PUPIL_API + `${id}`);
+  }
+
+  getHomeworkAnswers(homeworkId: number | null, idPupil: number | null): Observable<any> {
+    return this.http.get(this.PUPIL_API + `homework/${homeworkId}/answers/${idPupil}`);
+  }
+
 }

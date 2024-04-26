@@ -13,6 +13,7 @@ import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.compo
 import {PupilsAddHomeworkComponent} from "./modules/tutor/pupils-add-homework/pupils-add-homework.component";
 import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
 import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displaying/homeworks.displaying.component';
+import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.statistic/pupil.homework.statistic.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent, canActivate: [AuthGuardService]},
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'pupil', component: PupilComponent, canActivate: [AuthGuardService]},
   {path: 'pupil/homeworks', component: HomeworksListComponent, canActivate: [AuthGuardService]},
   {path: 'pupil/homework', component: HomeworksDisplayingComponent, canActivate: [AuthGuardService]},
+  {path: 'pupil/homework/statistic', component: PupilHomeworkStatisticComponent, canActivate: [AuthGuardService]},
   {path: 'support', component: SupportComponent, canActivate: [AuthGuardService]},
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
   {path: 'tutor', component: TutorComponent, canActivate: [AuthGuardService]},

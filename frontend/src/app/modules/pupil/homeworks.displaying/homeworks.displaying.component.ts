@@ -75,7 +75,8 @@ export class HomeworksDisplayingComponent {
 
   submit() {
     if (this.homework?.id) {
-     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe(test => console.log(test));
+     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe(() => 
+      this.router.navigate(['/pupil/homework/statistic']));
     }
   }
 }
