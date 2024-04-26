@@ -17,5 +17,5 @@ public interface HomeworkService {
     HomeworkEntity getHomeworkById(Long id);
     void deleteHomeworkById(Long id);
     HomeworkEntity save(HomeworkEntity homework);
-    HomeworkAnswersDTO checkingAnswers(Map<Long, String> answers, Long idHomework);
+    HomeworkAnswersDTO checkingAndSaveAnswers(Map<Long, String> answers, Long idHomework);
 }

@@ -53,6 +53,11 @@ public class PupilController {
         return new ResponseEntity<>(pupilService.findPupilById(id), HttpStatus.OK);
     }
 
+    @GetMapping("/pupil/{id}")
+    public ResponseEntity<PupilEntity> getPupilById(@PathVariable Long id) {
+        return new ResponseEntity<>(pupilService.findPupilById(id), HttpStatus.OK);
+    }
+
     @GetMapping("/pupil")
     public ResponseEntity<PupilDTO> getCurrentPupil(Principal principal) {
         PupilDTO pupil = pupilFacade.pupilToPupilDTO(pupilService.getCurrentPupil(principal));

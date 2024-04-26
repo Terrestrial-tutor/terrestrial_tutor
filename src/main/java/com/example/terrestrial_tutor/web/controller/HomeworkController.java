@@ -92,10 +92,10 @@ public class HomeworkController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/pupil/homework/{id}")
+    @PostMapping("/pupil/homework/{homeworkId}")
     public ResponseEntity<HomeworkAnswersDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
-                                                                 @PathVariable Long id) {
-        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.checkingAnswers(answers, id);
+                                                                 @PathVariable Long homeworkId) {
+        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.checkingAndSaveAnswers(answers, homeworkId);
         return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 

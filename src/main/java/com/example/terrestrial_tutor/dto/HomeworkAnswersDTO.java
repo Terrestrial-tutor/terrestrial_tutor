@@ -20,6 +20,7 @@ public class HomeworkAnswersDTO {
     public static class DetailsAnswer{
         Boolean check;
         String rightAnswer;
+        //todo ссылка на ютуб
     }
 
 }

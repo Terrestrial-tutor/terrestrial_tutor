@@ -8,8 +8,10 @@ import com.example.terrestrial_tutor.repository.*;
 import com.example.terrestrial_tutor.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,7 +90,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     }
 
-    public HomeworkAnswersDTO checkingAnswers(Map<Long, String> answers, Long idHomework) {
+    public HomeworkAnswersDTO checkingAndSaveAnswers(Map<Long, String> answers, Long idHomework) {
         HomeworkEntity homework = getHomeworkById(idHomework);
         Set<CompletedTaskEntity> completedTaskEntities = homework.getCompletedTaskEntities();
         Map<Long, HomeworkAnswersDTO.DetailsAnswer> checkingAnswers = new HashMap<>();
@@ -104,9 +106,10 @@ public class HomeworkServiceImpl implements HomeworkService {
                 throw new CustomException("There is no such task in homework");
             }
             TaskCheckingType check = completedTaskEntity.getTaskCheckingType();
+            TaskEntity task;
             switch (check.name()) {
                 case "AUTO":
-                    TaskEntity task = taskService.getTaskById(entry.getKey());
+                    task = taskService.getTaskById(entry.getKey());
                     switch (task.getAnswerType()) {
                         case "Варианты", "Текст или значение", "Код":
                             AnswerEntity answerEntity = new AnswerEntity();
@@ -115,6 +118,24 @@ public class HomeworkServiceImpl implements HomeworkService {
                             answerEntity.setTask(task);
                             answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                             answerService.addNewAnswer(answerEntity);
+                            break;
+                        default:
+                            throw new CustomException("Task does not have a answer type");
+                    }
+                    break;
+                case "INSTANCE":
+                    task = taskService.getTaskById(entry.getKey());
+                    switch (task.getAnswerType()) {
+                        case "Варианты", "Текст или значение", "Код":
+                            if(answerRepository.findAnswerEntitiesByPupilAndHomeworkAndTask((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
+                                    homework, task).isEmpty()) {
+                                AnswerEntity answerEntity = new AnswerEntity();
+                                answerEntity.setAnswer(entry.getValue());
+                                answerEntity.setHomework(homework);
+                                answerEntity.setTask(task);
+                                answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+                                answerService.addNewAnswer(answerEntity);
+                            }
                             String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
                             if (entry.getValue().equals(rightAnswer)) {
                                 checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(true, rightAnswer));
@@ -126,7 +147,6 @@ public class HomeworkServiceImpl implements HomeworkService {
                             throw new CustomException("Task does not have a answer type");
                     }
                     break;
-                case "INSTANCE":
                     //todo сделать другие типы проверок
                 case "MANUALLY":
                 default:
