@@ -1,25 +1,18 @@
 package com.example.terrestrial_tutor.service.impl;
 
-import com.example.terrestrial_tutor.dto.HomeworkAnswerDTO;
+import com.example.terrestrial_tutor.dto.HomeworkAnswersDTO;
 import com.example.terrestrial_tutor.entity.*;
-import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import com.example.terrestrial_tutor.exceptions.CustomException;
-import com.example.terrestrial_tutor.repository.CompletedTaskRepository;
-import com.example.terrestrial_tutor.repository.HomeworkRepository;
-import com.example.terrestrial_tutor.repository.PupilRepository;
-import com.example.terrestrial_tutor.repository.TaskRepository;
+import com.example.terrestrial_tutor.repository.*;
 import com.example.terrestrial_tutor.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Tuple;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.example.terrestrial_tutor.entity.enums.TaskCheckingType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +44,9 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Autowired
     CompletedTaskServiceImpl completedTaskService;
+
+    @Autowired
+    AnswerRepository answerRepository;
 
     public HomeworkEntity saveHomework(HomeworkEntity homework) {
         if (!homework.getTutor().getHomeworkList().contains(homework)) {
@@ -85,10 +81,17 @@ public class HomeworkServiceImpl implements HomeworkService {
         return homeworkRepository.save(homework);
     }
 
-    public HomeworkAnswerDTO checkingAnswers(Map<Long, String> answers, Long idHomework) {
+    public List<AnswerEntity> getPupilAnswers(Long homeworkId, Long pupilId){
+        PupilEntity pupilEntity = pupilService.findPupilById(pupilId);
+        HomeworkEntity homework = getHomeworkById(homeworkId);
+        return answerRepository.findAnswerEntitiesByPupilAndHomework(pupilEntity, homework);
+
+    }
+
+    public HomeworkAnswersDTO checkingAnswers(Map<Long, String> answers, Long idHomework) {
         HomeworkEntity homework = getHomeworkById(idHomework);
         Set<CompletedTaskEntity> completedTaskEntities = homework.getCompletedTaskEntities();
-        Map<Long, Boolean> checkingAnswers = new HashMap<>();
+        Map<Long, HomeworkAnswersDTO.DetailsAnswer> checkingAnswers = new HashMap<>();
         for (Map.Entry<Long, String> entry : answers.entrySet()) {
             CompletedTaskEntity completedTaskEntity = null;
             for (CompletedTaskEntity completedTaskEntity1 : completedTaskEntities) {
@@ -112,10 +115,11 @@ public class HomeworkServiceImpl implements HomeworkService {
                             answerEntity.setTask(task);
                             answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                             answerService.addNewAnswer(answerEntity);
-                            if (entry.getValue().equals(taskService.getTaskById(entry.getKey()).getAnswer().get(0))) {
-                                checkingAnswers.put(entry.getKey(), true);
+                            String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
+                            if (entry.getValue().equals(rightAnswer)) {
+                                checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(true, rightAnswer));
                             } else {
-                                checkingAnswers.put(entry.getKey(), false);
+                                checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(false, rightAnswer));
                             }
                             break;
                         default:
@@ -129,9 +133,9 @@ public class HomeworkServiceImpl implements HomeworkService {
                     throw new CustomException("Task does not have a review type");
             }
         }
-        HomeworkAnswerDTO homeworkAnswerDTO = new HomeworkAnswerDTO();
-        homeworkAnswerDTO.setCheckingAnswers(checkingAnswers);
-        return homeworkAnswerDTO;
+        HomeworkAnswersDTO homeworkAnswersDTO = new HomeworkAnswersDTO();
+        homeworkAnswersDTO.setCheckingAnswers(checkingAnswers);
+        return homeworkAnswersDTO;
     }
 //    public List<HomeworkEntity> getAllHomeworksPupil(){
 //        PupilEntity pupil = (PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

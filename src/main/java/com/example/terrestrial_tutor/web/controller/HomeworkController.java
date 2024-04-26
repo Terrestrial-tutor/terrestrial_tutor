@@ -2,9 +2,10 @@ package com.example.terrestrial_tutor.web.controller;
 
 import com.example.terrestrial_tutor.TerrestrialTutorApplication;
 import com.example.terrestrial_tutor.annotations.Api;
-import com.example.terrestrial_tutor.dto.HomeworkAnswerDTO;
+import com.example.terrestrial_tutor.dto.HomeworkAnswersDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
 import com.example.terrestrial_tutor.dto.facade.HomeworkFacade;
+import com.example.terrestrial_tutor.entity.AnswerEntity;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
@@ -92,16 +93,22 @@ public class HomeworkController {
     }
 
     @PostMapping("/pupil/homework/{id}")
-    public ResponseEntity<HomeworkAnswerDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
-                                                                @PathVariable Long id) {
-        HomeworkAnswerDTO homeworkAnswerDTO = homeworkService.checkingAnswers(answers, id);
-        return new ResponseEntity<>(homeworkAnswerDTO, HttpStatus.OK);
+    public ResponseEntity<HomeworkAnswersDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
+                                                                 @PathVariable Long id) {
+        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.checkingAnswers(answers, id);
+        return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 
     @GetMapping("/homework/{id}")
     public ResponseEntity<HomeworkDTO> getHomeworkById(@PathVariable Long id) {
         HomeworkEntity homework = homeworkService.getHomeworkById(id);
         return new ResponseEntity<>(homeworkFacade.homeworkToHomeworkDTO(homework), HttpStatus.OK);
+    }
+
+    @GetMapping("/pupil/homework/{id}/answers/{idPupil}")
+    public ResponseEntity<List<AnswerEntity>> getHomeworkAnswers(@PathVariable Long id, @PathVariable Long idPupil){
+        List<AnswerEntity> answerEntities = homeworkService.getPupilAnswers(id, idPupil);
+        return new ResponseEntity<>(answerEntities, HttpStatus.OK);
     }
 
     @DeleteMapping("/homework/delete/{id}")

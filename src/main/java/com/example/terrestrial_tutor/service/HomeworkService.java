@@ -1,6 +1,7 @@
 package com.example.terrestrial_tutor.service;
 
-import com.example.terrestrial_tutor.dto.HomeworkAnswerDTO;
+import com.example.terrestrial_tutor.dto.HomeworkAnswersDTO;
+import com.example.terrestrial_tutor.entity.AnswerEntity;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
 
 import java.util.List;
@@ -12,8 +13,9 @@ public interface HomeworkService {
 
 //    List<HomeworkEntity> getAllHomeworksPupil();
     List<HomeworkEntity> getAllHomeworksTutor();
+    List<AnswerEntity> getPupilAnswers(Long homeworkId, Long pupilId);
     HomeworkEntity getHomeworkById(Long id);
     void deleteHomeworkById(Long id);
     HomeworkEntity save(HomeworkEntity homework);
-    HomeworkAnswerDTO checkingAnswers(Map<Long, String> answers, Long idHomework);
+    HomeworkAnswersDTO checkingAnswers(Map<Long, String> answers, Long idHomework);
 }
