@@ -68,6 +68,9 @@ public class TaskEntity {
     @Column(name = "level2")
     String level2;
 
+   // @Column(name = "link_to_solution")
+   // String linkToSolution;
+
     @NonNull
     @Column(name = "tables")
     String table;

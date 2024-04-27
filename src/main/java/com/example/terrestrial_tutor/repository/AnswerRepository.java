@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
     List<AnswerEntity> findAnswerEntitiesByPupilAndHomework(PupilEntity pupil, HomeworkEntity homework);
+    List<AnswerEntity> findAnswerEntitiesByPupilAndHomeworkAndAttemptNumber(PupilEntity pupil, HomeworkEntity homework, int number);
     List<AnswerEntity> findAnswerEntitiesByPupilAndHomeworkAndTask(PupilEntity pupil, HomeworkEntity homework, TaskEntity task);
 }

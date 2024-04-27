@@ -82,6 +82,7 @@ public class HomeworkController {
 
     /**
      * Контроллер для отдачи случайной выборки заданий по заданным данным и формированием в дз
+     *
      * @param selectionDTO - входные данные, см. "SelectionDTO"
      * @return лист выборки
      */
@@ -105,9 +106,29 @@ public class HomeworkController {
         return new ResponseEntity<>(homeworkFacade.homeworkToHomeworkDTO(homework), HttpStatus.OK);
     }
 
-    @GetMapping("/pupil/homework/{id}/answers/{idPupil}")
-    public ResponseEntity<HomeworkAnswersDTO> getHomeworkAnswers(@PathVariable Long id, @PathVariable Long idPupil){
-        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.getPupilAnswers(id, idPupil);
+    /**
+     * Контроллер для отдачи списка выполненных дз ученика
+     *
+     * @param id - id ученика
+     * @return список выполненных дз ученика
+     */
+    @GetMapping("/pupil/{id}/homework/completed")
+    public ResponseEntity<Map<HomeworkDTO, Integer>> getCompletedHomework(@PathVariable Long id) {
+        return new ResponseEntity<>(homeworkService.getCompletedHomework(id), HttpStatus.OK);
+    }
+
+    /**
+     * Контроллер для отдачи результатов дз по определенной попытке
+     *
+     * @param id      - id дз
+     * @param idPupil - id ученика
+     * @param attempt - номер попытки
+     * @return - результаты дз по определенной попытке
+     */
+    @GetMapping("/pupil/homework/{id}/answers/{idPupil}/{attempt}")
+    public ResponseEntity<HomeworkAnswersDTO> getHomeworkAnswers(@PathVariable Long id, @PathVariable Long idPupil,
+                                                                 @PathVariable int attempt) {
+        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.getPupilAnswers(id, idPupil, attempt);
         return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 

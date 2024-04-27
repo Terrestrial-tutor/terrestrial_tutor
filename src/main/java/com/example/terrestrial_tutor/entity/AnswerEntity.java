@@ -35,4 +35,7 @@ public class AnswerEntity {
     @ManyToOne()
     @JoinColumn(name = "pupil")
     PupilEntity pupil;
+
+    @Column(name = "attempt_number")
+    Integer attemptNumber;
 }

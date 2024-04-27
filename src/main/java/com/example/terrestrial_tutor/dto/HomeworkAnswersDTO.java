@@ -23,7 +23,6 @@ public class HomeworkAnswersDTO {
     public static class DetailsAnswer{
         String pupilAnswer;
         String rightAnswer;
-        //todo ссылка на ютуб
     }
 
 }
