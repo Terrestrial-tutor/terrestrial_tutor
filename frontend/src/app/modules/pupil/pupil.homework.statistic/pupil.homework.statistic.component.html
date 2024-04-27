@@ -1,13 +1,23 @@
-<div class="container-fluid px-3 pb-3">
+<div *ngIf="homeworkAnswers" class="container-fluid px-3 pb-3">
   <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
-    <h2 class="mx-3 mb-5">Ваши домашиние задания</h2>
-    <div class="d-inline m-3" *ngFor="let task of homeworkAnswers | keyvalue">
-      {{
-        task.key
-      }}
-      {{
-        task.value['check']
-      }}
+    <div class="row">
+      <h2 class="mx-3 mb-1 col-4">Ваша статистика</h2>
+      <div class="text-end">
+        <button type="button" class="btn btn-primary col-3" (click)="submit()">На главную</button>
+      </div>
+    </div>
+    <h2 class="mx-3 mb-5">Ваш процент выполнения: {{ getResultProgress() }}%</h2>
+    <div class="d-inline m-3" *ngFor="let task of checkingAnswers | keyvalue">
+      <h2>{{ getTaskForPrint(task.key)?.name }}</h2>
+
+      <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+        <h3>{{ getTaskForPrint(task.key)?.taskText }}</h3>
+        <h3 class="row"
+            style="background-color: {{getAnswerStatus(getAnswersStatistic(task.value, task.key).pupilAnswer,getAnswersStatistic(task.value, task.key).rightAnswer)}}">
+          Ответ ученика: {{ getAnswersStatistic(task.value, task.key).pupilAnswer }}
+        </h3>
+        <h3>Верный ответ: {{ getAnswersStatistic(task.value, task.key).rightAnswer }}</h3>
+      </div>
     </div>
   </div>
 </div>

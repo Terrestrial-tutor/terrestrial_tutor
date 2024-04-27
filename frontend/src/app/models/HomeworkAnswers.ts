@@ -3,6 +3,6 @@ export interface HomeworkAnswers {
 }
 
 export class DetailsAnswer {
-  check: boolean = false;
+  pupilAnswer: string | null = null;
   rightAnswer: string = "";
 }
