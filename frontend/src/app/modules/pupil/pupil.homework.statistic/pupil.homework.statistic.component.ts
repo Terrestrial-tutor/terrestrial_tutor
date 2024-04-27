@@ -60,12 +60,15 @@ export class PupilHomeworkStatisticComponent {
             this.tasks = homework.tasks;
           }
         })
-        this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId).subscribe(answers => {
-          this.homeworkAnswers = answers;
-          if (answers.checkingAnswers) {
-            this.checkingAnswers = answers.checkingAnswers;
-          }
-        });
+        let attempt = sessionStorage.getItem('tryNumber');
+        if (attempt) {
+          this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId, parseInt(attempt)).subscribe(answers => {
+            this.homeworkAnswers = answers;
+            if (answers.checkingAnswers) {
+              this.checkingAnswers = answers.checkingAnswers;
+            }
+          });
+        }
 
       }
     }

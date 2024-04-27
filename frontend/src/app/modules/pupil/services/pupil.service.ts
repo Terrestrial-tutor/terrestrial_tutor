@@ -34,8 +34,12 @@ export class PupilService {
     return this.http.get(this.PUPIL_API + `${id}`);
   }
 
-  getHomeworkAnswers(homeworkId: number | null, idPupil: number | null): Observable<any> {
-    return this.http.get(this.PUPIL_API + `homework/${homeworkId}/answers/${idPupil}`);
+  getHomeworkAnswers(homeworkId: number | null, idPupil: number | null, attempt: number | null): Observable<any> {
+    return this.http.get(this.PUPIL_API + `homework/${homeworkId}/answers/${idPupil}/${attempt}`);
+  }
+
+  getCompletedHomeworks(pupilId: number) {
+    return this.http.get(this.PUPIL_API + `${pupilId}/homework/completed`);
   }
 
 }

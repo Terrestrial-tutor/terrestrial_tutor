@@ -1,3 +1,5 @@
+import {Homework} from "./Homework";
+
 export interface HomeworkAnswers {
   checkingAnswers: {[key: string]: DetailsAnswer};
 }

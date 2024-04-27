@@ -75,8 +75,10 @@ export class HomeworksDisplayingComponent {
 
   submit() {
     if (this.homework?.id) {
-     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe(() => 
-      this.router.navigate(['/pupil/homework/statistic']));
+     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe(() => {
+       sessionStorage.setItem('tryNumber', '1');
+       this.router.navigate(['/pupil/homework/statistic']);
+     });
     }
   }
 }

@@ -23,6 +23,7 @@ const routes: Routes = [
   {path: 'pupil/homeworks', component: HomeworksListComponent, canActivate: [AuthGuardService]},
   {path: 'pupil/homework', component: HomeworksDisplayingComponent, canActivate: [AuthGuardService]},
   {path: 'pupil/homework/statistic', component: PupilHomeworkStatisticComponent, canActivate: [AuthGuardService]},
+  {path: 'tutor/homework/statistic', component: PupilHomeworkStatisticComponent, canActivate: [AuthGuardService]},
   {path: 'support', component: SupportComponent, canActivate: [AuthGuardService]},
   {path: 'support/task/add', component: TaskComponent, canActivate: [AuthGuardService]},
   {path: 'tutor', component: TutorComponent, canActivate: [AuthGuardService]},

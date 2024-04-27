@@ -106,16 +106,16 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     }
 
-    public Map<HomeworkDTO, Integer> getCompletedHomework(Long id) {
+    public Map<Long, Integer> getCompletedHomework(Long id) {
         PupilEntity pupil = pupilService.findPupilById(id);
         Set<PupilEntity> pupilEntities = new HashSet<>();
         pupilEntities.add(pupil);
-        List<HomeworkEntity> homeworkEntities = homeworkRepository.findHomeworkEntitiesByPupils(pupilEntities);
-        Map<HomeworkDTO, Integer> result = new HashMap<>();
+        List<HomeworkEntity> homeworkEntities = homeworkRepository.findHomeworkEntitiesByPupilsIn(pupilEntities);
+        Map<Long, Integer> result = new HashMap<>();
         for (HomeworkEntity he : homeworkEntities) {
             int attempts = getLastAttempt(he, pupil);
             if (attempts > 0) {
-                result.put(homeworkFacade.homeworkToHomeworkDTO(he), attempts);
+                result.put(he.getId(), attempts);
             }
         }
         return result;

@@ -13,5 +13,5 @@ public interface HomeworkRepository extends JpaRepository<HomeworkEntity, Long> 
 //    List<HomeworkEntity> findHomeworkEntitiesByPupils(PupilEntity[] pupils);
     List<HomeworkEntity> findHomeworkEntitiesByTutor(TutorEntity tutor);
 
-    List<HomeworkEntity> findHomeworkEntitiesByPupils(Set<PupilEntity> pupils);
+    List<HomeworkEntity> findHomeworkEntitiesByPupilsIn(Set<PupilEntity> pupils);
 }

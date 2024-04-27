@@ -37,5 +37,5 @@ public class AnswerEntity {
     PupilEntity pupil;
 
     @Column(name = "attempt_number")
-    Integer attemptNumber;
+    Integer attemptNumber = 0;
 }

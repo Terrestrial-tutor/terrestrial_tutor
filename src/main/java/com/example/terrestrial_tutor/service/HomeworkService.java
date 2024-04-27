@@ -17,7 +17,7 @@ public interface HomeworkService {
     List<HomeworkEntity> getAllHomeworksTutor();
     HomeworkAnswersDTO getPupilAnswers(Long homeworkId, Long pupilId, int attempt);
     HomeworkEntity getHomeworkById(Long id);
-    Map<HomeworkDTO, Integer> getCompletedHomework(Long id);
+    Map<Long, Integer> getCompletedHomework(Long id);
     int getLastAttempt(HomeworkEntity homework, PupilEntity pupil);
     void deleteHomeworkById(Long id);
     HomeworkEntity save(HomeworkEntity homework);

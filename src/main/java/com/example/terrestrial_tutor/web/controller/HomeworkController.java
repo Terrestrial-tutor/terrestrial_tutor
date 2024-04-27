@@ -113,7 +113,7 @@ public class HomeworkController {
      * @return список выполненных дз ученика
      */
     @GetMapping("/pupil/{id}/homework/completed")
-    public ResponseEntity<Map<HomeworkDTO, Integer>> getCompletedHomework(@PathVariable Long id) {
+    public ResponseEntity<Map<Long, Integer>> getCompletedHomework(@PathVariable Long id) {
         return new ResponseEntity<>(homeworkService.getCompletedHomework(id), HttpStatus.OK);
     }
 
