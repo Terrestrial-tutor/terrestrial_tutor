@@ -106,9 +106,9 @@ public class HomeworkController {
     }
 
     @GetMapping("/pupil/homework/{id}/answers/{idPupil}")
-    public ResponseEntity<List<AnswerEntity>> getHomeworkAnswers(@PathVariable Long id, @PathVariable Long idPupil){
-        List<AnswerEntity> answerEntities = homeworkService.getPupilAnswers(id, idPupil);
-        return new ResponseEntity<>(answerEntities, HttpStatus.OK);
+    public ResponseEntity<HomeworkAnswersDTO> getHomeworkAnswers(@PathVariable Long id, @PathVariable Long idPupil){
+        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.getPupilAnswers(id, idPupil);
+        return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/homework/delete/{id}")

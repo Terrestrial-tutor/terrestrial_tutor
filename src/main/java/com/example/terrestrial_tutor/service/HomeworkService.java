@@ -13,7 +13,7 @@ public interface HomeworkService {
 
 //    List<HomeworkEntity> getAllHomeworksPupil();
     List<HomeworkEntity> getAllHomeworksTutor();
-    List<AnswerEntity> getPupilAnswers(Long homeworkId, Long pupilId);
+    HomeworkAnswersDTO getPupilAnswers(Long homeworkId, Long pupilId);
     HomeworkEntity getHomeworkById(Long id);
     void deleteHomeworkById(Long id);
     HomeworkEntity save(HomeworkEntity homework);

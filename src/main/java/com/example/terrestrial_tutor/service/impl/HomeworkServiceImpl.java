@@ -83,10 +83,15 @@ public class HomeworkServiceImpl implements HomeworkService {
         return homeworkRepository.save(homework);
     }
 
-    public List<AnswerEntity> getPupilAnswers(Long homeworkId, Long pupilId){
+    public HomeworkAnswersDTO getPupilAnswers(Long homeworkId, Long pupilId){
         PupilEntity pupilEntity = pupilService.findPupilById(pupilId);
         HomeworkEntity homework = getHomeworkById(homeworkId);
-        return answerRepository.findAnswerEntitiesByPupilAndHomework(pupilEntity, homework);
+        List<AnswerEntity> answers = answerRepository.findAnswerEntitiesByPupilAndHomework(pupilEntity, homework);
+        Map<Long, HomeworkAnswersDTO.DetailsAnswer> checkingAnswers = new HashMap<>();
+        for(AnswerEntity answer : answers){
+            checkingAnswers.put(answer.getTask().getId(), new HomeworkAnswersDTO.DetailsAnswer(answer.getAnswer(), answer.getTask().getAnswer().get(0)));
+        }
+        return new HomeworkAnswersDTO(checkingAnswers);
 
     }
 
@@ -106,29 +111,30 @@ public class HomeworkServiceImpl implements HomeworkService {
                 throw new CustomException("There is no such task in homework");
             }
             TaskCheckingType check = completedTaskEntity.getTaskCheckingType();
-            TaskEntity task;
+            TaskEntity task = taskService.getTaskById(entry.getKey());
+            boolean isRepeat = !answerRepository.findAnswerEntitiesByPupilAndHomeworkAndTask((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
+                    homework, task).isEmpty();
             switch (check.name()) {
                 case "AUTO":
-                    task = taskService.getTaskById(entry.getKey());
                     switch (task.getAnswerType()) {
                         case "Варианты", "Текст или значение", "Код":
-                            AnswerEntity answerEntity = new AnswerEntity();
-                            answerEntity.setAnswer(entry.getValue());
-                            answerEntity.setHomework(homework);
-                            answerEntity.setTask(task);
-                            answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-                            answerService.addNewAnswer(answerEntity);
+                            if(!isRepeat) {
+                                AnswerEntity answerEntity = new AnswerEntity();
+                                answerEntity.setAnswer(entry.getValue());
+                                answerEntity.setHomework(homework);
+                                answerEntity.setTask(task);
+                                answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+                                answerService.addNewAnswer(answerEntity);
+                            }
                             break;
                         default:
                             throw new CustomException("Task does not have a answer type");
                     }
                     break;
                 case "INSTANCE":
-                    task = taskService.getTaskById(entry.getKey());
                     switch (task.getAnswerType()) {
                         case "Варианты", "Текст или значение", "Код":
-                            if(answerRepository.findAnswerEntitiesByPupilAndHomeworkAndTask((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
-                                    homework, task).isEmpty()) {
+                            if(!isRepeat) {
                                 AnswerEntity answerEntity = new AnswerEntity();
                                 answerEntity.setAnswer(entry.getValue());
                                 answerEntity.setHomework(homework);
@@ -137,11 +143,7 @@ public class HomeworkServiceImpl implements HomeworkService {
                                 answerService.addNewAnswer(answerEntity);
                             }
                             String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
-                            if (entry.getValue().equals(rightAnswer)) {
-                                checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(true, rightAnswer));
-                            } else {
-                                checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(false, rightAnswer));
-                            }
+                            checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(entry.getValue(), rightAnswer));
                             break;
                         default:
                             throw new CustomException("Task does not have a answer type");

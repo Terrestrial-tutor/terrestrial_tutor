@@ -14,7 +14,7 @@ services:
       #      - ./config/nginx.conf/:/etc/nginx/conf.d/nginx.conf
       - ./frontend/dist/frontend:/usr/share/nginx/html/
     ports:
-      - "81:80"
+      - "80:80"
     networks:
       localnet:
         ipv4_address: 10.0.0.2

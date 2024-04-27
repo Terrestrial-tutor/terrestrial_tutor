@@ -2,6 +2,7 @@ package com.example.terrestrial_tutor.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Map;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class HomeworkAnswersDTO {
 
     Map<Long, DetailsAnswer> checkingAnswers;
@@ -18,7 +21,7 @@ public class HomeworkAnswersDTO {
     @Setter
     @AllArgsConstructor
     public static class DetailsAnswer{
-        Boolean check;
+        String pupilAnswer;
         String rightAnswer;
         //todo ссылка на ютуб
     }
