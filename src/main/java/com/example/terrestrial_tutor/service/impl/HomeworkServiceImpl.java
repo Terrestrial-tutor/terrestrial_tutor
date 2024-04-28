@@ -102,7 +102,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         } else {
             throw new CustomException("Attempt number not found");
         }
-        return new HomeworkAnswersDTO(checkingAnswers);
+        return new HomeworkAnswersDTO(checkingAnswers, attempt);
 
     }
 
@@ -210,8 +210,10 @@ public class HomeworkServiceImpl implements HomeworkService {
                     throw new CustomException("Task does not have a review type");
             }
         }
+        int attempts = getLastAttempt(homework, pupil);
         HomeworkAnswersDTO homeworkAnswersDTO = new HomeworkAnswersDTO();
         homeworkAnswersDTO.setCheckingAnswers(checkingAnswers);
+        homeworkAnswersDTO.setAttemptCount(attempts);
         return homeworkAnswersDTO;
     }
 //    public List<HomeworkEntity> getAllHomeworksPupil(){

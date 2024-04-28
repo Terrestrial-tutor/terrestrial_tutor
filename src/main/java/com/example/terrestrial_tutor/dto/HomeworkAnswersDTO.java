@@ -16,6 +16,7 @@ import java.util.Map;
 public class HomeworkAnswersDTO {
 
     Map<Long, DetailsAnswer> checkingAnswers;
+    Integer attemptCount;
 
     @Getter
     @Setter
