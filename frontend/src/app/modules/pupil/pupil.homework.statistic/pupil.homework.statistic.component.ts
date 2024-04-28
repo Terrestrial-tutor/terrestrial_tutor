@@ -18,6 +18,8 @@ export class PupilHomeworkStatisticComponent {
   homeworkAnswers: HomeworkAnswers | null = null;
   tasks: Task[] | null = null;
   checkingAnswers: {[key: string]: DetailsAnswer} = {};
+  tryNumber: number[] = [1];
+  currentTry: number = 1;
 
   constructor(private pupilService: PupilService,
               private router: Router,
@@ -25,6 +27,13 @@ export class PupilHomeworkStatisticComponent {
 
   ngOnInit(): void {
     let  serviceHomework = this.pupilDataService.getCurrentHomework()?.id;
+    let storageTry = sessionStorage.getItem('tryNumber');
+    if (storageTry) {
+      for (let i = 2; i < parseInt(storageTry); i++) {
+        this.tryNumber.push(i);
+      }
+      this.currentTry = parseInt(storageTry);
+    }
     if (serviceHomework) {
       this.currentHomework = serviceHomework;
     } else {
@@ -60,9 +69,9 @@ export class PupilHomeworkStatisticComponent {
             this.tasks = homework.tasks;
           }
         })
-        let attempt = sessionStorage.getItem('tryNumber');
+        let attempt = this.currentTry;
         if (attempt) {
-          this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId, parseInt(attempt)).subscribe(answers => {
+          this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId, attempt).subscribe(answers => {
             this.homeworkAnswers = answers;
             if (answers.checkingAnswers) {
               this.checkingAnswers = answers.checkingAnswers;
@@ -107,6 +116,11 @@ export class PupilHomeworkStatisticComponent {
       return percent / this.tasks?.length * 100;
     }
     return 0;
+  }
+
+  setCurrentAttempt(attempt: number) {
+    this.currentTry = attempt;
+    this.getStatistic();
   }
 
   submit() {

@@ -2,6 +2,16 @@
   <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
     <div class="row">
       <h2 class="mx-3 mb-1 col-4">Ваша статистика</h2>
+
+      <div ngbDropdown class="col-3">
+        <button type="button" class="drop-btn btn-primary drop-btn p-2 col-12" ngbDropdownToggle>
+          {{ currentTry }}
+        </button>
+        <div ngbDropdownMenu class="text-center col-12">
+          <button *ngFor="let attempt of tryNumber" class="nav-btn col-12" type="button" ngbDropdownItem (click)="setCurrentAttempt(attempt)">{{ attempt }}</button>
+        </div>
+      </div>
+
       <div class="text-end">
         <button type="button" class="btn btn-primary col-3" (click)="submit()">На главную</button>
       </div>

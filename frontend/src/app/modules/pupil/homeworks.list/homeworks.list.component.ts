@@ -27,6 +27,7 @@ export class HomeworksListComponent {
   ngOnInit(): void {
     sessionStorage.removeItem('tryNumber');
     sessionStorage.removeItem('currentHomework');
+    sessionStorage.removeItem('tryNumber');
     this.pupilDataService.setCurrentHomework(null);
     if (!this.pupilDataService.getCurrentSubject()) {
       let subject = sessionStorage.getItem('currentSubject');
@@ -87,8 +88,9 @@ export class HomeworksListComponent {
     this.router.navigate(['pupil/homework']);
   }
 
-  submitCompletedHomeworks(tryNumber: number) {
+  submitCompletedHomeworks(tryNumber: number, homeworkId: string) {
     sessionStorage.setItem('tryNumber', JSON.stringify(tryNumber));
+    sessionStorage.setItem('currentHomework', homeworkId)
     this.router.navigate(['pupil/homework/statistic']);
   }
 }

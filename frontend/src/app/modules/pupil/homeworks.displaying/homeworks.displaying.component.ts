@@ -6,6 +6,7 @@ import { Pupil } from 'src/app/models/Pupil';
 import { Homework } from 'src/app/models/Homework';
 import { TutorService } from '../../tutor/services/tutor.service';
 import {FormBuilder, FormGroup } from "@angular/forms";
+import {HomeworkAnswers} from "../../../models/HomeworkAnswers";
 
 @Component({
     selector: 'app-homeworks.displaying',
@@ -19,6 +20,7 @@ export class HomeworksDisplayingComponent {
   // @ts-ignore
   tasksAnswers: FormGroup = this.fb.group({});
   pageLoaded = false;
+  statistic: HomeworkAnswers = {checkingAnswers: {}, attemptCount: 1};
 
   constructor(private pupilDataService: PupilDataService,
       private pupilService: PupilService,
@@ -75,8 +77,11 @@ export class HomeworksDisplayingComponent {
 
   submit() {
     if (this.homework?.id) {
-     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe(() => {
-       sessionStorage.setItem('tryNumber', '1');
+     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe((homework) => {
+       if (homework) {
+         this.statistic = <HomeworkAnswers>homework;
+       }
+       sessionStorage.setItem('tryNumber', String(this.statistic.attemptCount));
        this.router.navigate(['/pupil/homework/statistic']);
      });
     }
