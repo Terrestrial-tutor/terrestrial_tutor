@@ -68,10 +68,14 @@ export class HomeworksDisplayingComponent {
     }
   }
 
-  createCheckRequest() {
+  createCheckRequest(taskId = -1) {
     let answers: {[key: number]: string} = {};
-    for(let control in this.tasksAnswers.controls) {
-      answers[parseInt(control)] = this.tasksAnswers.controls[control].value;
+    if (taskId != -1) {
+      answers[taskId] = this.tasksAnswers.controls[taskId].value;
+    } else {
+      for (let control in this.tasksAnswers.controls) {
+        answers[parseInt(control)] = this.tasksAnswers.controls[control].value;
+      }
     }
     return answers;
   }
@@ -103,5 +107,22 @@ export class HomeworksDisplayingComponent {
 
   checkImage(file: string): boolean {
     return file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg');
+  }
+
+  momentCheck(taskId: number) {
+    if (this.homework?.id) {
+      this.pupilService.sendAnswers(this.createCheckRequest(taskId), this.homework?.id).subscribe((homework) => {
+        if (homework) {
+          this.statistic = <HomeworkAnswers>homework;
+        }
+      });
+    }
+  }
+
+  checkChecking(taskId: number) {
+    if (this.homework?.tasksCheckingTypes[taskId]) {
+      return this.homework?.tasksCheckingTypes[taskId] == 'INSTANCE';
+    }
+    return false;
   }
 }

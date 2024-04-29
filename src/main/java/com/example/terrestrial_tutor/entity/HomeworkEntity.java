@@ -54,6 +54,7 @@ public class HomeworkEntity {
     TutorEntity tutor;
 
     @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
     List<CompletedTaskEntity> completedTaskEntities = new LinkedList<>();
 
     @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

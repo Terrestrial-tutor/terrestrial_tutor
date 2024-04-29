@@ -47,8 +47,6 @@ public class HomeworkController {
     public ResponseEntity<HomeworkDTO> saveHomework(@RequestBody HomeworkDTO homeworkDTO) {
         HomeworkEntity newHomework = homeworkService.saveHomework(homeworkFacade.homeworkDTOToHomework(homeworkDTO));
         HomeworkDTO newHomeworkDTO = homeworkFacade.homeworkToHomeworkDTO(newHomework);
-        SubjectEntity subject = newHomework.getSubject();
-        HomeworkEntity test = homeworkService.getHomeworkById(newHomework.getId());
         return new ResponseEntity<>(newHomeworkDTO, HttpStatus.OK);
     }
 

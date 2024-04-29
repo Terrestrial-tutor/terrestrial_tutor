@@ -49,8 +49,8 @@ export class PupilHomeworkStatisticComponent {
       this.pupilService.getPupilById(sessionStorage.getItem('currentPupil')).subscribe(pupil => {
         this.pupil = pupil;
         this.pupilDataService.setPupil(pupil);
+        this.getStatistic();
       });
-      this.getStatistic();
     } else {
       this.pupilService.getCurrentUser().subscribe(pupil => {
         this.pupil = pupil;
@@ -71,6 +71,7 @@ export class PupilHomeworkStatisticComponent {
         })
         let attempt = this.currentTry;
         if (attempt) {
+          console.log(attempt);
           this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId, attempt).subscribe(answers => {
             this.homeworkAnswers = answers;
             if (answers.checkingAnswers) {
@@ -113,7 +114,7 @@ export class PupilHomeworkStatisticComponent {
       }
     }
     if (this.tasks) {
-      return percent / this.tasks?.length * 100;
+      return (percent / this.tasks?.length * 100).toFixed(2);
     }
     return 0;
   }

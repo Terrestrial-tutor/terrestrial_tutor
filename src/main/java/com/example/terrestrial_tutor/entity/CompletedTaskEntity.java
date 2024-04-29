@@ -30,6 +30,9 @@ public class CompletedTaskEntity {
     @JoinColumn(name = "homework")
     HomeworkEntity homework;
 
+    @Column(name = "position")
+    Integer index;
+
     public CompletedTaskEntity(TaskEntity taskEntity, TaskCheckingType check){
         this.task = taskEntity;
         this.homework = homework;

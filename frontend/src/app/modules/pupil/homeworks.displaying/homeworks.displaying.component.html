@@ -8,7 +8,6 @@
 
       <h2>{{ task?.name }}</h2>
 
-      <!--Обработка вариантов-->
       <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
         <h3>{{ task.taskText }}</h3>
 
@@ -20,7 +19,7 @@
         <div *ngIf="task.answerType == 'Варианты'">
           <div *ngFor="let answer of task.answers">
             <div class="form-check form-check-inline align-content-center align-items-center">
-              <input class="form-check-input m-0 align-middle" type="radio" name="{{task.id.toString()}}"  value="{{answer}}" formControlName = "{{task.id.toString()}}" id="{{answer}}">
+              <input class="form-check-input m-0 align-middle" type="radio" name="{{task.id.toString()}}" value="{{answer}}" formControlName = "{{task.id.toString()}}" id="{{answer}}">
               <label class="form-check-label px-2 align-middle fs-4" for="{{answer}}">{{answer}}</label>
             </div>
           </div>
@@ -36,6 +35,10 @@
           <div *ngIf="!checkImage(file)" class="row mx-auto" style="
                   width: 40px;
                   word-wrap: break-word">{{file.substring(file.indexOf('.') + 1)}}</div>
+        </div>
+
+        <div *ngIf="checkChecking(task.id)">
+          <button type="button" class="btn btn-primary col-3" (click)="momentCheck(task.id)">Отправить</button>
         </div>
       </div>
     </div>

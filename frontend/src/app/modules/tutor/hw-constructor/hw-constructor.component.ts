@@ -83,6 +83,7 @@ export class HwConstructorComponent implements OnInit {
   }
 
   submit() {
+    this.saveHomework();
     this.pageLoaded = false;
     if (this.homework) {
       this.tutorService.saveHomework(this.homework).subscribe(id => {
