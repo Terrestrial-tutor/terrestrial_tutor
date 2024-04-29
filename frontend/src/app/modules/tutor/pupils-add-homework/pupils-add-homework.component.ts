@@ -42,6 +42,9 @@ export class PupilsAddHomeworkComponent implements OnInit {
         this.fillPupils(pupils);
       }
     })
+    this.filter.valueChanges.subscribe((text) => {
+      this.search(text);
+    });
   }
 
   fillPupils(pupils: Pupil[]) {

@@ -8,6 +8,7 @@ import {Task} from "../../../models/Task";
 import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
 import {Subscription} from "rxjs";
 import {TutorDataService} from "../storage/tutor.data.service";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-hw-constructor',
@@ -114,5 +115,15 @@ export class HwConstructorComponent implements OnInit {
   addPupils() {
     this.saveHomework();
     this.router.navigate(['tutor/constructor/add/pup']);
+  }
+
+  onDrop(event: CdkDragDrop<Task[]>) {
+    let tasks = this.homework?.tasks;
+    if (tasks) {
+      moveItemInArray(tasks, event.previousIndex, event.currentIndex);
+      if (this.homework) {
+        this.homework.tasks = tasks;
+      }
+    }
   }
 }

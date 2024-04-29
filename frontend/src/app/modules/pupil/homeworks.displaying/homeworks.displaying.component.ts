@@ -7,6 +7,7 @@ import { Homework } from 'src/app/models/Homework';
 import { TutorService } from '../../tutor/services/tutor.service';
 import {FormBuilder, FormGroup } from "@angular/forms";
 import {HomeworkAnswers} from "../../../models/HomeworkAnswers";
+import {Task} from "../../../models/Task";
 
 @Component({
     selector: 'app-homeworks.displaying',
@@ -85,5 +86,22 @@ export class HomeworksDisplayingComponent {
        this.router.navigate(['/pupil/homework/statistic']);
      });
     }
+  }
+
+  checkFilesAvailability(task: Task) {
+    let filesAmount = 0;
+    if (task.files) {
+      for (let file of task.files) {
+        if (!this.checkImage(file)) {
+          filesAmount++;
+        }
+      }
+      return filesAmount > 0;
+    }
+    return false;
+  }
+
+  checkImage(file: string): boolean {
+    return file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg');
   }
 }

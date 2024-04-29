@@ -1,7 +1,7 @@
 <div class="container-fluid px-3 pb-3">
   <div *ngIf="pageLoaded" [formGroup]="tasksAnswers" class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
-    <div class="row mx-3 mb-5">
-      <h2>{{ homework?.name }}</h2>
+    <div class="row mx-0 mb-5">
+      <h1>{{ homework?.name }}</h1>
       <button type="button" class="btn btn-primary col-3" (click)="submit()">Отправить</button>
     </div>
     <div class="d-inline" *ngFor="let task of homework?.tasks">
@@ -9,22 +9,35 @@
       <h2>{{ task?.name }}</h2>
 
       <!--Обработка вариантов-->
-      <div *ngIf="task.answerType == 'Варианты'" class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+      <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
         <h3>{{ task.taskText }}</h3>
-        <div *ngFor="let answer of task.answers">
-          <div class="form-check form-check-inline align-content-center align-items-center">
-            <input class="form-check-input m-0 align-middle" type="radio" name="{{task.id.toString()}}"  value="{{answer}}" formControlName = "{{task.id.toString()}}" id="{{answer}}">
-            <label class="form-check-label px-2 align-middle fs-4" for="{{answer}}">{{answer}}</label>
+
+        <div class="d-inline-block mb-3" *ngFor="let image of task.files">
+          <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
+               [src]="image" width="200px" height="auto" alt="">
+        </div>
+
+        <div *ngIf="task.answerType == 'Варианты'">
+          <div *ngFor="let answer of task.answers">
+            <div class="form-check form-check-inline align-content-center align-items-center">
+              <input class="form-check-input m-0 align-middle" type="radio" name="{{task.id.toString()}}"  value="{{answer}}" formControlName = "{{task.id.toString()}}" id="{{answer}}">
+              <label class="form-check-label px-2 align-middle fs-4" for="{{answer}}">{{answer}}</label>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!--Обработка текстовых ответов-->
-      <div *ngIf="task.answerType == 'Текст или значение'" class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
-        <h3>{{ task.taskText }}</h3>
-        <input formControlName = "{{task.id.toString()}}" placeholder="Введите ответ">
-      </div>
+        <div *ngIf="task.answerType == 'Текст или значение'">
+          <input formControlName = "{{task.id.toString()}}" placeholder="Введите ответ">
+        </div>
 
+        <h2 class="mt-3" *ngIf="checkFilesAvailability(task)">Файлы</h2>
+        <div class="d-inline-block mt-3 text-center" *ngFor="let file of task.files">
+          <a class="mx-auto" *ngIf="!checkImage(file)" href="{{file}}" download="{{file.substring(file.indexOf('.') + 1)}}"><img src="assets/document.png" width="60px"></a>
+          <div *ngIf="!checkImage(file)" class="row mx-auto" style="
+                  width: 40px;
+                  word-wrap: break-word">{{file.substring(file.indexOf('.') + 1)}}</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

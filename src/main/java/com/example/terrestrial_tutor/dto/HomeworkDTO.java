@@ -21,5 +21,5 @@ public class HomeworkDTO {
     LocalDate deadLine;
     @NonNull
     String subject;
-    Set<TaskDTO> tasks = new HashSet<>();
+    List<TaskDTO> tasks = new LinkedList<>();
 }

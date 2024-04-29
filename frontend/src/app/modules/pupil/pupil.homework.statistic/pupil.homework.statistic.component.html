@@ -22,11 +22,25 @@
 
       <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
         <h3>{{ getTaskForPrint(task.key)?.taskText }}</h3>
+
+        <div class="d-inline-block mb-3" *ngFor="let image of getTaskForPrint(task.key)?.files">
+          <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
+               [src]="image" width="200px" height="auto" alt="">
+        </div>
+
         <h3 class="row"
             style="background-color: {{getAnswerStatus(getAnswersStatistic(task.value, task.key).pupilAnswer,getAnswersStatistic(task.value, task.key).rightAnswer)}}">
           Ответ ученика: {{ getAnswersStatistic(task.value, task.key).pupilAnswer }}
         </h3>
         <h3>Верный ответ: {{ getAnswersStatistic(task.value, task.key).rightAnswer }}</h3>
+
+        <h2 class="mt-3" *ngIf="checkFilesAvailability(getTaskForPrint(task.key))">Файлы</h2>
+        <div class="d-inline-block mt-3 text-center" *ngFor="let file of getTaskForPrint(task.key)?.files">
+          <a class="mx-auto" *ngIf="!checkImage(file)" href="{{file}}" download="{{file.substring(file.indexOf('.') + 1)}}"><img src="assets/document.png" width="60px"></a>
+          <div *ngIf="!checkImage(file)" class="row mx-auto" style="
+                  width: 40px;
+                  word-wrap: break-word">{{file.substring(file.indexOf('.') + 1)}}</div>
+        </div>
       </div>
     </div>
   </div>

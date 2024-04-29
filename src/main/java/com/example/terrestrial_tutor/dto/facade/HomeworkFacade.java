@@ -42,7 +42,7 @@ public class HomeworkFacade {
         Map<Long, String> dtoTasksCheckingTypes = new HashMap<>();
         homework.getCompletedTaskEntities().forEach(task -> dtoTasksCheckingTypes.put(task.getTask().getId(), task.getTaskCheckingType().name()));
         homeworkDTO.setTasksCheckingTypes(dtoTasksCheckingTypes);
-        Set<TaskDTO> tasks = new HashSet<>();
+        List<TaskDTO> tasks = new LinkedList<>();
         homework.getCompletedTaskEntities().forEach(task -> tasks.add(taskFacade.taskToTaskDTO(task.getTask())));
         homeworkDTO.setTasks(tasks);
         return homeworkDTO;
@@ -66,7 +66,7 @@ public class HomeworkFacade {
                 TaskEntity task = taskService.getTaskById(key);
                 tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
             });
-            Set<CompletedTaskEntity> completedTaskEntities = new HashSet<>();
+            List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
             tasksCheckingTypes.forEach((task, check) -> {
                 if (completedTaskService.getByTask(task.getId()) != null) {
                     completedTaskEntities.add(completedTaskService.getByTask(task.getId()));

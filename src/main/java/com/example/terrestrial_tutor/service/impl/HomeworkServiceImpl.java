@@ -65,7 +65,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         HomeworkEntity finalHomework = homework;
         homework.setCompletedTaskEntities(homework.getCompletedTaskEntities().stream().peek(task -> {
             task.setHomework(finalHomework);
-        }).collect(Collectors.toSet()));
+        }).collect(Collectors.toList()));
         homework = homeworkRepository.save(homework);
         tutorService.updateTutor(homework.getTutor());
         return homework;
@@ -150,7 +150,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     public HomeworkAnswersDTO checkingAndSaveAnswers(Map<Long, String> answers, Long idHomework) {
         HomeworkEntity homework = getHomeworkById(idHomework);
-        Set<CompletedTaskEntity> completedTaskEntities = homework.getCompletedTaskEntities();
+        List<CompletedTaskEntity> completedTaskEntities = homework.getCompletedTaskEntities();
         Map<Long, HomeworkAnswersDTO.DetailsAnswer> checkingAnswers = new HashMap<>();
         PupilEntity pupil = (PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int attemptNumber = getLastAttempt(homework, pupil) + 1;

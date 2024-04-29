@@ -29,7 +29,7 @@ export class PupilHomeworkStatisticComponent {
     let  serviceHomework = this.pupilDataService.getCurrentHomework()?.id;
     let storageTry = sessionStorage.getItem('tryNumber');
     if (storageTry) {
-      for (let i = 2; i < parseInt(storageTry); i++) {
+      for (let i = 2; i <= parseInt(storageTry); i++) {
         this.tryNumber.push(i);
       }
       this.currentTry = parseInt(storageTry);
@@ -121,6 +121,23 @@ export class PupilHomeworkStatisticComponent {
   setCurrentAttempt(attempt: number) {
     this.currentTry = attempt;
     this.getStatistic();
+  }
+
+  checkFilesAvailability(task: Task | null) {
+    let filesAmount = 0;
+    if (task && task.files) {
+      for (let file of task.files) {
+        if (!this.checkImage(file)) {
+          filesAmount++;
+        }
+      }
+      return filesAmount > 0;
+    }
+    return false;
+  }
+
+  checkImage(file: string): boolean {
+    return file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg');
   }
 
   submit() {

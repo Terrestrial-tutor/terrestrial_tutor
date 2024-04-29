@@ -38,8 +38,8 @@
 
     </form>
 
-    <div class="container col-12 mx-3 mt-4">
-      <div *ngFor="let task of currentTasks let i = index">
+    <div class="container col-12 mx-3 mt-4" cdkDropList (cdkDropListDropped)="onDrop($event)">
+      <div *ngFor="let task of currentTasks let i = index" cdkDrag>
         <div class="row col-12 m-3">
           <div ngbDropdown class="col-3">
             <button type="button" class="drop-btn btn-primary drop-btn p-2 col-12" ngbDropdownToggle>
@@ -89,7 +89,6 @@
                   <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
                        [src]="image" width="200px" height="auto" alt="">
                   <div *ngIf="checkImage(image)" class="row mx-2 text-center" style="
-                background-color: white;
                 width: 200px;
                 word-wrap: break-word">{{image.substring(image.indexOf('.') + 1)}}</div>
                 </div>

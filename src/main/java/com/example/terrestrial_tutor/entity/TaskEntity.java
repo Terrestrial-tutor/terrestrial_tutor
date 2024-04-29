@@ -42,7 +42,7 @@ public class TaskEntity {
     @Column(name = "complexity")
     String complexity;
     */
-    @Column(name = "task_text")
+    @Column(name = "task_text", columnDefinition="text")
     String taskText;
 
     //task_images

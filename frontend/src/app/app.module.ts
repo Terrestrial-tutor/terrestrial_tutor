@@ -30,6 +30,8 @@ import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.compo
 import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
 import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displaying/homeworks.displaying.component';
 import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.statistic/pupil.homework.statistic.component';
+import {NgOptimizedImage} from "@angular/common";
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -60,6 +62,9 @@ import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.
     NgbAlertModule,
     NgbModule,
     CodemirrorModule,
+    NgOptimizedImage,
+    CdkDropList,
+    CdkDrag,
   ],
   providers: [
     authInterceptorProviders,

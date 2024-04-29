@@ -41,7 +41,7 @@ public class PupilFacade {
                             tasks.add(clearedTask);
                         }
                     });
-                    clearedHomework.setTasks(new HashSet<>(tasks));
+                    clearedHomework.setTasks(new LinkedList<>(tasks));
                     return clearedHomework;
                 })
                 .toList()));
