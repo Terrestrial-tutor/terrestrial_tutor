@@ -17,7 +17,7 @@ export class HomeworksListComponent {
   subject: string|null = null;
   collapseHomeworks: boolean = true;
   collapseHomeworksStatistic: boolean = true;
-  completedHomeworks: {} = {};
+  completedHomeworks: {[key: number]: number} = {};
 
   constructor(private pupilDataService: PupilDataService,
     private pupilService: PupilService,
@@ -63,7 +63,15 @@ export class HomeworksListComponent {
     let pupilId = this.pupil?.id;
     if (pupilId) {
       this.pupilService.getCompletedHomeworks(pupilId).subscribe(homeworks => {
-        this.completedHomeworks = homeworks;
+        for (let homework in homeworks) {
+          if (this.homeworks) {
+            let curHW = this.homeworks.find(curHomework => curHomework.id == parseInt(homework) && curHomework.subject == this.subject);
+            if (curHW) {
+              //@ts-ignore
+              this.completedHomeworks[parseInt(homework)] = homeworks[parseInt(homework)];
+            }
+          }
+        }
       });
     }
   }
