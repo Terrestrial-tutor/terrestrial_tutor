@@ -57,7 +57,7 @@ public class HomeworkEntity {
     @OrderColumn(name = "position")
     List<CompletedTaskEntity> completedTaskEntities = new LinkedList<>();
 
-    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     List<AnswerEntity> answerEntities;
 
     /*

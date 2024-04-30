@@ -58,7 +58,7 @@ public class TaskEntity {
     @JoinColumn(name = "subject")
     SubjectEntity subject;
 
-    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     List<AnswerEntity> answerEntities;
 
     @NonNull

@@ -49,7 +49,7 @@ public class PupilEntity implements UserDetails {
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
     List<PaymentEntity> payments= new ArrayList<>();
 
-    @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     List<AnswerEntity> answers = new ArrayList<>();
 
     @NonNull

@@ -127,6 +127,7 @@ public class HomeworkServiceImpl implements HomeworkService {
             return 0;
         } else {
             int result = 0;
+            int maxiAttempt = 0;
             Map<Integer, Integer> count = new HashMap<>();
             for (AnswerEntity answer : answers) {
                 result = Math.max(result, answer.getAttemptNumber());
@@ -136,7 +137,9 @@ public class HomeworkServiceImpl implements HomeworkService {
                 } else {
                     count.put(answer.getAttemptNumber(), 1);
                 }
+                maxiAttempt = Math.max(maxiAttempt, result);
             }
+            result = maxiAttempt;
             while (result != 0) {
                 if (count.get(result) == homework.getCompletedTaskEntities().size()) {
                     break;
@@ -180,6 +183,8 @@ public class HomeworkServiceImpl implements HomeworkService {
                             answerEntity.setAttemptNumber(attemptNumber);
                             answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                             answerService.addNewAnswer(answerEntity);
+                            String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
+                            checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(entry.getValue(), rightAnswer));
                             break;
                         default:
                             throw new CustomException("Task does not have a answer type");
@@ -188,8 +193,22 @@ public class HomeworkServiceImpl implements HomeworkService {
                 case "INSTANCE":
                     switch (task.getAnswerType()) {
                         case "Варианты", "Текст или значение", "Код":
-                            List<AnswerEntity> attempts = answerRepository.findAnswerEntitiesByPupilAndHomeworkAndAttemptNumber(pupil, homework, attemptNumber);
-                            answerRepository.deleteAll(attempts);
+                            List<AnswerEntity> attempts = answerRepository.findAnswerEntitiesByPupilAndHomeworkAndAttemptNumberAndTask(pupil, homework, attemptNumber, task);
+                            String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
+                            for(AnswerEntity answer : attempts){
+                                /*homework.getAnswerEntities().remove(answer);
+                                homeworkRepository.save(homework);
+                                task.getAnswerEntities().remove(answer);
+                                taskRepository.save(task);
+                                pupil.getAnswers().remove(answer);
+                                pupilRepository.save(pupil);
+                                 */
+                                answer.setHomework(null);
+                                answer.setTask(null);
+                                answer.setPupil(null);
+                                answerRepository.delete(answer);
+                            }
+                            //List<AnswerEntity> newAttempts = answerRepository.findAnswerEntitiesByPupilAndHomeworkAndAttemptNumberAndTask(pupil, homework, attemptNumber, task);
                             AnswerEntity answerEntity = new AnswerEntity();
                             answerEntity.setAnswer(entry.getValue());
                             answerEntity.setHomework(homework);
@@ -197,7 +216,6 @@ public class HomeworkServiceImpl implements HomeworkService {
                             answerEntity.setTask(task);
                             answerEntity.setPupil((PupilEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
                             answerService.addNewAnswer(answerEntity);
-                            String rightAnswer = taskService.getTaskById(entry.getKey()).getAnswer().get(0);
                             checkingAnswers.put(entry.getKey(), new HomeworkAnswersDTO.DetailsAnswer(entry.getValue(), rightAnswer));
                             break;
                         default:
@@ -210,10 +228,9 @@ public class HomeworkServiceImpl implements HomeworkService {
                     throw new CustomException("Task does not have a review type");
             }
         }
-        int attempts = getLastAttempt(homework, pupil);
         HomeworkAnswersDTO homeworkAnswersDTO = new HomeworkAnswersDTO();
         homeworkAnswersDTO.setCheckingAnswers(checkingAnswers);
-        homeworkAnswersDTO.setAttemptCount(attempts);
+        homeworkAnswersDTO.setAttemptCount(attemptNumber);
         return homeworkAnswersDTO;
     }
 //    public List<HomeworkEntity> getAllHomeworksPupil(){
