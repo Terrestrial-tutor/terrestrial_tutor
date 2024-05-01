@@ -145,4 +145,21 @@ export class PupilHomeworkStatisticComponent {
     this.router.navigate(['pupil']);
   }
 
+  autoLink(value: string | undefined): string {
+    const urlRegex = /(https?:\/\/\S+)/g;
+    return value ? value.replace(urlRegex, '<a href="$1" target="_blank">$1</a>') : "";
+  }
+
+  decodeTable(table: string | undefined) {
+    let parsedTable: [[string]] = JSON.parse(table ? table : '');
+    for (let i = 0; i < parsedTable.length; i++) {
+      for (let j = 0; j < parsedTable[i].length; j++) {
+        if (parsedTable[i][j] != '') {
+          return parsedTable;
+        }
+      }
+    }
+    return null;
+  }
+
 }

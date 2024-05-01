@@ -58,9 +58,9 @@
 
           <!-- Выбор препода -->
 
-          <div ngbDropdown class="row col-8 m-3" *ngIf="pupilsSubject != 'Выбирете предмет'">
+          <div ngbDropdown class="row col-8 m-3" *ngIf="pupilsSubject != 'Выберите предмет'">
             <button *ngIf="selectedTutor != undefined" type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>{{selectedTutor.surname + ' ' + selectedTutor.name + ' ' + selectedTutor.patronymic}}</button>
-            <button *ngIf="selectedTutor == undefined" type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>Выбирите преподавателя</button>
+            <button *ngIf="selectedTutor == undefined" type="button" class="drop-btn btn-primary p-2" ngbDropdownToggle>Выберите преподавателя</button>
             <div ngbDropdownMenu class="text-center">
               <button class="nav-btn" ngbDropdownItem *ngFor="let tutor of tutorsBySubjectsPupil" (click)="selectedTutor=tutor;getTutorPupilsBySubject()">{{ tutor.surname + ' ' + tutor.name + ' ' + tutor.patronymic }}</button>
             </div>
@@ -86,7 +86,7 @@
             </div>
           </div>
 
-          <button class="row btn btn-primary mb-5 mx-3 p-2" (click)="open(content, false)" *ngIf="tutorsSubject != 'Выбирете предмет'">Выбрать преподавателя</button>
+          <button class="row btn btn-primary mb-5 mx-3 p-2" (click)="open(content, false)" *ngIf="tutorsSubject != 'Выберите предмет'">Выбрать преподавателя</button>
           <div class="row m-1"></div>
           <div *ngIf="!isNewDataLoaded"  class="row mx-3 m-2 spinner-border" role="status"></div>
 

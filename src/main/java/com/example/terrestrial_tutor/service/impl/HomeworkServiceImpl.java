@@ -85,7 +85,6 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     public HomeworkEntity save(HomeworkEntity homework) {
-
         return homeworkRepository.save(homework);
     }
 

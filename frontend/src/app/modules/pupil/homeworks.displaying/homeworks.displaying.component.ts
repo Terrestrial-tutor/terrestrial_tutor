@@ -22,6 +22,7 @@ export class HomeworksDisplayingComponent {
   tasksAnswers: FormGroup = this.fb.group({});
   pageLoaded = false;
   statistic: HomeworkAnswers = {checkingAnswers: {}, attemptCount: 1};
+  taskChecked = true;
 
   constructor(private pupilDataService: PupilDataService,
       private pupilService: PupilService,
@@ -110,9 +111,11 @@ export class HomeworksDisplayingComponent {
   }
 
   momentCheck(taskId: number) {
+    this.taskChecked = false;
     if (this.homework?.id) {
       this.pupilService.sendAnswers(this.createCheckRequest(taskId), this.homework?.id).subscribe((homework) => {
         if (homework) {
+          this.taskChecked = true;
           this.statistic = <HomeworkAnswers>homework;
         }
       });
@@ -124,5 +127,22 @@ export class HomeworksDisplayingComponent {
       return this.homework?.tasksCheckingTypes[taskId] == 'INSTANCE';
     }
     return false;
+  }
+
+  autoLink(value: string): string {
+    const urlRegex = /(https?:\/\/\S+)/g;
+    return value.replace(urlRegex, '<a href="$1" target="_blank">$1</a>');
+  }
+
+  decodeTable(table: string) {
+    let parsedTable: [[string]] = JSON.parse(table);
+    for (let i = 0; i < parsedTable.length; i++) {
+      for (let j = 0; j < parsedTable[i].length; j++) {
+        if (parsedTable[i][j] != '') {
+          return parsedTable;
+        }
+      }
+    }
+    return null;
   }
 }

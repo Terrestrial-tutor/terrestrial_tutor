@@ -63,11 +63,11 @@ p {
   color: #FFFFFF;
 }
 
-a {
-  color: #FFFFFF;
-  cursor: pointer;
-  text-decoration: none;
-}
+/*a {*/
+/*  color: #FFFFFF;*/
+/*  cursor: pointer;*/
+/*  text-decoration: none;*/
+/*}*/
 
 textarea {
   color: #FFFFFF;

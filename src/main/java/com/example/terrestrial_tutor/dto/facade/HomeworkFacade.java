@@ -68,11 +68,7 @@ public class HomeworkFacade {
             });
             List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
             tasksCheckingTypes.forEach((task, check) -> {
-                if (completedTaskService.getByTask(task.getId()) != null) {
-                    completedTaskEntities.add(completedTaskService.getByTask(task.getId()));
-                } else {
-                    completedTaskEntities.add(new CompletedTaskEntity(task, check));
-                }
+                completedTaskEntities.add(new CompletedTaskEntity(task, check));
             });
             homework.setCompletedTaskEntities(completedTaskEntities);
         }

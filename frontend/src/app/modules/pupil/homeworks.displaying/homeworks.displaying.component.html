@@ -7,13 +7,27 @@
     <div class="d-inline" *ngFor="let task of homework?.tasks">
 
       <h2>{{ task?.name }}</h2>
+      <h3><u>Тема: {{ task.level1 }}</u></h3>
+      <h3><u>Подтема: {{ task.level2 }}</u></h3>
 
-      <div class="container-fluid mx-auto p-3 mb-3 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
-        <h3>{{ task.taskText }}</h3>
+      <div class="container-fluid mx-auto p-3 mb-5 min-vh-70 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
+        <h3 style="white-space: pre-line" [innerHTML]="autoLink(task.taskText)"></h3>
 
         <div class="d-inline-block mb-3" *ngFor="let image of task.files">
           <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
-               [src]="image" width="200px" height="auto" alt="">
+               [src]="image" width="500px" height="auto" alt="">
+        </div>
+
+        <div class="d-inline-block mb-3" *ngIf="decodeTable(task.table)">
+          <table class="mt-3 mx-auto">
+            <tbody *ngFor="let row of decodeTable(task.table); let i = index">
+            <tr>
+              <td class="col-3" *ngFor="let element of row; let j = index">
+                {{ element }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
         </div>
 
         <div *ngIf="task.answerType == 'Варианты'">
@@ -37,8 +51,11 @@
                   word-wrap: break-word">{{file.substring(file.indexOf('.') + 1)}}</div>
         </div>
 
-        <div *ngIf="checkChecking(task.id)">
-          <button type="button" class="btn btn-primary col-3" (click)="momentCheck(task.id)">Отправить</button>
+        <div class="row mt-4" *ngIf="checkChecking(task.id)">
+          <button type="button" class="btn btn-primary col-3" (click)="momentCheck(task.id)">Проверить</button>
+          <div *ngIf="!taskChecked" class="row m-3 col-12 spinner-border" role="status"></div>
+          <i style="font-size: 30px" *ngIf="taskChecked && statistic.checkingAnswers[task.id] && statistic.checkingAnswers[task.id].pupilAnswer == statistic.checkingAnswers[task.id].rightAnswer" class="col-2 bi bi-check-circle-fill text-success bi-lg"></i>
+          <i style="font-size: 30px" *ngIf="taskChecked && statistic.checkingAnswers[task.id] && statistic.checkingAnswers[task.id].pupilAnswer != statistic.checkingAnswers[task.id].rightAnswer" class="col-2 bi bi-x-circle-fill text-danger"></i>
         </div>
       </div>
     </div>

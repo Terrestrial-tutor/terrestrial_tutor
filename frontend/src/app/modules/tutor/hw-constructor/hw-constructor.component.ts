@@ -6,9 +6,12 @@ import {Homework} from "../../../models/Homework";
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {Task} from "../../../models/Task";
 import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
-import {Subscription} from "rxjs";
+import {Subscription, throwError} from "rxjs";
 import {TutorDataService} from "../storage/tutor.data.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {catchError} from "rxjs/operators";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-hw-constructor',
@@ -32,6 +35,7 @@ export class HwConstructorComponent implements OnInit {
   currentTasks: Task[] | null = null;
   pageLoaded: boolean = false;
   subscriptions: Subscription[] = [];
+  errorMessage = "";
 
   ngOnInit(): void {
     if (this.tutorDataService.getHomework()) {
@@ -86,7 +90,11 @@ export class HwConstructorComponent implements OnInit {
     this.saveHomework();
     this.pageLoaded = false;
     if (this.homework) {
-      this.tutorService.saveHomework(this.homework).subscribe(id => {
+      this.tutorService.saveHomework(this.homework).pipe(catchError((error: HttpErrorResponse) => {
+        this.errorMessage = "Ошибка при создании задания";
+        this.pageLoaded = true;
+        return throwError(error);
+      })).subscribe(id => {
         this.pageLoaded = true;
         this.tutorDataService.setHomework(null);
         sessionStorage.removeItem("homeworkId");
@@ -120,11 +128,19 @@ export class HwConstructorComponent implements OnInit {
 
   onDrop(event: CdkDragDrop<Task[]>) {
     let tasks = this.homework?.tasks;
+    let updatedCheckingMap: {[key: number]: string} = {};
     if (tasks) {
       moveItemInArray(tasks, event.previousIndex, event.currentIndex);
       if (this.homework) {
         this.homework.tasks = tasks;
       }
+      if (this.homework?.tasksCheckingTypes) {
+        for (let task of tasks) {
+          updatedCheckingMap[task.id] = this.homework?.tasksCheckingTypes[task.id];
+        }
+        this.homework.tasksCheckingTypes = updatedCheckingMap;
+      }
     }
+    console.log(updatedCheckingMap);
   }
 }
