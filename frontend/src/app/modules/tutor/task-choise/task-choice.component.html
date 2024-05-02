@@ -12,7 +12,7 @@
       [attr.aria-expanded]="!isCollapsed[i]"
       aria-controls="collapseExample"
     >
-      {{ task.task.name }}
+      {{ task.task.name }}, Тема: {{ task.task.level1 }}, Подтема: {{ task.task.level2 }}
     </button>
 
     <div class="col-10" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed[i]">

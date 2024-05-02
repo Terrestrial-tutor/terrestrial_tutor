@@ -241,4 +241,8 @@ public class HomeworkServiceImpl implements HomeworkService {
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return homeworkRepository.findHomeworkEntitiesByTutor(tutor);
     }
+
+    public List<HomeworkEntity> getAllHomeworks() {
+        return homeworkRepository.findAll();
+    }
 }

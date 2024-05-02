@@ -13,6 +13,7 @@ import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -134,6 +136,16 @@ public class HomeworkController {
     public HttpStatus deleteHomeworkById(@PathVariable Long id) {
         homeworkService.deleteHomeworkById(id);
         return HttpStatus.OK;
+    }
+
+    @GetMapping("/homework/all")
+    public ResponseEntity<List<HomeworkDTO>> getHomeworks() {
+        List<HomeworkEntity> allHomeworks = homeworkService.getAllHomeworks();
+        List<HomeworkDTO> allHomeworksDto = new ArrayList<>();
+        for(HomeworkEntity homework : allHomeworks) {
+            allHomeworksDto.add(homeworkFacade.homeworkToHomeworkDTO(homework));
+        }
+        return new ResponseEntity<>(allHomeworksDto, HttpStatus.OK);
     }
 
 //    @GetMapping("/homework/empty/{id}")
