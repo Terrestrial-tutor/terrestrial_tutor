@@ -12,7 +12,7 @@
       [attr.aria-expanded]="!isCollapsed[i]"
       aria-controls="collapseExample"
     >
-      {{ task.task.name }}
+      {{ task.task.name }}, Тема: {{ task.task.level1 }}, Подтема: {{ task.task.level2 }}
     </button>
 
     <div class="col-10" #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed[i]">
@@ -42,7 +42,6 @@
             <img *ngIf="checkImage(image)" class="m-2 border-opacity-25 border border-2"
                  [src]="image" width="200px" height="auto" alt="">
             <div *ngIf="checkImage(image)" class="row mx-2 text-center" style="
-              background-color: white;
               width: 200px;
               word-wrap: break-word">{{image.substring(image.indexOf('.') + 1)}}</div>
           </div>

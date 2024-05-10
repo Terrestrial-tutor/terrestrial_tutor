@@ -11,6 +11,8 @@ public interface TutorService {
 
     TutorEntity findTutorById(Long id);
 
+    List<TutorEntity> findTutorsWithoutSubject(String subject);
+
     TutorEntity verifyTutor(Long id);
 
     void deleteTutorById(Long id);

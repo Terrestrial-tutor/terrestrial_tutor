@@ -76,14 +76,28 @@ export class TaskChoiceComponent implements OnInit {
     }
   }
 
-  getSelectedTasks() {
-    let selectedTasksIds = [];
+  getSelectedTasks(): Task[] {
+    let selectedTasksIds = this.homework?.tasks.map(task => task.id);
+
     for (let task of this.allTasks) {
-      if (task.isSelected) {
-        selectedTasksIds.push(task.task);
+      if (task.isSelected && selectedTasksIds && !selectedTasksIds.includes(task.task.id)) {
+        selectedTasksIds.push(task.task.id);
+      }
+      if (!task.isSelected && selectedTasksIds && selectedTasksIds.includes(task.task.id)) {
+        delete selectedTasksIds[selectedTasksIds.indexOf(task.task.id)];
       }
     }
-    return selectedTasksIds;
+
+    let currentTasks: Task[] = [];
+    if (selectedTasksIds) {
+      for (let taskId of selectedTasksIds) {
+        let task = this.allTasks.find(task => task.task.id == taskId);
+        if (task) {
+          currentTasks.push(task.task);
+        }
+      }
+    }
+    return currentTasks;
   }
 
   submit() {

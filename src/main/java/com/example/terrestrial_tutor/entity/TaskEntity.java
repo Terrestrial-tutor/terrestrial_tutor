@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,22 +36,12 @@ public class TaskEntity {
     @CollectionTable(name = "task_files", joinColumns = @JoinColumn(name = "entity_id"))
     @Column(name = "files")
     Set<String> files;
-    /*
-    @NonNull
-    @Column(name = "complexity")
-    String complexity;
-    */
-    @Column(name = "task_text")
+
+    @Column(name = "task_text", columnDefinition="text")
     String taskText;
 
-    //task_images
-
-    //task_tables_ids
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "answers_array", joinColumns = @JoinColumn(name = "entity_id"))
-    @Column(name = "answers")
-    List<String> answer;
+    @Column(name = "answers", columnDefinition="text")
+    String answer;
 
     @ManyToOne()
     @JoinColumn(name = "subject")
@@ -72,11 +61,4 @@ public class TaskEntity {
     @ManyToOne()
     @JoinColumn(name = "support")
     SupportEntity support;
-
-    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    List<CompletedTaskEntity> completedTaskEntities;
-
-    //ban_commands
-
-    //task_analysis
 }

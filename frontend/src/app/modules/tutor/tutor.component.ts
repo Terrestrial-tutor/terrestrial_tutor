@@ -4,8 +4,6 @@ import {map, Subject, Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {dataService} from "./services/data.service";
 import {Homework} from "../../models/Homework";
-import {Store} from "@ngrx/store";
-import {clearHomeworkState, saveHomework} from "./storage/homework.actions";
 import * as HomeworkSelectors from "./storage/homework.selectors"
 import * as HomeworkActions from "./storage/homework.actions"
 import {TutorDataService} from "./storage/tutor.data.service";
@@ -25,16 +23,18 @@ export class TutorComponent implements OnInit {
   currentSubjects: any;
   subscriptions: Subscription[] = [];
   pageLoaded: boolean =  true;
+  homeworks: Homework[] = [];
 
   ngOnInit(): void {
     let homeworkId = Number(sessionStorage.getItem("homeworkId"));
-    if (homeworkId) {
+    if (homeworkId && sessionStorage.getItem('pid') != '1') {
       this.tutorService.deleteHomeworkById(homeworkId).subscribe(() => {
-        sessionStorage.removeItem("homeworkId");
+        sessionStorage.clear();
         this.tutorService.getTutorSubjects().subscribe(subjects =>
           this.currentSubjects = subjects);
       });
     } else {
+      sessionStorage.clear();
       this.tutorService.getTutorSubjects().subscribe(subjects =>
         this.currentSubjects = subjects);
     }
@@ -50,5 +50,16 @@ export class TutorComponent implements OnInit {
         this.router.navigate(['/tutor/constructor']);
       }
     });
+  }
+
+  getHomeworks() {
+    this.tutorService.getHomeworks().subscribe(homeworks => this.homeworks = homeworks);
+  }
+
+  addPupils(homework: Homework) {
+    this.tutorDataService.setHomework(homework);
+    sessionStorage.setItem('homeworkId', String(homework.id));
+    sessionStorage.setItem('pid', '1');
+    this.router.navigate(['tutor/constructor/add/pup']);
   }
 }

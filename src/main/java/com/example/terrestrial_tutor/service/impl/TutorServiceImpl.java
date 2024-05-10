@@ -106,4 +106,16 @@ public class TutorServiceImpl implements TutorService {
     public TutorEntity findTutorById(Long id) {
         return tutorRepository.findTutorEntityById(id);
     }
+
+    public List<TutorEntity> findTutorsWithoutSubject(String subject) {
+        List<TutorEntity> tutors = tutorRepository.findAll();
+        List<TutorEntity> filtredTutors = new ArrayList<>();
+        for (TutorEntity tutorEntity : tutors) {
+            List<String> subjects = tutorEntity.getSubjects().stream().map(SubjectEntity::getName).toList();
+            if (!subjects.contains(subject)) {
+                filtredTutors.add(tutorEntity);
+            }
+        }
+        return filtredTutors;
+    }
 }

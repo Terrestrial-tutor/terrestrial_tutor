@@ -1,8 +1,5 @@
 package com.example.terrestrial_tutor.dto;
 
-import com.example.terrestrial_tutor.entity.TaskEntity;
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -21,5 +18,6 @@ public class HomeworkDTO {
     LocalDate deadLine;
     @NonNull
     String subject;
-    Set<TaskDTO> tasks = new HashSet<>();
+    List<TaskDTO> tasks = new LinkedList<>();
+    Integer lastAttempt = 0;
 }
