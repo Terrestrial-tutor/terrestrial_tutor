@@ -28,6 +28,10 @@ import {provideEffects} from "@ngrx/effects";
 import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
 import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
 import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
+import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displaying/homeworks.displaying.component';
+import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.statistic/pupil.homework.statistic.component';
+import {NgOptimizedImage} from "@angular/common";
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -36,7 +40,9 @@ import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
+    PupilHomeworkStatisticComponent,
     HomeworksListComponent,
+    HomeworksDisplayingComponent,
     SubjectsComponent,
     SupportComponent,
     TaskComponent,
@@ -56,6 +62,9 @@ import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks
     NgbAlertModule,
     NgbModule,
     CodemirrorModule,
+    NgOptimizedImage,
+    CdkDropList,
+    CdkDrag,
   ],
   providers: [
     authInterceptorProviders,

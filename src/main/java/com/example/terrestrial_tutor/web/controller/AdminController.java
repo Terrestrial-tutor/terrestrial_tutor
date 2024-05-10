@@ -76,16 +76,27 @@ public class AdminController {
         return new ResponseEntity<>(resultPupils, HttpStatus.OK);
     }
 
-    @PostMapping("/admin/tutor/add/subject/{tutorId}")
-    public HttpStatus addSubjectToTutor(@RequestBody String subjectName, @PathVariable Long tutorId) throws Exception {
-        SubjectEntity subject = subjectService.findSubjectByName(subjectName);
-        TutorEntity tutor = tutorService.findTutorById(tutorId);
+    @PostMapping("/admin/tutor/add/subject/{subject}")
+    public ResponseEntity<List<TutorListDTO>> addSubjectToTutor(@PathVariable String subject, @RequestBody List<Long> tutorIds) throws Exception {
+        List<TutorEntity> tutors = new ArrayList<>();
+        for (Long tutorId : tutorIds) {
+            tutors.add(tutorService.findTutorById(tutorId));
+        }
         try {
-            tutorService.addTutorSubject(tutor, subject);
+            for (TutorEntity tutor : tutors) {
+                tutorService.addTutorSubject(tutor, subjectService.findSubjectByName(subject));
+            }
         }catch (Exception e) {
             throw  new Exception(e);
         }
-        return HttpStatus.OK;
+        return new ResponseEntity<>(tutorListFacade.tutorListToDTO(subjectService.findSubjectByName(subject).getTutors()), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/find/tutors/new/{subject}")
+    public ResponseEntity<List<TutorListDTO>> findTutorsWithoutSubject(@PathVariable String subject) {
+        List<TutorEntity> filtredTutors = tutorService.findTutorsWithoutSubject(subject);
+        List<TutorListDTO> result = tutorListFacade.tutorListToDTO(filtredTutors);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }

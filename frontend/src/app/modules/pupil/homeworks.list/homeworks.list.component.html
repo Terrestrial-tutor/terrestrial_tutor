@@ -1,10 +1,48 @@
 <div class="container-fluid px-3 pb-3">
   <div class="container-fluid mx-auto p-3  min-vh-100 border-opacity-25 rounded-4 border border-2 col-12 plate text-le">
     <h2 class="mx-3 mb-5">Ваши домашиние задания</h2>
-    <div class="d-inline" *ngFor="let homework of homeworks">
-      <button class="m-3 col-2 btn btn-primary" style="height: 15vh">
-        <h3>{{ homework.name }}</h3>
-      </button>
+
+    <button
+      type="button"
+      class="btn btn-primary col-12 mb-3"
+      style="text-align: start"
+      (click)="collapse.toggle()"
+      [attr.aria-expanded]="collapseHomeworks"
+      aria-controls="collapseExample"
+    >
+      <h3 class="m-0">Доступные задания</h3>
+    </button>
+
+    <div class="col-12 mb-4" #collapse="ngbCollapse" [(ngbCollapse)]="collapseHomeworks">
+      <div class="card">
+        <div class="row mb-4">
+          <button class="mb-0 m-3 col-2 btn btn-primary" *ngFor="let homework of homeworks" (click)="submit(homework)">
+            <h3>{{ homework.name }}</h3>
+          </button>
+        </div>
+      </div>
     </div>
+
+    <button
+      type="button"
+      class="btn btn-primary col-12"
+      style="text-align: start"
+      (click)="collapseStat.toggle()"
+      [attr.aria-expanded]="collapseHomeworksStatistic"
+      aria-controls="collapseExample"
+    >
+      <h3 class="m-0">Результаты по заданиям</h3>
+    </button>
+
+    <div class="col-12 mt-3" #collapseStat="ngbCollapse" [(ngbCollapse)]="collapseHomeworksStatistic">
+      <div class="card">
+        <div class="d-inline" *ngFor="let homework of completedHomeworks | keyvalue">
+          <button class="m-3 col-2 btn btn-primary" style="height: 15vh" (click)="submitCompletedHomeworks(homework.value, homework.key)">
+            <h3>{{ getHomeworkById(homework.key) }}</h3>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

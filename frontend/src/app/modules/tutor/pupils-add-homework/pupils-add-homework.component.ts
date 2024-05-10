@@ -42,6 +42,9 @@ export class PupilsAddHomeworkComponent implements OnInit {
         this.fillPupils(pupils);
       }
     })
+    this.filter.valueChanges.subscribe((text) => {
+      this.search(text);
+    });
   }
 
   fillPupils(pupils: Pupil[]) {
@@ -88,7 +91,13 @@ export class PupilsAddHomeworkComponent implements OnInit {
       this.tutorDataService.setHomework(this.homework);
       this.tutorService.saveHomework(this.homework).subscribe(() => {
         this.pageLoaded = true;
-        this.router.navigate(['tutor/constructor']);
+        if (sessionStorage.getItem('pid') != '1') {
+          this.router.navigate(['tutor/constructor']);
+        } else {
+          this.router.navigate(['tutor']);
+          sessionStorage.removeItem('pid');
+          sessionStorage.removeItem('homeworkId');
+        }
       });
     }
   }

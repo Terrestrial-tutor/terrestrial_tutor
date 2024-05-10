@@ -26,4 +26,20 @@ export class PupilService {
     return this.http.get(this.PUPIL_API + 'all');
   }
 
+  sendAnswers(answers: {[key: number]: string}, homeworkId: number, attempt: number) {
+    return this.http.post(this.PUPIL_API + `homework/${homeworkId}/${attempt}`, answers);
+  }
+
+  getPupilById(id: string | null): Observable<any> {
+    return this.http.get(this.PUPIL_API + `${id}`);
+  }
+
+  getHomeworkAnswers(homeworkId: number | null, idPupil: number | null, attempt: number | null): Observable<any> {
+    return this.http.get(this.PUPIL_API + `homework/${homeworkId}/answers/${idPupil}/${attempt}`);
+  }
+
+  getCompletedHomeworks(pupilId: number) {
+    return this.http.get(this.PUPIL_API + `${pupilId}/homework/completed`);
+  }
+
 }

@@ -43,6 +43,10 @@ export class TutorService {
     return this.http.get(this.HOMEWORK_API + id);
   }
 
+  getHomeworks(): Observable<any> {
+    return this.http.get(this.HOMEWORK_API + 'all/');
+  }
+
   addHomeworkTasks(taskIds: number[], HWId: any): Observable<any> {
     return this.http.post(this.HOMEWORK_API + 'add/tasks/' + HWId, taskIds);
   }

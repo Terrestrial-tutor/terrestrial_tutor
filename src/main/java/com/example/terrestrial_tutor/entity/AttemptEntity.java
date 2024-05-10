@@ -1,10 +1,12 @@
 package com.example.terrestrial_tutor.entity;
 
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+
+/** Сущность ответа ученика на задание
+ */
 
 @Entity
 @Getter
@@ -12,27 +14,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "completed_task", schema = "public")
-public class CompletedTaskEntity {
+@Table(name = "homework_solutions", schema = "public")
+public class AttemptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @Column(name = "task_checking_type")
-    TaskCheckingType taskCheckingType;
-
-    @ManyToOne()
-    @JoinColumn(name = "task")
-    TaskEntity task;
+    @Column(name = "answers", columnDefinition="text")
+    String answers;
 
     @ManyToOne()
     @JoinColumn(name = "homework")
     HomeworkEntity homework;
 
-    public CompletedTaskEntity(TaskEntity taskEntity, TaskCheckingType check){
-        this.task = taskEntity;
-        this.homework = homework;
-        this.taskCheckingType = check;
-    }
+    @ManyToOne()
+    @JoinColumn(name = "pupil")
+    PupilEntity pupil;
+
+    @Column(name = "attempt_number")
+    Integer attemptNumber = 0;
 }

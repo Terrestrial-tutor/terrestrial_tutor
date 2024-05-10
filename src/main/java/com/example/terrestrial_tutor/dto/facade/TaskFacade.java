@@ -3,8 +3,11 @@ package com.example.terrestrial_tutor.dto.facade;
 import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.TaskEntity;
 import com.example.terrestrial_tutor.service.TaskService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.LinkedList;
 
 @Component
 public class TaskFacade {
@@ -18,7 +21,7 @@ public class TaskFacade {
                 task.getChecking(),
                 task.getAnswerType(),
                 task.getTaskText(),
-                task.getAnswer(),
+                new Gson().fromJson(task.getAnswer(), LinkedList.class),
                 task.getSubject().getName(),
                 task.getLevel1(),
                 task.getLevel2(),
