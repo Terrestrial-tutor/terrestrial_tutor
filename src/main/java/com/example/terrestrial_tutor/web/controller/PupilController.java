@@ -3,7 +3,6 @@ package com.example.terrestrial_tutor.web.controller;
 import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.facade.PupilFacade;
-import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.payload.request.AddSubjectRequest;
@@ -60,8 +59,8 @@ public class PupilController {
 
     @GetMapping("/pupil")
     public ResponseEntity<PupilDTO> getCurrentPupil(Principal principal) {
-        PupilDTO pupil = pupilFacade.pupilToPupilDTO(pupilService.getCurrentPupil(principal));
-        return new ResponseEntity<PupilDTO>(pupil, HttpStatus.OK);
+        PupilDTO pupilDTO = pupilFacade.pupilToPupilDTO(pupilService.getCurrentPupil(principal));
+        return new ResponseEntity<PupilDTO>(pupilDTO, HttpStatus.OK);
     }
 
     @GetMapping("/pupil/all")
@@ -95,10 +94,4 @@ public class PupilController {
 
         return new ResponseEntity<>(pupilsDTO,HttpStatus.OK);
     }
-
-//    @GetMapping("/pupil/homework/all")
-//    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
-//        return new ResponseEntity<>(homeworkService.getAllHomeworksPupil(), HttpStatus.OK);
-//    }
-
 }

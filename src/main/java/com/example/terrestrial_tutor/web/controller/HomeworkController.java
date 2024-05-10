@@ -5,7 +5,6 @@ import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.HomeworkAnswersDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
 import com.example.terrestrial_tutor.dto.facade.HomeworkFacade;
-import com.example.terrestrial_tutor.entity.AnswerEntity;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
@@ -13,7 +12,6 @@ import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.service.HomeworkService;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,34 +50,6 @@ public class HomeworkController {
         return new ResponseEntity<>(newHomeworkDTO, HttpStatus.OK);
     }
 
-//    @PostMapping("/homework/add/tasks/{HWId}")
-//    public HttpStatus addTasksToHomework(@RequestBody List<Long> taskIds, @PathVariable Long HWId) {
-//        HomeworkEntity homework = homeworkService.getHomeworkById(HWId);
-//        List<TaskEntity> tasks = new ArrayList<>();
-//        for (Long taskId : taskIds) {
-//            TaskEntity task = taskService.getTaskById(taskId);
-//            List<HomeworkEntity> taskHomeworks = task.getHomeworks();
-//            if (!taskHomeworks.contains(homework)) {
-//                taskHomeworks.add(homework);
-//                task.setHomeworks(taskHomeworks);
-//                taskService.save(task);
-//            }
-//            tasks.add(task);
-//        }
-//
-//        for (TaskEntity task : homework.getTasks()) {
-//            if (!tasks.contains(task)) {
-//                List<HomeworkEntity> taskHomeworks = task.getHomeworks();
-//                taskHomeworks.remove(homework);
-//                taskService.save(task);
-//            }
-//        }
-//
-//        homework.setTasks(tasks);
-//        homeworkService.save(homework);
-//        return HttpStatus.OK;
-//    }
-
     /**
      * Контроллер для отдачи случайной выборки заданий по заданным данным и формированием в дз
      *
@@ -93,10 +63,11 @@ public class HomeworkController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @PostMapping("/pupil/homework/{homeworkId}")
+    @PostMapping("/pupil/homework/{homeworkId}/{attempt}")
     public ResponseEntity<HomeworkAnswersDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
-                                                                 @PathVariable Long homeworkId) {
-        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.checkingAndSaveAnswers(answers, homeworkId);
+                                                                 @PathVariable Long homeworkId,
+                                                                 @PathVariable int attempt) {
+        HomeworkAnswersDTO homeworkAnswersDTO = homeworkService.checkingAndSaveAnswers(answers, homeworkId, attempt);
         return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 
@@ -147,9 +118,4 @@ public class HomeworkController {
         }
         return new ResponseEntity<>(allHomeworksDto, HttpStatus.OK);
     }
-
-//    @GetMapping("/homework/empty/{id}")
-//    public ResponseEntity<Boolean> isHomeworkEmpty(@PathVariable Long id) {
-//        return new ResponseEntity<>(homeworkService.isHomeworkEmpty(id), HttpStatus.OK);
-//    }
 }

@@ -3,6 +3,7 @@ package com.example.terrestrial_tutor.dto.facade;
 import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.TaskDTO;
+import com.example.terrestrial_tutor.entity.AttemptEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.service.PupilService;
@@ -42,6 +43,13 @@ public class PupilFacade {
                         }
                     });
                     clearedHomework.setTasks(new LinkedList<>(tasks));
+                    int lastAttempt = 0;
+                    for (AttemptEntity attemptEntity : homework.getAnswerEntities()) {
+                        if (attemptEntity.getPupil().getId().equals(pupil.getId())) {
+                            lastAttempt = attemptEntity.getAttemptNumber() > lastAttempt ? attemptEntity.getAttemptNumber() : lastAttempt;
+                        }
+                    }
+                    clearedHomework.setLastAttempt(lastAttempt);
                     return clearedHomework;
                 })
                 .toList()));

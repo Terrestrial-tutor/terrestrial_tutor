@@ -50,7 +50,7 @@ public class PupilEntity implements UserDetails {
     List<PaymentEntity> payments= new ArrayList<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    List<AnswerEntity> answers = new ArrayList<>();
+    List<AttemptEntity> answers = new ArrayList<>();
 
     @NonNull
     @Column(name = "username")

@@ -22,7 +22,7 @@ export class HomeworksDisplayingComponent {
   tasksAnswers: FormGroup = this.fb.group({});
   pageLoaded = false;
   statistic: HomeworkAnswers = {checkingAnswers: {}, attemptCount: 1};
-  taskChecked = true;
+  tasksStatus: {[key: string]: number} = {};
 
   constructor(private pupilDataService: PupilDataService,
       private pupilService: PupilService,
@@ -36,13 +36,7 @@ export class HomeworksDisplayingComponent {
     if (this.pupil) {
       this.homework = this.pupilDataService.getCurrentHomework();
       if (this.homework) {
-        for (let task of this.homework?.tasks) {
-          let key = task.id.toString();
-          this.tasksAnswers?.addControl(
-            key,
-            this.fb.control('', [])
-          );
-        }
+        this.formFill();
         this.pageLoaded = true;
       }
     } else {
@@ -56,16 +50,21 @@ export class HomeworksDisplayingComponent {
         if (homework) {
           this.pupilDataService.setCurrentHomework(homework);
           this.homework = homework;
-          for (let task of this.homework?.tasks) {
-            let key = task.id.toString();
-            this.tasksAnswers?.addControl(
-              key,
-              this.fb.control('', [])
-            );
-          }
+          this.formFill();
           this.pageLoaded = true;
         }
       });
+    }
+  }
+
+  formFill() {
+    // @ts-ignore
+    for (let task of this.homework?.tasks) {
+      let key = task.id.toString();
+      this.tasksAnswers?.addControl(
+        key,
+        this.fb.control('', [])
+      );
     }
   }
 
@@ -83,7 +82,7 @@ export class HomeworksDisplayingComponent {
 
   submit() {
     if (this.homework?.id) {
-     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id).subscribe((homework) => {
+     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id, this.homework.lastAttempt).subscribe((homework) => {
        if (homework) {
          this.statistic = <HomeworkAnswers>homework;
        }
@@ -111,12 +110,16 @@ export class HomeworksDisplayingComponent {
   }
 
   momentCheck(taskId: number) {
-    this.taskChecked = false;
+    this.tasksStatus[taskId.toString()] = 0;
     if (this.homework?.id) {
-      this.pupilService.sendAnswers(this.createCheckRequest(taskId), this.homework?.id).subscribe((homework) => {
+      // @ts-ignore
+      this.pupilService.sendAnswers(this.createCheckRequest(taskId), this.homework?.id, this.homework.lastAttempt).subscribe((homework) => {
         if (homework) {
-          this.taskChecked = true;
           this.statistic = <HomeworkAnswers>homework;
+          let currentTaskStatistic = this.statistic.checkingAnswers[taskId.toString()];
+          if (currentTaskStatistic) {
+            this.tasksStatus[taskId.toString()] = currentTaskStatistic.pupilAnswer == currentTaskStatistic.rightAnswer ? 1 : 2;
+          }
         }
       });
     }

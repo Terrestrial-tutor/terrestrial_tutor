@@ -71,7 +71,6 @@ export class PupilHomeworkStatisticComponent {
         })
         let attempt = this.currentTry;
         if (attempt) {
-          console.log(attempt);
           this.pupilService.getHomeworkAnswers(this.currentHomework, pupilId, attempt).subscribe(answers => {
             this.homeworkAnswers = answers;
             if (answers.checkingAnswers) {

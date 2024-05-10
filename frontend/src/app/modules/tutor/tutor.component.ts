@@ -29,11 +29,12 @@ export class TutorComponent implements OnInit {
     let homeworkId = Number(sessionStorage.getItem("homeworkId"));
     if (homeworkId && sessionStorage.getItem('pid') != '1') {
       this.tutorService.deleteHomeworkById(homeworkId).subscribe(() => {
-        sessionStorage.removeItem("homeworkId");
+        sessionStorage.clear();
         this.tutorService.getTutorSubjects().subscribe(subjects =>
           this.currentSubjects = subjects);
       });
     } else {
+      sessionStorage.clear();
       this.tutorService.getTutorSubjects().subscribe(subjects =>
         this.currentSubjects = subjects);
     }

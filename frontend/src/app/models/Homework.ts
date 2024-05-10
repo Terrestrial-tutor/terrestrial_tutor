@@ -9,4 +9,5 @@ export class Homework {
   subject: string = '';
   public tasksCheckingTypes: { [key: number]: string } = {};
   tasks: Task[] = [];
+  lastAttempt: number = 0;
 }
