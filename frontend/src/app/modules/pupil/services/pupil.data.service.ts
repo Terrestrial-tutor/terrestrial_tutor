@@ -1,0 +1,40 @@
+import { Injectable } from '@angular/core';
+import { Subject } from 'src/app/models/Subject';
+import { Pupil } from 'src/app/models/Pupil';
+import { Homework } from 'src/app/models/Homework';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PupilDataService {
+
+  private pupil: Pupil | null = null;
+  private currentSubject: string | null = null;
+  private currentHomework: Homework | null = null;
+
+  public getPupil(): Pupil|null {
+    return this.pupil;
+  }
+
+  public setPupil(pupil: Pupil|null) {
+    this.pupil = pupil;
+  }
+
+  public getCurrentSubject(): string|null {
+    return this.currentSubject;
+  }
+
+  public setCurrentSubject(currentSubject: string|null) {
+    this.currentSubject = currentSubject;
+  }
+
+  public getCurrentHomework(): Homework|null {
+    return this.currentHomework;
+  }
+
+  public setCurrentHomework(currentHomework: Homework|null) {
+    this.currentHomework = currentHomework;
+  }
+
+}

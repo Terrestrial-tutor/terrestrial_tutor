@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import {PupilService} from "./services/pupil.service";
 import {Pupil} from "../../models/Pupil";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {TokenStorageService} from "../../security/token-storage.service";
-import {SubjectsService} from "../subjects/services/subjects.service";
-import {Subject} from "../../models/Subject";
+import { Router } from '@angular/router';
+import { PupilDataService } from './services/pupil.data.service';
 
 @Component({
   selector: 'app-pupil',
@@ -13,17 +11,35 @@ import {Subject} from "../../models/Subject";
 })
 export class PupilComponent {
 
-  pupil: Pupil | undefined;
+  pupil: Pupil | null = null;
+  currentSubjects: string[] | null = null;
 
-  constructor(private pupilService: PupilService,
-              private tokenService: TokenStorageService,
-              private subjectsService: SubjectsService) {}
+  constructor(private router: Router,
+    private pupilDataService: PupilDataService,
+    private pupilService: PupilService,) { }
 
   ngOnInit(): void {
-    // @ts-ignore
-    this.pupilService.getCurrentUser().subscribe(data => {
-      this.pupil = data;
-    });
+    sessionStorage.clear();
+    this.pupilDataService.setCurrentSubject(null);
+    if (!this.pupilDataService.getPupil()) {
+      this.pupilService.getCurrentUser().subscribe(pupil => {
+        this.pupil = pupil;
+        this.pupilDataService.setPupil(pupil);
+        this.currentSubjects = pupil.subjects;
+      })
+    } else {
+        this.pupil = this.pupilDataService.getPupil();
+        if (this.pupil?.subjects) {
+          this.currentSubjects = this.pupil?.subjects;
+        }
+    }
+
+  }
+
+  submit(subject: string) {
+    this.pupilDataService.setCurrentSubject(subject);
+    sessionStorage.setItem('currentSubject', JSON.stringify(subject));
+    this.router.navigate(['/pupil/homeworks']);
   }
 
 }

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../security/auth.service";
 import {RouterLink} from "@angular/router";
 
@@ -10,11 +10,11 @@ import {RouterLink} from "@angular/router";
 })
 export class RegistrationComponent implements OnInit {
   // @ts-ignore
-  public registrationForm: FormGroup;
+  public registrationForm: UntypedFormGroup;
 
   constructor(
     private authService: AuthService,
-    private fb: FormBuilder) {
+    private fb: UntypedFormBuilder) {
   }
 
   ngOnInit(): void {

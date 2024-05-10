@@ -9,11 +9,13 @@ import com.example.terrestrial_tutor.exceptions.CustomException;
 import com.example.terrestrial_tutor.repository.TaskRepository;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,7 +113,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskEntity addNewTask(TaskDTO dto, SupportEntity support) {
         TaskEntity newTask = new TaskEntity();
         newTask.setName(dto.getName());
-        newTask.setAnswer(dto.getAnswers());
+        newTask.setAnswer(new Gson().toJson(new LinkedList<>(dto.getAnswers())));
         newTask.setLevel1(dto.getLevel1());
         newTask.setLevel2(dto.getLevel2());
         newTask.setSubject(subjectService.findSubjectByName(dto.getSubject()));

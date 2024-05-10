@@ -30,24 +30,27 @@ public class PupilEntity implements UserDetails {
     @Column(name = "balance")
     Double balance;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<HomeworkEntity> homeworkList;
 
     @Column(name = "price")
-    int price;
+    Integer price;
 
-    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<SubjectEntity> subjects = new ArrayList<>();
 
     @ManyToOne()
     @JoinColumn(name = "support")
     SupportEntity support;
 
-    @ManyToMany(mappedBy = "pupils", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pupils", fetch = FetchType.EAGER)
     List<TutorEntity> tutors = new ArrayList<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
     List<PaymentEntity> payments= new ArrayList<>();
+
+    @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    List<AttemptEntity> answers = new ArrayList<>();
 
     @NonNull
     @Column(name = "username")

@@ -1,13 +1,11 @@
 package com.example.terrestrial_tutor.entity;
 
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Getter
@@ -26,23 +24,18 @@ public class HomeworkEntity {
     String name;
 
     @NonNull
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "subject")
     SubjectEntity subject;
-
-    //tasks
-
-    //@Column(name = "banList")
-    //List<Integer> = new ArrayList<Integer>();
 
     @Column(name = "solute_time")
     Long soluteTime;
 
     Long targetTime;
 
-    @ManyToMany()
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "pupils")
-    List<PupilEntity> pupils;
+    Set<PupilEntity> pupils;
 
 //    todo
 //    Добавить теоритические материалы
@@ -51,9 +44,11 @@ public class HomeworkEntity {
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
-    @ElementCollection
-    @CollectionTable(name = "checking_map")
-    @MapKeyColumn(name = "key_column")
-    Map<TaskEntity, TaskCheckingType> tasksCheckingTypes;
+    @Column(name = "task_checking_types", columnDefinition="text")
+    String taskCheckingTypes;
+
+    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER)
+    List<AttemptEntity> answerEntities;
+
     LocalDate deadLine;
 }

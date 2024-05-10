@@ -9,7 +9,9 @@ import {TutorList} from "../../models/TutorList";
 import {Pupil} from "../../models/Pupil";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PupilSelect} from "../../models/PupilSelect";
-import {FormControl} from "@angular/forms";
+import {UntypedFormControl} from "@angular/forms";
+import { TutorService } from '../tutor/services/tutor.service';
+import { TutorListSelect } from 'src/app/models/TutorListSelect';
 
 @Component({
   selector: 'app-admin',
@@ -30,18 +32,19 @@ export class AdminComponent implements OnInit {
   filteredTutorsPupils: TutorList[] = [];
   filteredTutors: TutorList[] = [];
   isChecksPageLoaded: boolean = false;
-  isPupilsLoaded: boolean = true;
+  isNewDataLoaded: boolean = true;
   isNewPupilsLoaded: boolean = true;
-  newPupils: PupilSelect[] = [];
+  newData: (PupilSelect | TutorListSelect)[] = [];
   active = "requests";
-  filter = new FormControl('');
-  filteredPupils: PupilSelect[] = [];
+  filter = new UntypedFormControl('');
+  filteredData: (PupilSelect | TutorListSelect)[] = [];
 
   constructor(private adminService: AdminService,
               private tokenService: TokenStorageService,
               private subjectsService: SubjectsService,
               private pupilService: PupilService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private tutorService: TutorService) {
   }
 
   ngOnInit(): void {
@@ -80,54 +83,81 @@ export class AdminComponent implements OnInit {
   }
 
   getTutorPupilsBySubject() {
-    this.isPupilsLoaded = false;
+    this.isNewDataLoaded = false;
     this.adminService.getTutorPupilsBySubject(this.pupilsSubject, this.selectedTutor.id).subscribe(data => {
       this.pupils = data;
-      this.isPupilsLoaded = true;
+      this.isNewDataLoaded = true;
     })
   }
 
   search(text: any) {
     text = text.toLowerCase();
-    this.filteredPupils = this.newPupils.filter(pupil => {
-      return pupil.pupil.username.toLowerCase().includes(text) ||
-        pupil.pupil.name.toLowerCase().includes(text) ||
-        pupil.pupil.surname.toLowerCase().includes(text) ||
-        pupil.pupil.patronymic.toLowerCase().includes(text);
+    this.filteredData = this.newData.filter(data => {
+      if (data instanceof PupilSelect) {
+        return data.pupil.username.toLowerCase().includes(text) ||
+          data.pupil.name.toLowerCase().includes(text) ||
+          data.pupil.surname.toLowerCase().includes(text) ||
+          data.pupil.patronymic.toLowerCase().includes(text);
+      } else {
+        return data.tutor.username.toLowerCase().includes(text) ||
+          data.tutor.name.toLowerCase().includes(text) ||
+          data.tutor.surname.toLowerCase().includes(text) ||
+          data.tutor.patronymic.toLowerCase().includes(text);
+      }
     });
   }
 
-  open(content: any) {
-    this.newPupils = [];
-    this.adminService.findPupilsWithoutSubject(this.pupilsSubject).subscribe(pupils => {
-      this.newPupils = pupils.map((pupil: any) => {
-        return new PupilSelect(pupil, false);
+  open(content: any, typePupils: boolean = true) {
+    this.newData = [];
+    if (typePupils) {
+      this.adminService.findPupilsWithoutSubject(this.pupilsSubject).subscribe(pupils => {
+        this.newData = pupils.map((pupil: any) => {
+          return new PupilSelect(pupil, false);
+        });
+        this.filteredData = this.newData;
+        this.isNewDataLoaded = true;
       });
-      this.filteredPupils = this.newPupils;
-      this.isPupilsLoaded = true;
-    });
+    } else {
+      this.adminService.findTutorsWithoutSubject(this.tutorsSubject).subscribe(tutors => {
+        this.newData = tutors.map((tutor: any) => {
+          return new TutorListSelect(tutor, false);
+        });;
+        this.filteredData = this.newData;
+        this.isNewDataLoaded = true;
+      })
+    }
     this.filter.valueChanges.subscribe((text) => {
       this.search(text);
     });
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then(selectedPupils => {
-      let newPupilsIds = selectedPupils.map((pupil: Pupil) => {
-        return pupil.id;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'}).result.then(selectedData => {
+      let newDataIds = selectedData.map((data: Pupil | TutorList) => {
+        return data.id;
       })
-      this.pupilService.addSubjects(this.pupilsSubject, newPupilsIds).subscribe();
-      this.adminService.addPupilsForTutor(newPupilsIds, this.selectedTutor.id).subscribe(pupils => {
-        this.pupils = pupils;
-      });
+      if (typePupils) {
+        this.pupilService.addSubjects(this.pupilsSubject, newDataIds).subscribe();
+        this.adminService.addPupilsForTutor(newDataIds, this.selectedTutor.id).subscribe(pupils => {
+          this.pupils = pupils;
+        });
+      } else {
+        this.adminService.addTutorsSubject(newDataIds, this.tutorsSubject).subscribe(tutors => this.tutorsBySubjectsTutor = tutors);
+      }
     }).finally(() => {});
-    this.isPupilsLoaded = false;
+    this.isNewDataLoaded = false;
   }
 
   close(modal: any) {
-    modal.close(this.newPupils.filter(pupil => pupil.isSelected).map(pupil => pupil.pupil));
+    modal.close(this.newData.filter(data => data.isSelected).map(data => {
+      return data instanceof PupilSelect ? data.pupil : data.tutor;
+    }));
   }
 
   navChange() {
     if (this.active == "setTutors") {
       this.getAllSubjects();
     }
+  }
+
+  checkType(data: PupilSelect | TutorListSelect) {
+    return data instanceof PupilSelect ? data.pupil : data.tutor;
   }
 }

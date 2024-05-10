@@ -12,27 +12,26 @@ import {AdminComponent} from "./modules/admin/admin.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatTabsModule} from "@angular/material/tabs";
 import {SubjectsComponent} from './modules/subjects/subjects.component';
-import {MatOptionModule} from "@angular/material/core";
-import {MatSelectModule} from "@angular/material/select";
-import {MatButtonModule} from "@angular/material/button";
-import {MatListModule} from "@angular/material/list";
-import {MatDialogModule} from "@angular/material/dialog";
-import {MatTableModule} from "@angular/material/table";
-import {MatSortModule} from "@angular/material/sort";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {MatInputModule} from "@angular/material/input";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {NgbAlertModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { SupportComponent } from './modules/support/support.component';
 import { TaskComponent } from './modules/task/task.component';
 import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 import { TutorComponent } from './modules/tutor/tutor.component';
 import { HwConstructorComponent } from './modules/tutor/hw-constructor/hw-constructor.component';
-import { TaskChoiceComponent } from './modules/tutor/task-choise/task-choice.component';
 import { BrowseNotificationsComponent } from './modules/modals/browse-notifications.component';
 import { PupilsAddHomeworkComponent } from './modules/tutor/pupils-add-homework/pupils-add-homework.component';
+import {provideStore} from "@ngrx/store";
+import {homeworkFeature} from "./modules/tutor/storage/homework.reducer";
+import {provideStoreDevtools} from "@ngrx/store-devtools";
+import {provideEffects} from "@ngrx/effects";
+import * as homeworkEffects from "./modules/tutor/storage/homework.effects";
+import {TaskChoiceComponent} from "./modules/tutor/task-choise/task-choice.component";
+import { HomeworksListComponent } from './modules/pupil/homeworks.list/homeworks.list.component';
+import { HomeworksDisplayingComponent } from './modules/pupil/homeworks.displaying/homeworks.displaying.component';
+import { PupilHomeworkStatisticComponent } from './modules/pupil/pupil.homework.statistic/pupil.homework.statistic.component';
+import {NgOptimizedImage} from "@angular/common";
+import {CdkDrag, CdkDropList} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [
@@ -41,6 +40,9 @@ import { PupilsAddHomeworkComponent } from './modules/tutor/pupils-add-homework/
     LoginComponent,
     RegistrationComponent,
     PupilComponent,
+    PupilHomeworkStatisticComponent,
+    HomeworksListComponent,
+    HomeworksDisplayingComponent,
     SubjectsComponent,
     SupportComponent,
     TaskComponent,
@@ -57,22 +59,30 @@ import { PupilsAddHomeworkComponent } from './modules/tutor/pupils-add-homework/
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    MatTabsModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatListModule,
-    MatDialogModule,
-    MatTableModule,
-    MatSortModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
     NgbAlertModule,
     NgbModule,
-    CodemirrorModule
+    CodemirrorModule,
+    NgOptimizedImage,
+    CdkDropList,
+    CdkDrag,
   ],
-  providers: [authInterceptorProviders, authErrorInterceptorProviders],
+  providers: [
+    authInterceptorProviders,
+    authErrorInterceptorProviders,
+    provideEffects(
+      homeworkEffects
+    ),
+    provideStore( {
+      [homeworkFeature.name]: homeworkFeature.reducer,
+    }),
+    provideStoreDevtools({
+      maxAge: 25,
+      logOnly: false,
+      autoPause: true,
+      trace: false,
+      traceLimit: 75
+    })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

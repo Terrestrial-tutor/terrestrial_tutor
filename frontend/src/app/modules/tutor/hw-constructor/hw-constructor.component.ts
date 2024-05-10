@@ -3,95 +3,104 @@ import {dataService} from "../services/data.service";
 import {Router} from "@angular/router";
 import {TutorService} from "../services/tutor.service";
 import {Homework} from "../../../models/Homework";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {Task} from "../../../models/Task";
 import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
+import {Subscription, throwError} from "rxjs";
+import {TutorDataService} from "../storage/tutor.data.service";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {error} from "@angular/compiler-cli/src/transformers/util";
+import {catchError} from "rxjs/operators";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-hw-constructor',
   templateUrl: './hw-constructor.component.html',
   styleUrls: ['./hw-constructor.component.css']
 })
-export class HwConstructorComponent implements OnInit, OnDestroy {
+export class HwConstructorComponent implements OnInit {
   @ViewChild('codemirrorComponent') codemirror: CodemirrorComponent | undefined;
 
   constructor(private tutorService: TutorService,
               private dataService: dataService,
               private router: Router,
-              private fb: FormBuilder,) { }
+              private fb: UntypedFormBuilder,
+              private tutorDataService: TutorDataService,) { }
 
   homework: Homework | null = null;
   //@ts-ignore
-  hwForm: FormGroup;
-  currentSubject: string = "";
+  hwForm: UntypedFormGroup;
   isCollapsed: boolean[] = [];
   update: boolean = false;
   currentTasks: Task[] | null = null;
+  pageLoaded: boolean = false;
+  subscriptions: Subscription[] = [];
+  errorMessage = "";
 
   ngOnInit(): void {
-    this.homework = this.dataService.getCurrentHomework();
-    this.currentTasks = this.dataService.getCurrentTasks();
-    this.isCollapsed = [];
-    if (this.homework?.tasksCheckingTypes) {
-      for (let task of this.homework?.tasksCheckingTypes) {
-        this.isCollapsed.push(true);
+    if (this.tutorDataService.getHomework()) {
+      this.homework = this.tutorDataService.getHomework();
+      this.initFields();
+      this.initForm();
+    } else {
+      let homework: number = Number(sessionStorage.getItem("homeworkId"));
+      this.tutorService.getHomework(homework).subscribe(homework => {
+        this.homework = homework;
+        this.initFields();
+        this.initForm();
+      })
+    }
+  }
+
+  initFields() {
+    if (this.homework) {
+      this.currentTasks = this.homework.tasks;
+      this.isCollapsed = [];
+      if (this.homework?.tasksCheckingTypes) {
+        for (let task of this.currentTasks) {
+          this.isCollapsed.push(true);
+        }
       }
     }
-    if (this.homework) {
-      this.currentSubject = this.homework?.subject;
-    }
-    this.initForm();
-
-    // window.addEventListener("beforeunload", (event) => {
-    //   event.preventDefault();
-    //   event.returnValue = "";
-    //   this.ngbToast.show();
-    // });
   }
 
   initForm(): void {
     this.hwForm = this.fb.group( {
-      name: new FormControl(this.homework?.name, [Validators.required]),
-      deadLine: new FormControl(this.homework?.deadLine, [Validators.required]),
-      targetTime: new FormControl('', [Validators.required]),
+      name: [this.homework?.name, Validators.compose([Validators.required])],
+      deadLine: [this.homework?.deadLine, Validators.compose([Validators.required])],
+      targetTime: ['', Validators.compose([Validators.required])],
     });
+    if (this.homework != null)
+      this.pageLoaded = true;
   }
 
   addTasks(): void {
     this.saveHomework();
-    this.router.navigate(['/tutor/constructor/hw/add/task']);
+    this.router.navigate(['/tutor/constructor/hw/add/task'])
   }
 
-  saveHomework(): void {
-    if (this.homework) {
-      this.homework.deadLine = this.hwForm.controls['deadLine'].value;
-      this.homework.name = this.hwForm.controls['name'].value;
-      this.homework.targetTime = this.hwForm.controls['targetTime'].value;
-      this.dataService.setCurrentHomework(this.homework);
-    } else {
-      this.dataService.setCurrentHomework(this.homework);
-    }
+  saveHomework() {
+    this.homework!.name = this.hwForm.controls['name'].value;
+    this.homework!.deadLine = this.hwForm.controls['deadLine'].value;
+    this.homework!.targetTime = this.hwForm.controls['targetTime'].value;
+    this.tutorDataService.setHomework(this.homework);
   }
 
   submit() {
+    this.saveHomework();
+    this.pageLoaded = false;
     if (this.homework) {
-      this.saveHomework()
-      this.tutorService.addHomework(this.homework).subscribe(id => {
-        this.dataService.setCurrentHomework(null);
-        this.dataService.setCurrentTasks(null);
+      this.tutorService.saveHomework(this.homework).pipe(catchError((error: HttpErrorResponse) => {
+        this.errorMessage = "Ошибка при создании задания";
+        this.pageLoaded = true;
+        return throwError(error);
+      })).subscribe(id => {
+        this.pageLoaded = true;
+        this.tutorDataService.setHomework(null);
+        sessionStorage.removeItem("homeworkId");
         this.router.navigate(['/tutor']);
       });
     }
-  }
-
-  clear() {
-    if (this.homework) {
-      // @ts-ignore
-      this.homework = {subject: this.currentSubject, deadLine: ''};
-      this.initForm();
-      this.saveHomework();
-    }
-
   }
 
   checkImage(file: string): boolean {
@@ -104,28 +113,34 @@ export class HwConstructorComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    this.saveHomework();
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  unloadHandler(event: Event) {
-    this.update = true;
-  }
-
-  protected readonly indexedDB = indexedDB;
-
   setChecking(index: number, type: string) {
-    if (typeof this.homework?.tasksCheckingTypes)
-    this.homework?.tasksCheckingTypes.set(index, type);
+    this.homework!.tasksCheckingTypes[index] = type;
   }
 
   getChecking(index: number) {
-    return this.homework?.tasksCheckingTypes.get(index);
+    return this.homework?.tasksCheckingTypes[index];
   }
 
   addPupils() {
     this.saveHomework();
     this.router.navigate(['tutor/constructor/add/pup']);
+  }
+
+  onDrop(event: CdkDragDrop<Task[]>) {
+    let tasks = this.homework?.tasks;
+    let updatedCheckingMap: {[key: number]: string} = {};
+    if (tasks) {
+      moveItemInArray(tasks, event.previousIndex, event.currentIndex);
+      if (this.homework) {
+        this.homework.tasks = tasks;
+      }
+      if (this.homework?.tasksCheckingTypes) {
+        for (let task of tasks) {
+          updatedCheckingMap[task.id] = this.homework?.tasksCheckingTypes[task.id];
+        }
+        this.homework.tasksCheckingTypes = updatedCheckingMap;
+      }
+    }
+    console.log(updatedCheckingMap);
   }
 }
