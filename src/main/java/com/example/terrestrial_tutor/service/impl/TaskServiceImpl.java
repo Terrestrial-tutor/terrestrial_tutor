@@ -1,6 +1,7 @@
 package com.example.terrestrial_tutor.service.impl;
 
 import com.example.terrestrial_tutor.dto.TaskDTO;
+import com.example.terrestrial_tutor.dto.facade.TaskFacade;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.SupportEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
@@ -9,13 +10,11 @@ import com.example.terrestrial_tutor.exceptions.CustomException;
 import com.example.terrestrial_tutor.repository.TaskRepository;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +29,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     SubjectService subjectService;
+    @Autowired
+    private TaskFacade taskFacade;
 
     /**
      * Функция вывода листа заданий по учебному прдмету и уровню выбора 1
@@ -62,12 +63,12 @@ public class TaskServiceImpl implements TaskService {
             return null;
     }
 
-    public List<TaskEntity> getTasksBySubjectAndLevel2 (SubjectEntity subject, String level2){
-        if(subject.getCountLevel() > 1)
-            return taskRepository.findTaskEntitiesBySubjectAndLevel2(subject, level2);
-        else
-            return null;
-    }
+//    public List<TaskEntity> getTasksBySubjectAndLevel2 (SubjectEntity subject, String level2){
+//        if(subject.getCountLevel() > 1)
+//            return taskRepository.findTaskEntitiesBySubjectAndLevel2(subject, level2);
+//        else
+//            return null;
+//    }
 
     public List<TaskEntity> getAllTasks(){
         return taskRepository.findAll();
@@ -111,19 +112,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public TaskEntity addNewTask(TaskDTO dto, SupportEntity support) {
-        TaskEntity newTask = new TaskEntity();
-        newTask.setName(dto.getName());
-        newTask.setAnswer(new Gson().toJson(new LinkedList<>(dto.getAnswers())));
-        newTask.setLevel1(dto.getLevel1());
-        newTask.setLevel2(dto.getLevel2());
-        newTask.setSubject(subjectService.findSubjectByName(dto.getSubject()));
-        newTask.setTaskText(dto.getTaskText());
-        newTask.setAnswerType(dto.getAnswerType());
-        newTask.setChecking(dto.getChecking());
-        newTask.setSupport(support);
-        newTask.setFiles(dto.getFiles());
-        newTask.setTable(dto.getTable());
-        return taskRepository.save(newTask);
+        TaskEntity task = taskFacade.taskDTOToTask(dto, support);
+        if (task.getId() != null && dto.getId() != 0) {
+            TaskEntity savedTask = taskRepository.findTaskEntityById(dto.getId());
+            savedTask.setTaskText("test");
+            return taskRepository.saveAndFlush(task);
+        }
+
+        return taskRepository.saveAndFlush(task);
     }
 
     public String toStringName(TaskCheckingType type) {

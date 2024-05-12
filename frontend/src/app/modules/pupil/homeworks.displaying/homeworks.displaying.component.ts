@@ -82,13 +82,14 @@ export class HomeworksDisplayingComponent {
 
   submit() {
     if (this.homework?.id) {
-     this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id, this.homework.lastAttempt).subscribe((homework) => {
-       if (homework) {
-         this.statistic = <HomeworkAnswers>homework;
-       }
-       sessionStorage.setItem('tryNumber', String(this.statistic.attemptCount));
-       this.router.navigate(['/pupil/homework/statistic']);
-     });
+      if (this.homework.lastAttempt == 0) this.homework.lastAttempt = 1;
+      this.pupilService.sendAnswers(this.createCheckRequest(), this.homework?.id, this.homework.lastAttempt).subscribe((homework) => {
+        if (homework) {
+          this.statistic = <HomeworkAnswers>homework;
+        }
+        sessionStorage.setItem('tryNumber', String(this.statistic.attemptCount));
+        this.router.navigate(['/pupil/homework/statistic']);
+      });
     }
   }
 
@@ -112,6 +113,7 @@ export class HomeworksDisplayingComponent {
   momentCheck(taskId: number) {
     this.tasksStatus[taskId.toString()] = 0;
     if (this.homework?.id) {
+      if (this.homework.lastAttempt == 0) this.homework.lastAttempt = 1;
       // @ts-ignore
       this.pupilService.sendAnswers(this.createCheckRequest(taskId), this.homework?.id, this.homework.lastAttempt).subscribe((homework) => {
         if (homework) {

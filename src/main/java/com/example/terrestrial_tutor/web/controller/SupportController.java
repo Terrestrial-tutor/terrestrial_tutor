@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +31,7 @@ public class SupportController {
 
     @PostMapping("/support/add/task")
     public HttpStatus addTask(@RequestParam(required = false) Set<MultipartFile> files,
+                              @RequestParam Long id,
                               @RequestParam String name,
                               @RequestParam int checking,
                               @RequestParam String answerType,
@@ -43,9 +43,10 @@ public class SupportController {
                               @RequestParam String table
                               ) throws Exception {
         try{
-            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2, table);
+            TaskDTO taskDTO = new TaskDTO(id, name, checking, answerType, taskText, answer, subject, level1, level2, table);
             if (files != null) {
-                taskDTO.setFiles(uploadFilesService.uploadFiles(files));
+                TaskEntity curTask = taskService.getTaskById(taskDTO.getId());
+                taskDTO.setFiles(uploadFilesService.uploadFiles(files, curTask));
             }
             SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             taskService.addNewTask(taskDTO, support);

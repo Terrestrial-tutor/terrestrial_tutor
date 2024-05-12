@@ -34,11 +34,10 @@ public class PupilFacade {
                             Collections.shuffle(taskDTO.getAnswers());
                             tasks.add(taskDTO);
                         } else {
-                            TaskDTO clearedTask = new TaskDTO(taskDTO.getName(), taskDTO.getChecking(),
+                            TaskDTO clearedTask = new TaskDTO(taskDTO.getId(), taskDTO.getName(), taskDTO.getChecking(),
                                     taskDTO.getAnswerType(), taskDTO.getTaskText(), null, taskDTO.getSubject(),
                                     taskDTO.getLevel1(), taskDTO.getLevel2(), taskDTO.getTable());
                             clearedTask.setFiles(taskDTO.getFiles());
-                            clearedTask.setId(taskDTO.getId());
                             tasks.add(clearedTask);
                         }
                     });

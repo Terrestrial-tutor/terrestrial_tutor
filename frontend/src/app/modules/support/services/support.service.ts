@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {EnvironmentService} from "../../../../environments/environment.service";
 import {Observable} from "rxjs";
-import {Task} from "../../../models/Task";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +15,7 @@ export class SupportService {
 
   addTask(task: any): Observable<any> {
     const formData = new FormData();
+    formData.append('id', task.id);
     formData.append('name', task.name);
     formData.append('checking', task.checking);
     formData.append('taskText', task.taskText);

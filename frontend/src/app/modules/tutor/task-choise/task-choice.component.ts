@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {dataService} from "../services/data.service";
 import {TaskService} from "../../task/services/task.service";
 import {Task} from "../../../models/Task";
@@ -7,16 +7,16 @@ import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
 import {TutorService} from "../services/tutor.service";
 import {Router} from "@angular/router";
 import {Homework} from "../../../models/Homework";
-import * as HomeworkActions from "../storage/homework.actions";
 import {Store} from "@ngrx/store";
-import * as HomeworkSelectors from "../storage/homework.selectors";
-import {map, Subscription} from "rxjs";
+import {map} from "rxjs";
 import {TutorDataService} from "../storage/tutor.data.service";
+import {UntypedFormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-task-choise',
   templateUrl: './task-choice.component.html',
-  styleUrls: ['./task-choice.component.css']
+  styleUrls: ['./task-choice.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TaskChoiceComponent implements OnInit {
 
@@ -30,12 +30,12 @@ export class TaskChoiceComponent implements OnInit {
               private tutorDataService: TutorDataService,) { }
 
   allTasks: TaskSelect[] = [];
+  filteredTasks: TaskSelect[] = [];
   subject: any;
   pageLoaded: boolean = false;
-  homeworkLoaded: boolean = false;
   isCollapsed: boolean[] = [];
   homework: Homework | null = null;
-  subscriptions$: Subscription[] = [];
+  filterText = new UntypedFormControl('');
 
   ngOnInit(): void {
     if (this.tutorDataService.getHomework()) {
@@ -50,6 +50,10 @@ export class TaskChoiceComponent implements OnInit {
         this.setTasks();
       });
     }
+
+    this.filterText.valueChanges.subscribe(text => {
+      this.search(text);
+    })
   }
 
   setTasks() {
@@ -62,6 +66,7 @@ export class TaskChoiceComponent implements OnInit {
         }
         this.isCollapsed.push(true);
       }
+      this.filteredTasks = this.allTasks;
       this.pageLoaded = true;
     });
   }
@@ -74,6 +79,28 @@ export class TaskChoiceComponent implements OnInit {
     if (this.codemirror != undefined) {
       this.codemirror.codeMirror?.refresh();
     }
+  }
+
+  search(text: any) {
+    text = text.toLowerCase();
+    this.filteredTasks = this.allTasks.filter(task => {
+      return task.task.id.toString().toLowerCase().includes(text) ||
+        task.task.name.toLowerCase().includes(text) ||
+        task.task.subject.toLowerCase().includes(text) ||
+        task.task.answers.includes(text) ||
+        task.task.files.includes(text) ||
+        task.task.table.toLowerCase().includes(text) ||
+        task.task.level2.toLowerCase().includes(text) ||
+        task.task.level1.toLowerCase().includes(text) ||
+        task.task.taskText.toLowerCase().includes(text);
+    });
+  }
+
+  getFromAllTasksById(id: number): TaskSelect {
+    // @ts-ignore
+    return this.allTasks.find(task => {
+      return task.task.id == id;
+    });
   }
 
   getSelectedTasks(): Task[] {
@@ -108,7 +135,7 @@ export class TaskChoiceComponent implements OnInit {
       for (let i = 0; i < currentTasks.length; i++) {
         tasks.push(currentTasks[i]);
         if (!this.homework.tasksCheckingTypes[currentTasks[i].id]) {
-          newTasksList[currentTasks[i].id] = 'AUTO';
+          newTasksList[currentTasks[i].id] = 'INSTANCE';
         } else {
           newTasksList[currentTasks[i].id] = this.homework.tasksCheckingTypes[currentTasks[i].id];
         }
@@ -123,4 +150,6 @@ export class TaskChoiceComponent implements OnInit {
       });
     }
   }
+
+  protected readonly event = event;
 }

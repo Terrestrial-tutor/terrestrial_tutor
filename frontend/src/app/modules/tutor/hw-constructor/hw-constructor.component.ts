@@ -1,4 +1,4 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {dataService} from "../services/data.service";
 import {Router} from "@angular/router";
 import {TutorService} from "../services/tutor.service";
@@ -9,7 +9,6 @@ import {CodemirrorComponent} from "@ctrl/ngx-codemirror";
 import {Subscription, throwError} from "rxjs";
 import {TutorDataService} from "../storage/tutor.data.service";
 import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {catchError} from "rxjs/operators";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -118,7 +117,8 @@ export class HwConstructorComponent implements OnInit {
   }
 
   getChecking(index: number) {
-    return this.homework?.tasksCheckingTypes[index];
+    return this.homework?.tasksCheckingTypes[index] == 'AUTO' ? 'Авто' :
+      this.homework?.tasksCheckingTypes[index] == 'INSTANCE' ? 'Моментальная' : 'Ручная';
   }
 
   addPupils() {
@@ -136,7 +136,9 @@ export class HwConstructorComponent implements OnInit {
       }
       if (this.homework?.tasksCheckingTypes) {
         for (let task of tasks) {
-          updatedCheckingMap[task.id] = this.homework?.tasksCheckingTypes[task.id];
+          if ('tasksCheckingTypes' in this.homework) {
+            updatedCheckingMap[task.id] = this.homework?.tasksCheckingTypes[task.id];
+          }
         }
         this.homework.tasksCheckingTypes = updatedCheckingMap;
       }
