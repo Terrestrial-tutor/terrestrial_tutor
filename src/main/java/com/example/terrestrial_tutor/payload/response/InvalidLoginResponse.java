@@ -2,6 +2,9 @@ package com.example.terrestrial_tutor.payload.response;
 
 import lombok.Getter;
 
+/**
+ * Ответ авторизации
+ */
 @Getter
 public class InvalidLoginResponse {
     private final String username;

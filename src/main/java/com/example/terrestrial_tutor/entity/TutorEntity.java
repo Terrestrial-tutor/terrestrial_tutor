@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
+/**
+ * Класс сущности репетитора
+ */
 @Entity
 @Getter
 @Setter
@@ -72,16 +75,30 @@ public class TutorEntity implements UserDetails {
     @Transient
     private GrantedAuthority authorities;
 
+    /**
+     * Конструктор сущности репетитора
+     *
+     * @param id           id
+     * @param username     логин
+     * @param name         имя
+     * @param surname      фамилия
+     * @param patronymic   отчество
+     * @param email        почта
+     * @param password     пароль
+     * @param role         роль
+     * @param verification верификация
+     * @param authorities  авторизация
+     */
     public TutorEntity(Long id,
-                String username,
-                String name,
-                String surname,
-                String patronymic,
-                String email,
-                String password,
-                ERole role,
-                Boolean verification,
-                GrantedAuthority authorities) {
+                       String username,
+                       String name,
+                       String surname,
+                       String patronymic,
+                       String email,
+                       String password,
+                       ERole role,
+                       Boolean verification,
+                       GrantedAuthority authorities) {
         this.id = id;
         this.username = username;
         this.name = name;

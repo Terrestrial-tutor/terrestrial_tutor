@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Класс сущности домашнего задания
+ */
+
 @Entity
 @Getter
 @Setter
@@ -44,7 +48,7 @@ public class HomeworkEntity {
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
-    @Column(name = "task_checking_types", columnDefinition="text")
+    @Column(name = "task_checking_types", columnDefinition = "text")
     String taskCheckingTypes;
 
     @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER)

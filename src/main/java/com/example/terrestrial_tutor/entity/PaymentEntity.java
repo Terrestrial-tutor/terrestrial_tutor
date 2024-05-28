@@ -2,11 +2,14 @@ package com.example.terrestrial_tutor.entity;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
+
+/**
+ * Не актуально
+ */
 @Entity
 @Getter
 @Setter

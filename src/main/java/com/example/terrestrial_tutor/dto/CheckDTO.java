@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * Класс DTO пользователя
+ */
 @Getter
 @Setter
 public class CheckDTO {

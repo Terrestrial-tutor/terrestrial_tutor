@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * Класс для перевода сущности ученика в DTO
+ */
+
 @Component
 public class PupilFacade {
 
@@ -19,6 +23,13 @@ public class PupilFacade {
     PupilService pupilService;
     @Autowired
     HomeworkFacade homeworkFacade;
+
+    /**
+     * Метод перевода сущности ученика в DTO
+     *
+     * @param pupil ученик
+     * @return DTO
+     */
 
     public PupilDTO pupilToPupilDTO(PupilEntity pupil) {
         PupilDTO pupilDTO = new PupilDTO();
@@ -66,6 +77,7 @@ public class PupilFacade {
         pupilDTO.setName(pupil.getName());
         pupilDTO.setSurname(pupil.getSurname());
         pupilDTO.setPatronymic(pupil.getPatronymic());
+
         return pupilDTO;
     }
 }

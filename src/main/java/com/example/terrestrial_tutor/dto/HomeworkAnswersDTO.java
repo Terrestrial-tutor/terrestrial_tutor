@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import java.util.Map;
 
-/** Дто для возврата результатов дз ученику */
+/**
+ * Класс DTO ответов на дз
+ */
 
 @Getter
 @Setter
@@ -21,7 +23,7 @@ public class HomeworkAnswersDTO {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class DetailsAnswer{
+    public static class DetailsAnswer {
         String pupilAnswer;
         String rightAnswer;
     }

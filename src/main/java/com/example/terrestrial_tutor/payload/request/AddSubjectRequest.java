@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Запрос добавления предмета
+ */
 @Getter
 @Setter
 public class AddSubjectRequest {
