@@ -7,9 +7,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
+/**
+ * Класс сущности администратора
+ */
 
 @Entity
 @Getter
@@ -54,6 +56,19 @@ public class AdminEntity implements UserDetails {
     @Transient
     private GrantedAuthority authorities;
 
+    /**
+     * Конструктор администратора
+     *
+     * @param id          id
+     * @param username    логин
+     * @param name        имя
+     * @param surname     фамилия
+     * @param patronymic  отчество
+     * @param email       почта
+     * @param password    пароль
+     * @param role        роль
+     * @param authorities авторизация
+     */
     public AdminEntity(Long id,
                        String username,
                        String name,

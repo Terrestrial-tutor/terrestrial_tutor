@@ -8,10 +8,12 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Класс сущности тех поддержки
+ */
 @Entity
 @Getter
 @Setter
@@ -69,15 +71,28 @@ public class SupportEntity implements UserDetails {
     @Column(name = "username")
     String username;
 
+    /**
+     * Конструктор сущности тех поддержки
+     *
+     * @param id          id
+     * @param username    логин
+     * @param name        имя
+     * @param surname     фамилия
+     * @param patronymic  отчество
+     * @param email       почта
+     * @param password    пароль
+     * @param role        роль
+     * @param authorities авторизация
+     */
     public SupportEntity(Long id,
-                       String username,
-                       String name,
-                       String surname,
-                       String patronymic,
-                       String email,
-                       String password,
-                       ERole role,
-                       GrantedAuthority authorities) {
+                         String username,
+                         String name,
+                         String surname,
+                         String patronymic,
+                         String email,
+                         String password,
+                         ERole role,
+                         GrantedAuthority authorities) {
         this.id = id;
         this.username = username;
         this.name = name;

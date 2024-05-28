@@ -6,6 +6,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Класс сущности задания
+ */
 @Entity
 @Getter
 @Setter
@@ -37,10 +40,10 @@ public class TaskEntity {
     @Column(name = "files")
     Set<String> files;
 
-    @Column(name = "task_text", columnDefinition="text")
+    @Column(name = "task_text", columnDefinition = "text")
     String taskText;
 
-    @Column(name = "answers", columnDefinition="text")
+    @Column(name = "answers", columnDefinition = "text")
     String answer;
 
     @ManyToOne()

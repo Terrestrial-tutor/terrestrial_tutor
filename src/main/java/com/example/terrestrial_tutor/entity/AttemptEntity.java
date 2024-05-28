@@ -5,7 +5,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-/** Сущность ответа ученика на задание
+/**
+ * Сущность ответа ученика на задание
  */
 
 @Entity
@@ -21,7 +22,7 @@ public class AttemptEntity {
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @Column(name = "answers", columnDefinition="text")
+    @Column(name = "answers", columnDefinition = "text")
     String answers;
 
     @ManyToOne()

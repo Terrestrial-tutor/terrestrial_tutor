@@ -5,6 +5,9 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
+/**
+ * Класс сущности таблицы к заданию
+ */
 @Entity
 @Getter
 @Setter
