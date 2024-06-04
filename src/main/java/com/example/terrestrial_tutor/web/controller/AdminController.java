@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер для администратора
+ */
 @CrossOrigin
 @Api
 public class AdminController {
@@ -38,11 +41,24 @@ public class AdminController {
     @Autowired
     private TutorRepository tutorRepository;
 
+    /**
+     * Поиск репетиторов по заданному предмету
+     *
+     * @param subject предмет
+     * @return лист dto репетиторов
+     */
     @GetMapping("/admin/subject/{subject}/find/tutors")
     public ResponseEntity<List<TutorListDTO>> findTutorsBySubject(@PathVariable String subject) {
         return new ResponseEntity<>(tutorListFacade.tutorListToDTO(subjectService.findSubjectTutors(subject)), HttpStatus.OK);
     }
 
+    /**
+     * Добавление учеников репетитору по его id
+     *
+     * @param pupilsIds id учеников
+     * @param id        id репетитора
+     * @return лист добавленных учеников
+     */
     @PostMapping("/admin/tutor/{id}/add/pupils")
     public ResponseEntity<List<PupilDTO>> addPupilsForTutor(@RequestBody List<Long> pupilsIds, @PathVariable Long id) {
         List<PupilEntity> pupils = pupilService.findPupilsByIds(pupilsIds);
@@ -60,6 +76,12 @@ public class AdminController {
         return new ResponseEntity<>(pupilsDTO, HttpStatus.OK);
     }
 
+    /**
+     * Поиск учеников по предмету
+     *
+     * @param subject предмет
+     * @return лист учеников
+     */
     @GetMapping("/admin/find/pupils/new/{subject}")
     public ResponseEntity<List<PupilDTO>> findPupilsWithoutSubject(@PathVariable String subject) {
         List<PupilEntity> allPupils = pupilService.findAllPupils();
@@ -76,6 +98,14 @@ public class AdminController {
         return new ResponseEntity<>(resultPupils, HttpStatus.OK);
     }
 
+    /**
+     * Добавление предмета репетиторам
+     *
+     * @param subject  предмет
+     * @param tutorIds id репетиторов
+     * @return лист репетиторов
+     * @throws Exception
+     */
     @PostMapping("/admin/tutor/add/subject/{subject}")
     public ResponseEntity<List<TutorListDTO>> addSubjectToTutor(@PathVariable String subject, @RequestBody List<Long> tutorIds) throws Exception {
         List<TutorEntity> tutors = new ArrayList<>();
@@ -86,12 +116,18 @@ public class AdminController {
             for (TutorEntity tutor : tutors) {
                 tutorService.addTutorSubject(tutor, subjectService.findSubjectByName(subject));
             }
-        }catch (Exception e) {
-            throw  new Exception(e);
+        } catch (Exception e) {
+            throw new Exception(e);
         }
         return new ResponseEntity<>(tutorListFacade.tutorListToDTO(subjectService.findSubjectByName(subject).getTutors()), HttpStatus.OK);
     }
 
+    /**
+     * Поиск репетиторов по предмету
+     *
+     * @param subject предмет
+     * @return лист репетиторов
+     */
     @GetMapping("/admin/find/tutors/new/{subject}")
     public ResponseEntity<List<TutorListDTO>> findTutorsWithoutSubject(@PathVariable String subject) {
         List<TutorEntity> filtredTutors = tutorService.findTutorsWithoutSubject(subject);

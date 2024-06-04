@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Контроллер для проверки зарегистрированных пользователей
+ */
 @CrossOrigin
 @Api
 public class ChecksController {
@@ -31,15 +34,26 @@ public class ChecksController {
     @Autowired
     private CheckFacade checkFacade;
 
+    /**
+     * Вывести все проверки
+     *
+     * @return лист проверок
+     */
     @GetMapping("/check/all")
     public ResponseEntity<List<CheckDTO>> checks() {
-        List<CheckDTO> checkList =checkService.getAllChecks()
+        List<CheckDTO> checkList = checkService.getAllChecks()
                 .stream()
                 .map(checkFacade::checkToCheckDTO)
                 .toList();
         return new ResponseEntity<>(checkList, HttpStatus.OK);
     }
 
+    /**
+     * Закрытие проверки
+     *
+     * @param id id проверки
+     * @return удаление проверки
+     */
     @DeleteMapping("/check/close/{id}")
     public ResponseEntity<CheckEntity> closeCheck(@PathVariable Long id) {
         CheckEntity check = checkService.findCheckById(id);
