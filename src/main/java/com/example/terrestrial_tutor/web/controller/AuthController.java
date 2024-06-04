@@ -33,6 +33,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
+/**
+ * Контроллер для авторизации
+ */
 @CrossOrigin
 @Api
 @PreAuthorize("permitAll()")
@@ -89,7 +92,7 @@ public class AuthController {
         UserDetails newUser = null;
         if (registrationRequest.getRole() == ERole.PUPIL) {
             newUser = pupilService.addNewPupil(registrationRequest);
-        } else if (registrationRequest.getRole() == ERole.TUTOR){
+        } else if (registrationRequest.getRole() == ERole.TUTOR) {
             newUser = tutorService.addNewTutor(registrationRequest);
         } else {
             throw new NotAdminException();

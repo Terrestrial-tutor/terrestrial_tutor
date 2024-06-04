@@ -19,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Контроллер для работы с тех поддержкой
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -30,6 +33,22 @@ public class SupportController {
     @Autowired
     UploadFilesService uploadFilesService;
 
+    /**
+     * Добавление задания в бд
+     *
+     * @param files      файлы
+     * @param name       название
+     * @param checking   тип проверки
+     * @param answerType тип ответа
+     * @param taskText   текст задания
+     * @param answer     ответы
+     * @param subject    предмет
+     * @param level1     тема верхнего уровня
+     * @param level2     тема нижнего уровня
+     * @param table      таблица к заданию
+     * @return статус операции
+     * @throws Exception
+     */
     @PostMapping("/support/add/task")
     public HttpStatus addTask(@RequestParam(required = false) Set<MultipartFile> files,
                               @RequestParam String name,
@@ -41,16 +60,15 @@ public class SupportController {
                               @RequestParam String level1,
                               @RequestParam String level2,
                               @RequestParam String table
-                              ) throws Exception {
-        try{
+    ) throws Exception {
+        try {
             TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2, table);
             if (files != null) {
                 taskDTO.setFiles(uploadFilesService.uploadFiles(files));
             }
             SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             taskService.addNewTask(taskDTO, support);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new Exception(e);
         }
         return HttpStatus.OK;

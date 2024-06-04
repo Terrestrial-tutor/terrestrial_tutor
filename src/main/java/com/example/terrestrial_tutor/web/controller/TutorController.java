@@ -23,6 +23,9 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер для работы с репетиторами
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -41,6 +44,13 @@ public class TutorController {
     @Autowired
     private PupilFacade pupilFacade;
 
+    /**
+     * Поиск учеников репетитора по предмету
+     *
+     * @param subject предмет
+     * @param id      id репетитора
+     * @return лист учеников
+     */
     @GetMapping("/tutor/find/pupils/{subject}/{id}")
     public ResponseEntity<List<PupilDTO>> getTutorPupilsBySubject(@PathVariable String subject, @PathVariable Long id) {
         List<PupilEntity> pupils = tutorService.findTutorById(id).getPupils();
@@ -66,6 +76,11 @@ public class TutorController {
         return new ResponseEntity<>(pupilsDTO, HttpStatus.OK);
     }
 
+    /**
+     * Поиск предметов репетитора
+     *
+     * @return лист предметов
+     */
     @GetMapping("/tutor/subjects")
     public ResponseEntity<List<SubjectDTO>> getTutorPupilsBySubject() {
         TutorEntity tutor = (TutorEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -80,8 +95,13 @@ public class TutorController {
         return new ResponseEntity<>(subjectsDTO, HttpStatus.OK);
     }
 
+    /**
+     * Поиск всех дз репетитора
+     *
+     * @return лист дз
+     */
     @GetMapping("/tutor/homework/all")
-    public ResponseEntity<List<HomeworkEntity>> getAllHomework(){
+    public ResponseEntity<List<HomeworkEntity>> getAllHomework() {
         return new ResponseEntity<>(homeworkService.getAllHomeworksTutor(), HttpStatus.OK);
     }
 

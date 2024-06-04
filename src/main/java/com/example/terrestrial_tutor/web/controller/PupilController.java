@@ -23,6 +23,9 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер для работы с учеником
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -47,11 +50,23 @@ public class PupilController {
         return new ResponseEntity<>(pupilService.addNewPupil(pupil), HttpStatus.OK);
     }*/
 
+    /**
+     * Поиск ученика по id
+     *
+     * @param id id ученика
+     * @return ученик
+     */
     @GetMapping("/pupil/find")
     public ResponseEntity<PupilEntity> findPupilById(@RequestHeader Long id) {
         return new ResponseEntity<>(pupilService.findPupilById(id), HttpStatus.OK);
     }
 
+    /**
+     * Поиск ученика по id
+     *
+     * @param id id ученика
+     * @return ученик
+     */
     @GetMapping("/pupil/{id}")
     public ResponseEntity<PupilEntity> getPupilById(@PathVariable Long id) {
         return new ResponseEntity<>(pupilService.findPupilById(id), HttpStatus.OK);
@@ -92,6 +107,6 @@ public class PupilController {
             pupilsDTO.add(pupilFacade.pupilToPupilDTO(pupil));
         }
 
-        return new ResponseEntity<>(pupilsDTO,HttpStatus.OK);
+        return new ResponseEntity<>(pupilsDTO, HttpStatus.OK);
     }
 }
