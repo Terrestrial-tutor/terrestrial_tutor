@@ -24,4 +24,5 @@ jobs:
             REMOTE_USER: tutor
             TARGET: "/home/tutor/test"
             SCRIPT_AFTER: |
+              ls
               docker compose restart nginx
