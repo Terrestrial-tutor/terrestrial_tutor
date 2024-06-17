@@ -16,4 +16,4 @@ jobs:
       - uses: actions/checkout@v4
       - name: Deploy changes
         working-directory: ./
-        run: git pull && docker compose restart nginx
+        run: cd /home/tutor/terrestrial_tutor && git pull && docker compose restart nginx
