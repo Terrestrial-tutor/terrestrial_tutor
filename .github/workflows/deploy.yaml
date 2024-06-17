@@ -13,7 +13,7 @@ jobs:
     runs-on: self-hosted
 
     env:
-      PROJECT_PATH: /home/tutor/terrestrial_tutor
+      PROJECT_PATH: /home/tutor
 
     steps:
         - name: Checkout
