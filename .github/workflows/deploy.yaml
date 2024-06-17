@@ -16,7 +16,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
           with:
-            path: terrestrial_tutor
+            path: /home/tutor/terrestrial_tutor
     
         - name: Deploy changes
           run: git pull && docker compose restart nginx
