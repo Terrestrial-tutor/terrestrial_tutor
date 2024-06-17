@@ -11,7 +11,7 @@ terrestrial_tutor.iml
 /frontend/src/assets
 
 ### DB ###
-/db_snapshots
+/db_snapshots/backups
 
 ### PgAdmin ###
 /pgadmin
