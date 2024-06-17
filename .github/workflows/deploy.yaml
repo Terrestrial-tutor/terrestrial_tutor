@@ -13,6 +13,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            path: /home/tutor
+    
         - name: Deploy changes
           working-directory: /home/tutor/terrestrial_tutor
           run: docker compose restart nginx
