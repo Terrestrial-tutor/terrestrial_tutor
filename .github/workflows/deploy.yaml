@@ -13,6 +13,9 @@ jobs:
     runs-on: self-hosted
 
     steps:
+        - uses: actions/checkout@v4 
+          with:
+            path: /home/tutor
         - name: Deploy changes
           working-directory: ./
-          run: git pull && docker compose restart nginx
+          run: docker compose restart nginx
