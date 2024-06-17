@@ -15,4 +15,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy changes
-        run: docker compose restart nginx
+        run: gut pull && docker compose restart nginx
