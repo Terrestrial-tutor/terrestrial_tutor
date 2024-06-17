@@ -19,7 +19,7 @@ jobs:
           with:
             SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH }}
             ARGS: "-rlgoDzvc -i"
-            SOURCE: "./terrestrial_tutor"
+            SOURCE: "./"
             REMOTE_HOST: 87.249.49.62
             REMOTE_USER: tutor
             TARGET: "/home/tutor/test"
