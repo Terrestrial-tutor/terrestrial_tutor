@@ -5,6 +5,11 @@ on:
     branches: [ "changes" ]
   pull_request:
     branches: [ "changes" ]
+    
+defaults:
+  run:
+    shell: bash
+    working-directory: /home/tutor/terrestrial_tutor
 
 jobs:
 
@@ -13,5 +18,5 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Deploy changes
-        run: cd /home/tutor/terrestrial_tutor && git pull && docker compose restart nginx
+        - name: Deploy changes
+        - run: git pull && docker compose restart nginx
