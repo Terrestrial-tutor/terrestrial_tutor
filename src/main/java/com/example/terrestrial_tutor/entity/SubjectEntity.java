@@ -40,6 +40,6 @@ public class SubjectEntity {
     @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     List<TaskEntity> tasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "subject", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     List<HomeworkEntity> homeworkList;
 }

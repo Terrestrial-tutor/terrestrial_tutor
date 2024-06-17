@@ -118,7 +118,8 @@ export class HwConstructorComponent implements OnInit {
   }
 
   getChecking(index: number) {
-    return this.homework?.tasksCheckingTypes[index];
+    return this.homework?.tasksCheckingTypes[index] == 'AUTO' ? 'Авто' :
+      this.homework?.tasksCheckingTypes[index] == 'INSTANCE' ? 'Моментальная' : 'Ручная';
   }
 
   addPupils() {

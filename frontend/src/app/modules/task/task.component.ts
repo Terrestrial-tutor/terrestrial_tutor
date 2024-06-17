@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {
+  UntypedFormArray,
+  UntypedFormBuilder, UntypedFormControl,
+  UntypedFormGroup,
+  Validators
+} from "@angular/forms";
 import {Subject} from "../../models/Subject";
 import {SubjectsService} from "../subjects/services/subjects.service";
 import {SupportService} from "../support/services/support.service";
 import {Task} from "../../models/Task";
 import {Router} from "@angular/router";
-import * as CodeMirror from 'codemirror';
+import {SupportDataService} from "../support/services/support.data.service";
+import {TaskService} from "./services/task.service";
 
 
 @Component({
@@ -27,48 +33,110 @@ export class TaskComponent implements OnInit {
     autoCloseBrackets: true,
     extraKeys: {'Ctrl-Space': 'autocomplete'}
   };
+  task: Task | null = null;
+  files: File[] | null = [];
+  filesExist = false;
+  pageLoaded = false;
 
   constructor(private fb: UntypedFormBuilder,
               private subjectsService: SubjectsService,
               private supportService: SupportService,
+              private taskService: TaskService,
+              private supportDataService: SupportDataService,
               private router: Router,) {
   }
 
   ngOnInit(): void {
-    this.taskForm = this.createTaskForm();
-    this.getAllSubjects();
+    if (this.supportDataService.getTask()) {
+      this.task = this.supportDataService.getTask();
+      this.createTaskForm();
+      this.getAllSubjects();
+      this.pageLoaded = true;
+    } else if (sessionStorage.getItem('taskId')) {
+      this.taskService.getTaskById(sessionStorage.getItem('taskId')).subscribe(task => {
+        this.task = task;
+        this.createTaskForm();
+        this.getAllSubjects();
+        this.pageLoaded = true;
+      })
+    } else {
+      this.createTaskForm();
+      this.getAllSubjects();
+      this.pageLoaded = true;
+    }
   }
 
   private createTaskForm() {
-    return this.fb.group({
-      taskName: ['', Validators.compose([Validators.required])],
-      taskText: ['', Validators.compose([Validators.required])],
-      taskAns: this.fb.array([
-        this.fb.control('', Validators.compose([Validators.required]))
-      ], Validators.compose([Validators.required])),
-      selectedSubject: ['Выбирете предмет', Validators.compose([(subject) => {
-        if (subject.value == 'Выбирете предмет') {
+    let taskAnswers = [];
+    if (this.task) {
+      for (let i = 0; i < this.task.answers.length; i++) {
+        taskAnswers.push(this.fb.control(this.task.answers[i], Validators.compose([Validators.required])));
+      }
+    }
+    let table: UntypedFormControl[][] = [];
+    if (this.task?.table && JSON.parse(<string>this.task?.table)) {
+      let currentTable = JSON.parse(<string>this.task?.table);
+      for (let i = 0; i < currentTable.length; i++) {
+        let row = [];
+        for (let j = 0; j < currentTable[0].length; j++) {
+          row.push(this.fb.control(currentTable[i][j]));
+        }
+        table.push(row);
+      }
+    } else {
+      table = [[this.fb.control(''), this.fb.control(''), this.fb.control('')]];
+    }
+
+    let form = this.fb.group({
+      taskName: [this.task?.name ? this.task?.name : '', Validators.compose([Validators.required])],
+      taskText: [this.task?.taskText ? this.task?.taskText : '', Validators.compose([Validators.required])],
+      taskAns: this.fb.array(
+        taskAnswers
+      , Validators.compose([Validators.required])),
+      selectedSubject: [this.task?.subject ? this.task?.subject : 'Выберете предмет', Validators.compose([(subject) => {
+        if (subject.value == 'Выберете предмет') {
           return {subjectNotSelected: false};
         } else {
           return null;
         }
       }])],
-      answerType: ['Выбирете тип', Validators.compose([(answerType) => {
-        if (answerType.value == 'Выбирете тип') {
+      answerType: [this.task?.answerType ? this.task?.answerType : 'Выберете тип', Validators.compose([(answerType) => {
+        if (answerType.value == 'Выберете тип') {
           return {answerType: false};
         } else {
           return null;
         }
       }])],
-      level1: ['', Validators.compose([Validators.required])],
-      level2: [''],
+      level1: [this.task?.level1 ? this.task?.level1 : '', Validators.compose([Validators.required])],
+      level2: [this.task?.level2 ? this.task?.level2 : ''],
       files: [''],
-      tableRows: [''],
-      tableCols: [''],
-      table: [[
-        [this.fb.control(''), this.fb.control(''), this.fb.control('')],
-      ]]
-    })
+      tableRows: [table.length],
+      tableCols: [table.length > 0 ? table[0].length : ''],
+      table: [
+        table,
+      ]
+    });
+
+    if (this.task && "id" in this.task) {
+      this.taskService.getTaskFiles(this.task.id).subscribe(files => {
+        const fileLoader = document.querySelector('input[type="file"]');
+        const dataTransfer = new DataTransfer();
+        if (files) {
+          for (let file of files) {
+            if ('fileName' in file) {
+              let newFile: File = new File([file.file], file.fileName);
+              let displayedFile: File = new File([file.file], file.fileName.substring(file.fileName.indexOf('.') + 1));
+              this.files?.push(newFile);
+              dataTransfer.items.add(displayedFile);
+            }
+          }
+          this.filesExist = true;
+          form.controls['files'].setValue(this.files);
+          (<HTMLInputElement>fileLoader).files = dataTransfer.files;
+        }
+      })
+    }
+    this.taskForm = form;
   }
 
   getAllSubjects(): void {
@@ -91,6 +159,10 @@ export class TaskComponent implements OnInit {
       table: this.tableToJson(),
       files: this.taskForm.controls['files'].value,
     };
+
+    if (this.task) {
+      task.id = this.task.id;
+    }
 
     this.supportService.addTask(task).subscribe(data => {
       this.router.navigate(['/support']);
@@ -160,10 +232,6 @@ export class TaskComponent implements OnInit {
       }
     }
     this.taskForm.controls['table'].setValue(newTable);
-  }
-
-  test(content: any) {
-    console.log(content);
   }
 
   protected readonly toString = toString;

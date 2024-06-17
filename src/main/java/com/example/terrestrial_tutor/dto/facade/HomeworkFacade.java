@@ -3,8 +3,9 @@ package com.example.terrestrial_tutor.dto.facade;
 import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.entity.*;
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import com.example.terrestrial_tutor.service.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,6 @@ public class HomeworkFacade {
     PupilService pupilService;
     @Autowired
     TaskService taskService;
-    @Autowired
-    CompletedTaskService completedTaskService;
 
     public HomeworkDTO homeworkToHomeworkDTO(HomeworkEntity homework) {
         HomeworkDTO homeworkDTO = new HomeworkDTO();
@@ -40,10 +39,15 @@ public class HomeworkFacade {
                 toList());
         homeworkDTO.setTargetTime(homework.getTargetTime());
         Map<Long, String> dtoTasksCheckingTypes = new HashMap<>();
-        homework.getCompletedTaskEntities().forEach(task -> dtoTasksCheckingTypes.put(task.getTask().getId(), task.getTaskCheckingType().name()));
-        homeworkDTO.setTasksCheckingTypes(dtoTasksCheckingTypes);
+        Map<Long, String> tasksCheckingTypes = new Gson().fromJson(homework.getTaskCheckingTypes(), (new TypeToken<Map<Long, String>>() {}.getType()));
+        homeworkDTO.setTasksCheckingTypes(tasksCheckingTypes);
         List<TaskDTO> tasks = new LinkedList<>();
-        homework.getCompletedTaskEntities().forEach(task -> tasks.add(taskFacade.taskToTaskDTO(task.getTask())));
+        for (Map.Entry<Long, String> task : tasksCheckingTypes.entrySet()) {
+            tasks.add(taskFacade.taskToTaskDTO(
+                    homework.getSubject().getTasks().stream().filter(currentTask
+                            -> Objects.equals(currentTask.getId(), task.getKey())).findFirst().get())
+            );
+        }
         homeworkDTO.setTasks(tasks);
         return homeworkDTO;
     }
@@ -60,17 +64,7 @@ public class HomeworkFacade {
                 .map(id -> pupilService.findPupilById(id)).collect(Collectors.toSet()));
 
         if (homeworkDTO.getTasksCheckingTypes() != null) {
-            Map<TaskEntity, TaskCheckingType> tasksCheckingTypes = new HashMap<>();
-            homeworkDTO.getTasksCheckingTypes().forEach((key, value) ->
-            {
-                TaskEntity task = taskService.getTaskById(key);
-                tasksCheckingTypes.put(task, TaskCheckingType.valueOf(value));
-            });
-            List<CompletedTaskEntity> completedTaskEntities = new ArrayList<>();
-            tasksCheckingTypes.forEach((task, check) -> {
-                completedTaskEntities.add(new CompletedTaskEntity(task, check));
-            });
-            homework.setCompletedTaskEntities(completedTaskEntities);
+            homework.setTaskCheckingTypes(new Gson().toJson(homeworkDTO.getTasksCheckingTypes()));
         }
 
         return homework;

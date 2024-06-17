@@ -44,7 +44,7 @@ services:
     #       - postgres
     environment:
       - SERVER_PORT=8181
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://87.249.49.62:5432/terrestrial_tutor
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://10.0.0.6:5432/terrestrial_tutor
       - SPRING_DATASOURCE_USERNAME=tutor
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
     networks:
@@ -79,9 +79,16 @@ services:
     volumes:
       - ./db_snapshots/:/dumps
       - ./db_snapshots/init:/docker-entrypoint-initdb.d/
+    networks:
+      localnet:
+        ipv4_address: 10.0.0.6
 
   postgres_dev:
-    image: postgres
+    image: postgres:16.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: postgres
     environment:
       POSTGRES_DB: terrestrial_tutor
       POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
@@ -91,3 +98,25 @@ services:
     volumes:
       - ./db_snapshots/:/dumps
       - ./db_snapshots/init/:/docker-entrypoint-initdb.d/
+        
+  backend_deploy:
+    image: backend
+    volumes:
+      - ./frontend/src/assets:/assets
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: app
+    ports:
+      - "8182:8181"
+    depends_on:
+      - builder-be
+    #       - postgres
+    environment:
+      - SERVER_PORT=8181
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5433/terrestrial_tutor
+      - SPRING_DATASOURCE_USERNAME=tutor
+      - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
+    networks:
+      localnet:
+        ipv4_address: 10.0.0.8

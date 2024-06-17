@@ -89,6 +89,7 @@ export class HomeworksListComponent {
   }
 
   submit(homework: Homework) {
+    homework.lastAttempt++;
     if (homework.id) {
       sessionStorage.setItem('currentHomework', JSON.stringify(homework.id));
     }

@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @RequiredArgsConstructor
 public class TaskDTO {
-    Long id;
+    final Long id;
     final String name;
     final int checking;
     final String answerType;

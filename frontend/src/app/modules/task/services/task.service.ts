@@ -22,4 +22,11 @@ export class TaskService {
     return this.http.get(this.TASK_API + `${subject}`);
   }
 
+  getTaskById(id: any): Observable<any> {
+    return this.http.get(this.apiService.apiUrl + `task/${id}`);
+  }
+
+  getTaskFiles(id: number): Observable<any> {
+    return this.http.get(this.TASK_API + `${id}/files`);
+  }
 }

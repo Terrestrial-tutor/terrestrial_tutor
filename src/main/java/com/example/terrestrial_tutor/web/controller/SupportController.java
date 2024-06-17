@@ -32,6 +32,7 @@ public class SupportController {
 
     @PostMapping("/support/add/task")
     public HttpStatus addTask(@RequestParam(required = false) Set<MultipartFile> files,
+                              @RequestParam Long id,
                               @RequestParam String name,
                               @RequestParam int checking,
                               @RequestParam String answerType,
@@ -43,9 +44,10 @@ public class SupportController {
                               @RequestParam String table
                               ) throws Exception {
         try{
-            TaskDTO taskDTO = new TaskDTO(name, checking, answerType, taskText, answer, subject, level1, level2, table);
+            TaskDTO taskDTO = new TaskDTO(id, name, checking, answerType, taskText, answer, subject, level1, level2, table);
             if (files != null) {
-                taskDTO.setFiles(uploadFilesService.uploadFiles(files));
+                TaskEntity curTask = taskService.getTaskById(taskDTO.getId());
+                taskDTO.setFiles(uploadFilesService.uploadFiles(files, curTask));
             }
             SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             taskService.addNewTask(taskDTO, support);

@@ -12,3 +12,6 @@ terrestrial_tutor.iml
 
 ### DB ###
 /db_snapshots
+
+### PgAdmin ###
+/pgadmin

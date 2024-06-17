@@ -3,6 +3,7 @@ package com.example.terrestrial_tutor.dto.facade;
 import com.example.terrestrial_tutor.dto.HomeworkDTO;
 import com.example.terrestrial_tutor.dto.PupilDTO;
 import com.example.terrestrial_tutor.dto.TaskDTO;
+import com.example.terrestrial_tutor.entity.AttemptEntity;
 import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.service.PupilService;
@@ -33,15 +34,21 @@ public class PupilFacade {
                             Collections.shuffle(taskDTO.getAnswers());
                             tasks.add(taskDTO);
                         } else {
-                            TaskDTO clearedTask = new TaskDTO(taskDTO.getName(), taskDTO.getChecking(),
+                            TaskDTO clearedTask = new TaskDTO(taskDTO.getId(), taskDTO.getName(), taskDTO.getChecking(),
                                     taskDTO.getAnswerType(), taskDTO.getTaskText(), null, taskDTO.getSubject(),
                                     taskDTO.getLevel1(), taskDTO.getLevel2(), taskDTO.getTable());
                             clearedTask.setFiles(taskDTO.getFiles());
-                            clearedTask.setId(taskDTO.getId());
                             tasks.add(clearedTask);
                         }
                     });
                     clearedHomework.setTasks(new LinkedList<>(tasks));
+                    int lastAttempt = 0;
+                    for (AttemptEntity attemptEntity : homework.getAnswerEntities()) {
+                        if (attemptEntity.getPupil().getId().equals(pupil.getId())) {
+                            lastAttempt = attemptEntity.getAttemptNumber() > lastAttempt ? attemptEntity.getAttemptNumber() : lastAttempt;
+                        }
+                    }
+                    clearedHomework.setLastAttempt(lastAttempt);
                     return clearedHomework;
                 })
                 .toList()));

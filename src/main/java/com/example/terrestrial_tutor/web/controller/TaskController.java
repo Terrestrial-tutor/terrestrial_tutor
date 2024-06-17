@@ -6,8 +6,10 @@ import com.example.terrestrial_tutor.dto.TaskDTO;
 import com.example.terrestrial_tutor.dto.facade.TaskFacade;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
+import com.example.terrestrial_tutor.payload.response.FilesResponse;
 import com.example.terrestrial_tutor.service.SubjectService;
 import com.example.terrestrial_tutor.service.TaskService;
+import com.example.terrestrial_tutor.service.UploadFilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -33,11 +37,15 @@ public class TaskController {
     SubjectService subjectService;
 
     @Autowired
+    UploadFilesService uploadFilesService;
+
+    @Autowired
     TaskFacade taskFacade;
 
     @GetMapping("/tasks/all")
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
         List<TaskEntity> tasksList = taskService.getAllTasks();
+        tasksList.sort(Comparator.comparingLong(TaskEntity::getId));
         List<TaskDTO> tasksDTO = new ArrayList<>();
         for (TaskEntity task : tasksList) {
             tasksDTO.add(taskFacade.taskToTaskDTO(task));
@@ -69,6 +77,12 @@ public class TaskController {
         return new ResponseEntity<>(tasksDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/task/{id}")
+    public ResponseEntity<TaskDTO> getTasksById(@PathVariable Long id) {
+        TaskEntity task = taskService.getTaskById(id);
+        return new ResponseEntity<>(taskFacade.taskToTaskDTO(task), HttpStatus.OK);
+    }
+
     /**
      * Контроллер для отдачи выборки заданий по предмету, верхней теме и подтеме
      * @param subject - предмет
@@ -84,5 +98,10 @@ public class TaskController {
         return new ResponseEntity<>(listTasks, HttpStatus.OK);
     }
 
+    @GetMapping("/tasks/{id}/files")
+    public ResponseEntity<Set<FilesResponse>> getTaskFile(@PathVariable Long id) throws IOException {
+        TaskEntity task = taskService.getTaskById(id);
+        return new ResponseEntity<>(uploadFilesService.getFilesByPaths(task.getFiles()), HttpStatus.OK);
+    }
 
 }

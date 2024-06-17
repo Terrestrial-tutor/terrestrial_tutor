@@ -14,23 +14,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table(name = "answers", schema = "public")
-public class AnswerEntity {
+@Table(name = "homework_solutions", schema = "public")
+public class AttemptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
     @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 10)
     private Long id;
 
-    @Column(name = "answer")
-    String answer;
+    @Column(name = "answers", columnDefinition="text")
+    String answers;
 
     @ManyToOne()
     @JoinColumn(name = "homework")
     HomeworkEntity homework;
-
-    @ManyToOne
-    @JoinColumn(name ="task")
-    TaskEntity task;
 
     @ManyToOne()
     @JoinColumn(name = "pupil")

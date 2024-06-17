@@ -1,15 +1,11 @@
 package com.example.terrestrial_tutor.entity;
 
-import com.example.terrestrial_tutor.entity.enums.TaskCheckingType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -28,14 +24,9 @@ public class HomeworkEntity {
     String name;
 
     @NonNull
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "subject")
     SubjectEntity subject;
-
-    //tasks
-
-    //@Column(name = "banList")
-    //List<Integer> = new ArrayList<Integer>();
 
     @Column(name = "solute_time")
     Long soluteTime;
@@ -49,23 +40,15 @@ public class HomeworkEntity {
 //    todo
 //    Добавить теоритические материалы
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tutor")
     TutorEntity tutor;
 
-    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderColumn(name = "position")
-    List<CompletedTaskEntity> completedTaskEntities = new LinkedList<>();
+    @Column(name = "task_checking_types", columnDefinition="text")
+    String taskCheckingTypes;
 
-    @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER)
-    List<AnswerEntity> answerEntities;
+    @OneToMany(mappedBy = "homework", fetch = FetchType.LAZY)
+    List<AttemptEntity> answerEntities;
 
-    /*
-    @ElementCollection
-    @CollectionTable(name = "checking_map")
-    @MapKeyColumn(name = "key_column")
-    Map<TaskEntity, TaskCheckingType> tasksCheckingTypes;
-
-     */
     LocalDate deadLine;
 }

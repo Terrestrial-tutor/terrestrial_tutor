@@ -17,7 +17,7 @@
       <div class="card">
         <div class="row mb-4">
           <button class="mb-0 m-3 col-2 btn btn-primary" *ngFor="let homework of homeworks" (click)="submit(homework)">
-            <h3>{{ homework.name }}</h3>
+            <h3 class="text-break">{{ homework.name }}</h3>
           </button>
         </div>
       </div>
@@ -38,7 +38,7 @@
       <div class="card">
         <div class="d-inline" *ngFor="let homework of completedHomeworks | keyvalue">
           <button class="m-3 col-2 btn btn-primary" style="height: 15vh" (click)="submitCompletedHomeworks(homework.value, homework.key)">
-            <h3>{{ getHomeworkById(homework.key) }}</h3>
+            <h3 class="text-break">{{ getHomeworkById(homework.key) }}</h3>
           </button>
         </div>
       </div>

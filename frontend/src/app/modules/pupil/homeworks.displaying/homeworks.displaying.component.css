@@ -8,3 +8,7 @@ td, th {
   border: 2px solid #000000;
   padding: 8px;
 }
+
+.is-valid {
+  border-color: #28a745 !important;
+}
