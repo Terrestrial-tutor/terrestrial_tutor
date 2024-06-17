@@ -14,5 +14,5 @@ jobs:
 
     steps:
         - name: Deploy changes
-          working-directory: ./terrestrial_tutor
+          working-directory: terrestrial_tutor
           run: git pull && docker compose restart nginx
