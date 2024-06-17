@@ -15,4 +15,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Deploy changes
+        working-directory: ./
         run: git pull && docker compose restart nginx
