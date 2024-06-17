@@ -15,7 +15,7 @@ jobs:
     steps:
         - uses: actions/checkout@v4 
           with:
-            path: /home/tutor
+            path: /home/tutor/terrestrial_tutor
         - name: Deploy changes
           working-directory: ./
           run: docker compose restart nginx
