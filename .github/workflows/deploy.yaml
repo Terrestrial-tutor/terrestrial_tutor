@@ -16,7 +16,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
           with:
-            path: /home/tutor
+            path: ../
     
         - name: Deploy changes
           working-directory: /home/tutor/terrestrial_tutor
