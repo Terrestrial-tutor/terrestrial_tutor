@@ -15,7 +15,7 @@ jobs:
     steps:
         - uses: actions/checkout@v4 
           with:
-            path: terrestrial_tutor
+            set-safe-directory: false
         - name: Deploy changes
           working-directory: ./
           run: docker compose restart nginx
