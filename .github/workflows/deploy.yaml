@@ -28,3 +28,11 @@ jobs:
               docker compose down backend && docker compose up --build backend
               docker compose down frontend && docker compose up --build frontend
               docker compose restart nginx
+              
+  rerun:
+
+    runs-on: self-hosted
+
+    steps:          
+        - name: Run changes
+          run: docker compose down backend && docker compose up --build backend && docker compose down frontend && docker compose up --build frontend && docker compose restart nginx
