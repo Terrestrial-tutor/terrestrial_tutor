@@ -72,8 +72,7 @@ services:
       POSTGRES_DB: terrestrial_tutor
       POSTGRES_PASSWORD: tErRrEsTrIaLtUtOr
       POSTGRES_USER: tutor
-    #    command:
-    #      - /bin/sh -c apt update && apt install cron
+      command: "bin/bash cron"
     ports:
       - '5432:5432'
     volumes:
@@ -98,7 +97,7 @@ services:
     volumes:
       - ./db_snapshots/:/dumps
       - ./db_snapshots/init/:/docker-entrypoint-initdb.d/
-        
+
   backend_deploy:
     image: backend
     volumes:
@@ -111,10 +110,9 @@ services:
       - "8182:8181"
     depends_on:
       - builder-be
-    #       - postgres
     environment:
       - SERVER_PORT=8181
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5433/terrestrial_tutor
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://10.0.0.6:5432/terrestrial_tutor
       - SPRING_DATASOURCE_USERNAME=tutor
       - SPRING_DATASOURCE_PASSWORD=tErRrEsTrIaLtUtOr
     networks:
