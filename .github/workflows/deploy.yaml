@@ -14,6 +14,7 @@ jobs:
 
     steps:  
         - uses: actions/checkout@v4 
+        
         - name: Deploy changes
           uses: easingthemes/ssh-deploy@main
           with:
@@ -24,4 +25,6 @@ jobs:
             REMOTE_USER: tutor
             TARGET: "/home/tutor/terrestrial_tutor"
             SCRIPT_AFTER: |
-              docker ps
+              docker compose down backend && docker compose up --build backend
+              docker compose down frontend && docker compose up --build frontend
+              docker compose restart nginx
