@@ -22,6 +22,6 @@ jobs:
             SOURCE: "./"
             REMOTE_HOST: 87.249.49.62
             REMOTE_USER: tutor
-            TARGET: "/home/tutor"
+            TARGET: "/home/tutor/terrestrial_tutor"
             SCRIPT_AFTER: |
-              ls
+              docker ps
