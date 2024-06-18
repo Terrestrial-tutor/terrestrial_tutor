@@ -25,4 +25,5 @@ jobs:
             REMOTE_USER: tutor
             TARGET: "/home/tutor/terrestrial_tutor"
             SCRIPT_AFTER: |
-              ls
+              cd terrestrial_tutor
+              docker compose down backend && docker compose up --build -d backend
