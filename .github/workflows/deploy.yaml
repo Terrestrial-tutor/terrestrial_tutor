@@ -10,14 +10,18 @@ jobs:
 
   deploy:
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
-    env:
-      PROJECT_PATH: /home/tutor
-
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-    
+    steps:  
+        - uses: actions/checkout@v4 
         - name: Deploy changes
-          run: git pull && docker compose restart nginx
+          uses: easingthemes/ssh-deploy@main
+          with:
+            SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH }}
+            ARGS: ""
+            SOURCE: "./"
+            REMOTE_HOST: 87.249.49.62
+            REMOTE_USER: tutor
+            TARGET: "/home/tutor"
+            SCRIPT_AFTER: |
+              ls
