@@ -27,4 +27,4 @@ jobs:
             SCRIPT_AFTER: |
               cd terrestrial_tutor
               docker compose down backend && docker compose up --build -d backend
-              docker compose up -d frontend
+              docker compose down frontend && docker compose up -d frontend
