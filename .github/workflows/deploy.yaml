@@ -9,24 +9,36 @@ on:
 
 jobs:
 
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:  
+      - uses: actions/checkout@v4 
+
+      - name: Build
+	run: |
+ 	  docker compose up -d
+
   deploy:
 
     runs-on: ubuntu-latest
 
     steps:  
-        - uses: actions/checkout@v4 
+      - uses: actions/checkout@v4 
         
-        - name: Up containers
-          uses: easingthemes/ssh-deploy@main
-          with:
-            SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH }}
-            ARGS: ""
-            SOURCE: "./"
-            REMOTE_HOST: 87.249.49.62
-            REMOTE_USER: tutor
-            TARGET: "/home/tutor/terrestrial_tutor"
-            SCRIPT_AFTER: |
-              cd terrestrial_tutor
-              docker compose down backend && docker compose up --build -d backend
-              docker compose down frontend && docker compose up -d frontend
-	      docker compose down nginx && docker compose up -d nginx
+      - name: Up containers
+        needs: build
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH }}
+          ARGS: ""
+          SOURCE: "./"
+          REMOTE_HOST: 87.249.49.62
+          REMOTE_USER: tutor
+          TARGET: "/home/tutor/terrestrial_tutor"
+          SCRIPT_AFTER: |
+            cd terrestrial_tutor
+            docker compose down backend && docker compose up --build -d backend
+            docker compose down frontend && docker compose up -d frontend
+	    docker compose down nginx && docker compose up -d nginx
