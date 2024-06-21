@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * Запрос авторизации
+ */
 @Data
 public class LoginRequest {
 

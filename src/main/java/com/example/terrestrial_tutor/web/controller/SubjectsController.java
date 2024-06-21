@@ -22,6 +22,9 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Контроллер для работы с предметами
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -30,6 +33,11 @@ public class SubjectsController {
     @Autowired
     private SubjectService subjectService;
 
+    /**
+     * Поиск всех предметов
+     *
+     * @return все предметы
+     */
     @GetMapping("/subjects")
     public ResponseEntity<List<SubjectDTO>> findAllSubjects() {
         List<SubjectEntity> subjects = subjectService.getAllSubjects();

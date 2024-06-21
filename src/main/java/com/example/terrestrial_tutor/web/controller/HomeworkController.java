@@ -5,6 +5,7 @@ import com.example.terrestrial_tutor.annotations.Api;
 import com.example.terrestrial_tutor.dto.HomeworkAnswersDTO;
 import com.example.terrestrial_tutor.dto.SelectionDTO;
 import com.example.terrestrial_tutor.dto.facade.HomeworkFacade;
+import com.example.terrestrial_tutor.entity.AnswerEntity;
 import com.example.terrestrial_tutor.entity.HomeworkEntity;
 import com.example.terrestrial_tutor.entity.SubjectEntity;
 import com.example.terrestrial_tutor.entity.TaskEntity;
@@ -25,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Контроллер для работы с дз
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -43,6 +47,12 @@ public class HomeworkController {
 
     //todo контроллер для обработки завершенной домашки
 
+    /**
+     * Сохранение дз
+     *
+     * @param homeworkDTO дз
+     * @return сохраненное дз
+     */
     @PostMapping("/homework/save")
     public ResponseEntity<HomeworkDTO> saveHomework(@RequestBody HomeworkDTO homeworkDTO) {
         HomeworkEntity newHomework = homeworkService.saveHomework(homeworkFacade.homeworkDTOToHomework(homeworkDTO));
@@ -63,6 +73,14 @@ public class HomeworkController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    /**
+     * Добавление ответов на дз
+     *
+     * @param answers    ответы
+     * @param homeworkId id дз
+     * @param attempt    попытка
+     * @return дз с добавленной попыткой
+     */
     @PostMapping("/pupil/homework/{homeworkId}/{attempt}")
     public ResponseEntity<HomeworkAnswersDTO> getCheckingAnswers(@RequestBody Map<Long, String> answers,
                                                                  @PathVariable Long homeworkId,
@@ -71,6 +89,12 @@ public class HomeworkController {
         return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 
+    /**
+     * Поиск дз по id
+     *
+     * @param id id дз
+     * @return дз
+     */
     @GetMapping("/homework/{id}")
     public ResponseEntity<HomeworkDTO> getHomeworkById(@PathVariable Long id) {
         HomeworkEntity homework = homeworkService.getHomeworkById(id);
@@ -103,12 +127,24 @@ public class HomeworkController {
         return new ResponseEntity<>(homeworkAnswersDTO, HttpStatus.OK);
     }
 
+    /**
+     * Удаление дз по id
+     *
+     * @param id id дз
+     * @return статус операции
+     */
+
     @DeleteMapping("/homework/delete/{id}")
     public HttpStatus deleteHomeworkById(@PathVariable Long id) {
         homeworkService.deleteHomeworkById(id);
         return HttpStatus.OK;
     }
 
+    /**
+     * Поиск всех дз
+     *
+     * @return все дз
+     */
     @GetMapping("/homework/all")
     public ResponseEntity<List<HomeworkDTO>> getHomeworks() {
         List<HomeworkEntity> allHomeworks = homeworkService.getAllHomeworks();

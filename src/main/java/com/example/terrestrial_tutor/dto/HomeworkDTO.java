@@ -7,6 +7,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Класс DTO дз
+ */
 @Getter
 @Setter
 public class HomeworkDTO {

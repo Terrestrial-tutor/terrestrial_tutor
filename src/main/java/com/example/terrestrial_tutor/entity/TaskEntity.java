@@ -6,6 +6,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ * Класс сущности задания
+ */
 @Entity
 @Getter
 @Setter

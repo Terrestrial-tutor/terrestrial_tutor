@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Класс DTO ученика
+ */
 @Getter
 @Setter
 public class PupilDTO {

@@ -1,22 +1,24 @@
 package com.example.terrestrial_tutor.dto.facade;
 
-import com.example.terrestrial_tutor.dto.CheckDTO;
 import com.example.terrestrial_tutor.dto.TutorListDTO;
-import com.example.terrestrial_tutor.entity.CheckEntity;
-import com.example.terrestrial_tutor.entity.PupilEntity;
 import com.example.terrestrial_tutor.entity.TutorEntity;
-import com.example.terrestrial_tutor.service.PupilService;
-import com.example.terrestrial_tutor.service.TutorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+/**
+ * Класс для перевода сущностей репетиторов в DTO
+ */
 
 @Component
 public class TutorListFacade {
 
+    /**
+     * Метод для перевода сущностей репетиторов в DTO
+     *
+     * @param tutors репетиторы
+     * @return DTO из списка репетиторов
+     */
     public List<TutorListDTO> tutorListToDTO(List<TutorEntity> tutors) {
         return tutors
                 .stream()

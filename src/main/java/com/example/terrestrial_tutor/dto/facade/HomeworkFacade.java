@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Класс для перевода HomeworkEntity в HomeworkDTO и обратно
+ */
+
 @Component
 public class HomeworkFacade {
 
@@ -27,6 +31,13 @@ public class HomeworkFacade {
     @Autowired
     TaskService taskService;
 
+    /**
+     * Метод для перевода сущности дз в DTO
+     *
+     * @param homework домашнее задание
+     * @return дз DTO
+     */
+
     public HomeworkDTO homeworkToHomeworkDTO(HomeworkEntity homework) {
         HomeworkDTO homeworkDTO = new HomeworkDTO();
         homeworkDTO.setId(homework.getId());
@@ -38,8 +49,9 @@ public class HomeworkFacade {
                 map(PupilEntity::getId).
                 toList());
         homeworkDTO.setTargetTime(homework.getTargetTime());
-        Map<Long, String> dtoTasksCheckingTypes = new HashMap<>();
-        Map<Long, String> tasksCheckingTypes = new Gson().fromJson(homework.getTaskCheckingTypes(), (new TypeToken<Map<Long, String>>() {}.getType()));
+
+        Map<Long, String> tasksCheckingTypes = new Gson().fromJson(homework.getTaskCheckingTypes(), (new TypeToken<Map<Long, String>>() {
+        }.getType()));
         homeworkDTO.setTasksCheckingTypes(tasksCheckingTypes);
         List<TaskDTO> tasks = new LinkedList<>();
         for (Map.Entry<Long, String> task : tasksCheckingTypes.entrySet()) {
@@ -48,9 +60,17 @@ public class HomeworkFacade {
                             -> Objects.equals(currentTask.getId(), task.getKey())).findFirst().get())
             );
         }
+
         homeworkDTO.setTasks(tasks);
         return homeworkDTO;
     }
+
+    /**
+     * Метод для перевода DTO дз в сущность
+     *
+     * @param homeworkDTO домашнее задание DTO
+     * @return сущность домашнего задания
+     */
 
     public HomeworkEntity homeworkDTOToHomework(HomeworkDTO homeworkDTO) {
         HomeworkEntity homework = new HomeworkEntity();

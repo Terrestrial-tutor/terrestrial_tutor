@@ -7,6 +7,10 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ * Класс сущности домашнего задания
+ */
+
 @Entity
 @Getter
 @Setter

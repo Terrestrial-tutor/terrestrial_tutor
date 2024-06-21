@@ -25,6 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Контроллер дл работы с заданиями
+ */
 @RequiredArgsConstructor
 @Controller
 @Api
@@ -42,6 +45,11 @@ public class TaskController {
     @Autowired
     TaskFacade taskFacade;
 
+    /**
+     * Поиск всех заданий
+     *
+     * @return все задания
+     */
     @GetMapping("/tasks/all")
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
         List<TaskEntity> tasksList = taskService.getAllTasks();
@@ -55,8 +63,9 @@ public class TaskController {
 
     /**
      * Контроллер для отдачи выборки заданий по предмету и верхней заданной теме
+     *
      * @param subject - предмет
-     * @param level1 - верхняя тема выборки заданий
+     * @param level1  - верхняя тема выборки заданий
      * @return лист выборки заданий
      */
     @GetMapping("/tasks/{subject}/{level1}")
@@ -66,6 +75,12 @@ public class TaskController {
         return new ResponseEntity<>(listTasks, HttpStatus.OK);
     }
 
+    /**
+     * Поиск заданий по предмету
+     *
+     * @param subject предмет
+     * @return лист заданий
+     */
     @GetMapping("/tasks/{subject}")
     public ResponseEntity<List<TaskDTO>> getTasksBySubjectAndHW(@PathVariable String subject) {
         SubjectEntity currentSubject = subjectService.findSubjectByName(subject);
@@ -85,9 +100,10 @@ public class TaskController {
 
     /**
      * Контроллер для отдачи выборки заданий по предмету, верхней теме и подтеме
+     *
      * @param subject - предмет
-     * @param level1 - верхняя тема выборки задания
-     * @param level2 - подтема выборки задания
+     * @param level1  - верхняя тема выборки задания
+     * @param level2  - подтема выборки задания
      * @return лист выборки задания
      */
     @GetMapping("/tasks/{subject}/{level1}/{level2}")

@@ -5,7 +5,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-/** Сущность ответа ученика на задание
+/**
+ * Сущность ответа ученика на задание
  */
 
 @Entity

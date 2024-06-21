@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-
+/**
+ * Класс сущности ученика
+ */
 @Entity
 @Getter
 @Setter
@@ -47,7 +49,7 @@ public class PupilEntity implements UserDetails {
     List<TutorEntity> tutors = new ArrayList<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.LAZY)
-    List<PaymentEntity> payments= new ArrayList<>();
+    List<PaymentEntity> payments = new ArrayList<>();
 
     @OneToMany(mappedBy = "pupil", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     List<AttemptEntity> answers = new ArrayList<>();
@@ -86,16 +88,30 @@ public class PupilEntity implements UserDetails {
     @Transient
     private GrantedAuthority authorities;
 
+    /**
+     * Конструктор сущности ученика
+     *
+     * @param id           id
+     * @param username     логин
+     * @param name         имя
+     * @param surname      фамилия
+     * @param patronymic   отчество
+     * @param email        почта
+     * @param password     пароль
+     * @param role         роль
+     * @param verification верификация
+     * @param authorities  авторизация
+     */
     public PupilEntity(Long id,
-                String username,
-                String name,
-                String surname,
-                String patronymic,
-                String email,
-                String password,
-                ERole role,
-                Boolean verification,
-                GrantedAuthority authorities) {
+                       String username,
+                       String name,
+                       String surname,
+                       String patronymic,
+                       String email,
+                       String password,
+                       ERole role,
+                       Boolean verification,
+                       GrantedAuthority authorities) {
         this.id = id;
         this.username = username;
         this.name = name;

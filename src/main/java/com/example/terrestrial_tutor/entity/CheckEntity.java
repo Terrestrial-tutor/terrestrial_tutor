@@ -7,6 +7,9 @@ import lombok.experimental.FieldDefaults;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * Класс сущности для проверки пользователя
+ */
 @Entity
 @Getter
 @Setter

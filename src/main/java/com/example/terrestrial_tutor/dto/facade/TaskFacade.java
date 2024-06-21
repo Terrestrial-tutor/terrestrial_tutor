@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 
+/**
+ * Класс для перевода сущности задания в сущность DTO
+ */
 @Component
 public class TaskFacade {
 
@@ -18,6 +21,13 @@ public class TaskFacade {
     TaskService taskService;
     @Autowired
     SubjectService subjectService;
+
+    /**
+     * Метод для перевода сущности задания в сущность DTO
+     *
+     * @param task задание
+     * @return задание DTO
+     */
 
     public TaskDTO taskToTaskDTO(TaskEntity task) {
         TaskDTO taskDTO = new TaskDTO(

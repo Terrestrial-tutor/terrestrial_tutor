@@ -1,11 +1,16 @@
 package com.example.terrestrial_tutor.entity;
 
 import javax.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Класс сущности предмета
+ */
 
 @Entity
 @Getter
