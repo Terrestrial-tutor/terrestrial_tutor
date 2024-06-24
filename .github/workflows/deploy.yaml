@@ -21,10 +21,10 @@ jobs:
   deploy:
 
     runs-on: ubuntu-latest
+    needs: build
 
     steps:  
-      - uses: actions/checkout@v4 
-        
+      - uses: actions/checkout@v4
       - name: Up containers
         uses: easingthemes/ssh-deploy@main
         with:
