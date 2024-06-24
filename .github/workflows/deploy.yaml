@@ -14,11 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:  
-      - uses: actions/checkout@v4 
-
-      - name: Build
-	run: |
- 	  docker compose up -d
+      - uses: actions/checkout@v4
+      - run: docker compose up -d
+        name: Build
 
   deploy:
 
@@ -28,7 +26,6 @@ jobs:
       - uses: actions/checkout@v4 
         
       - name: Up containers
-        needs: build
         uses: easingthemes/ssh-deploy@main
         with:
           SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH }}
@@ -41,4 +38,4 @@ jobs:
             cd terrestrial_tutor
             docker compose down backend && docker compose up --build -d backend
             docker compose down frontend && docker compose up -d frontend
-	    docker compose down nginx && docker compose up -d nginx
+            docker compose down nginx && docker compose up -d nginx
