@@ -83,7 +83,6 @@ public interface HomeworkService {
      * @return сохраненное дз
      */
     HomeworkEntity save(HomeworkEntity homework);
-    HomeworkAnswersDTO checkingAndSaveAnswers(Map<Long, String> answers, Long idHomework, int attempt);
 
     /**
      * Сохранение ответов на дз

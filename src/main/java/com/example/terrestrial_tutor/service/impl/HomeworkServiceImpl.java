@@ -36,9 +36,6 @@ public class HomeworkServiceImpl implements HomeworkService {
     PupilService pupilService;
 
     @Autowired
-    AnswerService answerService;
-
-    @Autowired
     TutorService tutorService;
 
     @Autowired
