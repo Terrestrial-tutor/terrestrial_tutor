@@ -1,0 +1,14 @@
+name: build.yml
+on:
+  push:
+    branches:
+      - devel
+
+jobs:
+  build:
+    name: Build check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose build && docker compose up -d
+        name: Build
