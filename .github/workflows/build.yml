@@ -1,13 +1,11 @@
 name: Build
 on:
-  push:
-    branches:
-      - devel
   pull_request:
     types:
       - opened
     branches:
       - master
+      - devel
 
 jobs:
   build:
