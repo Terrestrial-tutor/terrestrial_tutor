@@ -6,6 +6,9 @@ on:
     branches:
       - devel
       - master
+  push:
+    branches:
+      - devel
 
 jobs:
   build:
