@@ -16,7 +16,7 @@ import java.util.Set;
 public class TaskDTO {
     final Long id;
     final String name;
-    final int checking;
+    final Integer checking;
     final String answerType;
     final String taskText;
     final List<String> answers;
