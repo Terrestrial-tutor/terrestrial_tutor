@@ -164,12 +164,11 @@ export class TaskComponent implements OnInit {
 
     if (this.task) {
       task.id = this.task.id;
+      task.files = this.task.files;
     }
-    console.log(JSON.stringify(task));
+
     this.supportService.addTask(task).subscribe(data => {
-//       this.router.navigate(['/support']);
-      this.supportService.addFiles(files, data).subscribe();
-      console.log('Task Added');
+      this.supportService.addFiles(files, data).subscribe(() => this.router.navigate(['/support']));
     })
   }
 
