@@ -55,10 +55,9 @@ public class HomeworkFacade {
         homeworkDTO.setTasksCheckingTypes(tasksCheckingTypes);
         List<TaskDTO> tasks = new LinkedList<>();
         for (Map.Entry<Long, String> task : tasksCheckingTypes.entrySet()) {
-            tasks.add(taskFacade.taskToTaskDTO(
-                    homework.getSubject().getTasks().stream().filter(currentTask
-                            -> Objects.equals(currentTask.getId(), task.getKey())).findFirst().get())
-            );
+            homework.getSubject().getTasks().stream().filter(currentTask
+                            -> Objects.equals(currentTask.getId(), task.getKey())).findFirst().
+                    ifPresent(taskEntity -> tasks.add(taskFacade.taskToTaskDTO(taskEntity)));
         }
 
         homeworkDTO.setTasks(tasks);

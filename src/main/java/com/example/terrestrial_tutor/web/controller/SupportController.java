@@ -9,14 +9,15 @@ import com.example.terrestrial_tutor.service.UploadFilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,40 +37,26 @@ public class SupportController {
     /**
      * Добавление задания в бд
      *
-     * @param files      файлы
-     * @param name       название
-     * @param checking   тип проверки
-     * @param answerType тип ответа
-     * @param taskText   текст задания
-     * @param answer     ответы
-     * @param subject    предмет
-     * @param level1     тема верхнего уровня
-     * @param level2     тема нижнего уровня
-     * @param table      таблица к заданию
+     * @param task тип ответа
      * @return статус операции
-     * @throws Exception
      */
     @PostMapping("/support/add/task")
-    public HttpStatus addTask(@RequestParam(required = false) Set<MultipartFile> files,
-                              @RequestParam Long id,
-                              @RequestParam String name,
-                              @RequestParam int checking,
-                              @RequestParam String answerType,
-                              @RequestParam String taskText,
-                              @RequestParam List<String> answer,
-                              @RequestParam String subject,
-                              @RequestParam String level1,
-                              @RequestParam String level2,
-                              @RequestParam String table
+    public ResponseEntity<Long> addTask(@RequestBody TaskDTO task) {
+        SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long taskId = taskService.addNewTask(task, support).getId();
+        return new ResponseEntity<>(taskId, HttpStatus.OK);
+    }
+
+    @PostMapping("/support/add/file/{id}")
+    public HttpStatus addFilesForTask(@PathVariable Long id,
+                                                @RequestParam(required = false) Set<MultipartFile> files
     ) throws Exception {
         try {
-            TaskDTO taskDTO = new TaskDTO(id, name, checking, answerType, taskText, answer, subject, level1, level2, table);
+            TaskEntity task = taskService.getTaskById(id);
             if (files != null) {
-                TaskEntity curTask = taskService.getTaskById(taskDTO.getId());
-                taskDTO.setFiles(uploadFilesService.uploadFiles(files, curTask));
+                task.setFiles(uploadFilesService.uploadFiles(files, task));
             }
-            SupportEntity support = (SupportEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            taskService.addNewTask(taskDTO, support);
+            taskService.save(task);
         } catch (Exception e) {
             throw new Exception(e);
         }
